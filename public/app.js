@@ -67,7 +67,7 @@ async function detectModeAndInit() {
   }
 
   isStaticMode = true;
-  console.log('⚡ SuperDry PRO: Running in Standalone Client Demo Mode (GitHub Pages)');
+  console.log('SuperDry PRO: Running in Standalone Client Demo Mode (GitHub Pages)');
 
   // Try loading saved state from browser localStorage
   const savedState = localStorage.getItem('superdry_demo_state');
@@ -186,21 +186,19 @@ function saveDemoState() {
 }
 
 // -----------------------------------------------------------------
-// PERSONA NAVIGATION
+// PERSONA NAVIGATION (UBER BASE CLEAN CONTROL)
 // -----------------------------------------------------------------
 function setPersona(persona) {
   currentPersona = persona;
 
   // Toggle active tab buttons
   document.querySelectorAll('.persona-tab').forEach(tab => {
-    tab.classList.remove('bg-white', 'text-teal-700', 'shadow-sm');
-    tab.classList.add('text-slate-700');
+    tab.className = 'persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-black';
   });
 
   const activeBtn = document.getElementById(`btn-persona-${persona}`);
   if (activeBtn) {
-    activeBtn.classList.add('bg-white', 'text-teal-700', 'shadow-sm');
-    activeBtn.classList.remove('text-slate-700');
+    activeBtn.className = 'persona-tab px-4 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center space-x-1.5 text-black bg-white shadow-sm';
   }
 
   // Sync mobile dropdown
@@ -209,13 +207,11 @@ function setPersona(persona) {
 
   // Sync mobile pill buttons
   document.querySelectorAll('.mobile-persona-pill').forEach(pill => {
-    pill.classList.remove('bg-teal-600', 'text-white', 'shadow-sm');
-    pill.classList.add('bg-slate-100', 'text-slate-700');
+    pill.className = 'mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 bg-[#EEEEEE] text-[#545454]';
   });
   const activeMobilePill = document.getElementById(`mbtn-persona-${persona}`);
   if (activeMobilePill) {
-    activeMobilePill.classList.remove('bg-slate-100', 'text-slate-700');
-    activeMobilePill.classList.add('bg-teal-600', 'text-white', 'shadow-sm');
+    activeMobilePill.className = 'mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1 bg-black text-white shadow-sm';
   }
 
   // Toggle screens
@@ -227,16 +223,16 @@ function setPersona(persona) {
 
   // Update role badge
   const labelMap = {
-    admin: 'Super Admin (Store Owner)',
-    manager: 'Front Desk / Operations Lead',
-    washer: 'Laundry Master (Floor Operator)',
-    rider: 'Field Logistics Agent (PWA)'
+    admin: 'Super Admin',
+    manager: 'Front Desk',
+    washer: 'Laundry Master',
+    rider: 'Field Agent'
   };
   const roleEl = document.getElementById('role-context-label');
   if (roleEl) {
-    roleEl.innerText = `Active Screen: ${labelMap[persona]}`;
+    roleEl.innerText = `Active: ${labelMap[persona]}`;
     if (isStaticMode) {
-      roleEl.innerHTML = `${roleEl.innerText} <span class="bg-amber-500/20 text-amber-300 text-[10px] px-1.5 py-0.5 rounded font-bold ml-1">GitHub Pages Demo</span>`;
+      roleEl.innerHTML = `${roleEl.innerText} <span class="bg-[#EEEEEE] text-black text-[10px] px-2 py-0.5 rounded-full font-bold ml-1">Demo Mode</span>`;
     }
   }
 
@@ -251,10 +247,10 @@ function setManagerTab(tab) {
     const view = document.getElementById(`manager-view-${t}`);
     if (!btn || !view) return;
     if (t === tab) {
-      btn.className = 'pb-2.5 sm:pb-3 border-b-2 border-teal-600 text-teal-700 flex items-center space-x-1.5 sm:space-x-2 font-semibold shrink-0 whitespace-nowrap';
+      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold bg-black text-white shadow-sm flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
       view.classList.remove('hidden');
     } else {
-      btn.className = 'pb-2.5 sm:pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-1.5 sm:space-x-2 font-semibold shrink-0 whitespace-nowrap';
+      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-black flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
       view.classList.add('hidden');
     }
   });
@@ -278,13 +274,13 @@ function setRiderMode(mode) {
   const dView = document.getElementById('rider-view-delivery');
 
   if (mode === 'pickup') {
-    pBtn.className = 'py-2 rounded-lg bg-teal-600 text-white shadow transition-all flex items-center justify-center space-x-1.5 font-semibold';
-    dBtn.className = 'py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center justify-center space-x-1.5 font-semibold';
+    pBtn.className = 'py-2 rounded-full bg-white text-black shadow transition-all flex items-center justify-center space-x-1.5 font-semibold';
+    dBtn.className = 'py-2 rounded-full text-neutral-400 hover:text-white transition-all flex items-center justify-center space-x-1.5 font-medium';
     pView.classList.remove('hidden');
     dView.classList.add('hidden');
   } else {
-    dBtn.className = 'py-2 rounded-lg bg-teal-600 text-white shadow transition-all flex items-center justify-center space-x-1.5 font-semibold';
-    pBtn.className = 'py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center justify-center space-x-1.5 font-semibold';
+    dBtn.className = 'py-2 rounded-full bg-white text-black shadow transition-all flex items-center justify-center space-x-1.5 font-semibold';
+    pBtn.className = 'py-2 rounded-full text-neutral-400 hover:text-white transition-all flex items-center justify-center space-x-1.5 font-medium';
     dView.classList.remove('hidden');
     pView.classList.add('hidden');
   }
@@ -417,21 +413,21 @@ function renderStats() {
   document.getElementById('stat-total-customers').innerText = (statsData.totalCustomers || 2000).toLocaleString('en-IN');
 
   const stages = [
-    { key: 'PICKUP_REQUESTED', label: '1. Pickup Req', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
-    { key: 'PICKED_UP', label: '2. En Route Store', color: 'bg-purple-50 text-purple-700 border-purple-200' },
-    { key: 'RECEIVED_IN_STORE', label: '3. In Intake/Tag', color: 'bg-cyan-50 text-cyan-700 border-cyan-200' },
-    { key: 'WASHING', label: '4. Washing', color: 'bg-blue-50 text-blue-700 border-blue-200' },
-    { key: 'DRYING', label: '5. Drying', color: 'bg-sky-50 text-sky-700 border-sky-200' },
-    { key: 'IRONING', label: '6. Steam Press', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-    { key: 'PACKED', label: '7. Packed & Ready', color: 'bg-teal-50 text-teal-700 border-teal-200' },
-    { key: 'OUT_FOR_DELIVERY', label: '8. Out for Delivery', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' }
+    { key: 'PICKUP_REQUESTED', label: '1. Pickup Req' },
+    { key: 'PICKED_UP', label: '2. En Route' },
+    { key: 'RECEIVED_IN_STORE', label: '3. In Store' },
+    { key: 'WASHING', label: '4. Washing' },
+    { key: 'DRYING', label: '5. Drying' },
+    { key: 'IRONING', label: '6. Ironing' },
+    { key: 'PACKED', label: '7. Packed' },
+    { key: 'OUT_FOR_DELIVERY', label: '8. Delivery' }
   ];
 
   const pipelineContainer = document.getElementById('admin-pipeline-breakdown');
   pipelineContainer.innerHTML = stages.map(s => `
-    <div class="border ${s.color} rounded-xl p-2.5 sm:p-3 flex flex-col justify-between min-w-0">
-      <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider block opacity-75 truncate">${s.label}</span>
-      <span class="text-lg sm:text-xl font-black mt-1 sm:mt-2">${statsData.stageCounts[s.key] || 0}</span>
+    <div class="bg-[#F6F6F6] rounded-xl p-2.5 sm:p-3 flex flex-col justify-between border border-[#E2E2E2] min-w-0">
+      <span class="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider block text-[#545454] truncate">${s.label}</span>
+      <span class="text-xl sm:text-2xl font-black text-black mt-1">${statsData.stageCounts[s.key] || 0}</span>
     </div>
   `).join('');
 }
@@ -446,44 +442,44 @@ function renderAdminOrders() {
   }
 
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">No orders match the selected filter.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-[#898989]">No orders match the selected filter.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = list.map(o => {
-    const isExpress = o.isExpress ? `<span class="bg-red-100 text-red-700 text-[10px] font-extrabold px-1.5 py-0.5 rounded ml-1">⚡ EXPRESS</span>` : '';
+    const isExpress = o.isExpress ? `<span class="bg-black text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full ml-1 border border-[#E11900]">EXPRESS</span>` : '';
     const statusBadges = {
-      PICKUP_REQUESTED: 'bg-indigo-100 text-indigo-800',
-      PICKED_UP: 'bg-purple-100 text-purple-800',
-      RECEIVED_IN_STORE: 'bg-cyan-100 text-cyan-800',
-      WASHING: 'bg-blue-100 text-blue-800',
-      DRYING: 'bg-sky-100 text-sky-800',
-      IRONING: 'bg-amber-100 text-amber-800',
-      PACKED: 'bg-teal-100 text-teal-800',
-      OUT_FOR_DELIVERY: 'bg-emerald-100 text-emerald-800',
-      DELIVERED: 'bg-slate-100 text-slate-700'
+      PICKUP_REQUESTED: 'bg-[#F6F6F6] text-black border border-[#E2E2E2]',
+      PICKED_UP: 'bg-[#F6F6F6] text-black border border-[#E2E2E2]',
+      RECEIVED_IN_STORE: 'bg-[#F6F6F6] text-black border border-[#E2E2E2]',
+      WASHING: 'bg-amber-50 text-amber-900 border border-amber-200',
+      DRYING: 'bg-[#F6F6F6] text-black border border-[#E2E2E2]',
+      IRONING: 'bg-[#F6F6F6] text-black border border-[#E2E2E2]',
+      PACKED: 'bg-emerald-50 text-emerald-900 border border-emerald-200',
+      OUT_FOR_DELIVERY: 'bg-blue-50 text-blue-900 border border-blue-200',
+      DELIVERED: 'bg-black text-white'
     };
 
     return `
-      <tr class="hover:bg-slate-50 transition-colors">
-        <td class="p-3.5 font-mono font-bold text-slate-900">${o.id} ${isExpress}</td>
+      <tr class="hover:bg-[#F6F6F6] transition-colors">
+        <td class="p-3.5 font-mono font-bold text-black">${o.id} ${isExpress}</td>
         <td class="p-3.5">
-          <div class="font-bold text-slate-900">${o.customerName}</div>
-          <div class="text-slate-500 font-mono text-[11px]">${o.customerPhone}</div>
+          <div class="font-bold text-black">${o.customerName}</div>
+          <div class="text-[#545454] font-mono text-[11px]">${o.customerPhone}</div>
         </td>
-        <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-medium">${o.zone}</span></td>
+        <td class="p-3.5"><span class="bg-[#EEEEEE] text-black px-2 py-0.5 rounded-full font-medium text-[11px]">${o.zone}</span></td>
         <td class="p-3.5">
-          <span class="font-bold text-slate-800">${o.totalPieces} Pieces</span>
-          <div class="text-slate-400 text-[10px] truncate max-w-[150px]">${(o.items || []).map(i => i.garmentName).slice(0, 2).join(', ')}...</div>
+          <span class="font-bold text-black">${o.totalPieces} Pieces</span>
+          <div class="text-[#898989] text-[10px] truncate max-w-[150px]">${(o.items || []).map(i => i.garmentName).slice(0, 2).join(', ')}...</div>
         </td>
-        <td class="p-3.5 font-bold text-slate-900">
+        <td class="p-3.5 font-bold text-black">
           ₹${o.subtotal}
-          <div class="text-[10px] ${o.paymentStatus === 'PAID' ? 'text-emerald-600 font-bold' : 'text-amber-600'}">${o.paymentStatus}</div>
+          <div class="text-[10px] ${o.paymentStatus === 'PAID' ? 'text-[#06C167] font-bold' : 'text-[#FFC043]'}">${o.paymentStatus}</div>
         </td>
-        <td class="p-3.5"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${statusBadges[o.status] || 'bg-slate-100'}">${o.status.replace(/_/g, ' ')}</span></td>
-        <td class="p-3.5 text-slate-600">${new Date(o.promisedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</td>
+        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusBadges[o.status] || 'bg-[#F6F6F6] text-black'}">${o.status.replace(/_/g, ' ')}</span></td>
+        <td class="p-3.5 text-[#545454]">${new Date(o.promisedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</td>
         <td class="p-3.5 text-right space-x-1">
-          <button onclick="previewThermalTags('${o.id}')" title="Print Garment Tags" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg">
+          <button onclick="previewThermalTags('${o.id}')" title="Print Garment Tags" class="p-1.5 bg-[#EEEEEE] hover:bg-[#E2E2E2] text-black rounded-full">
             <i data-lucide="printer" class="w-3.5 h-3.5 inline"></i>
           </button>
         </td>
@@ -502,9 +498,9 @@ function setLeadsFilter(filter) {
     const btn = document.getElementById(`lfilter-${f}`);
     if (!btn) return;
     if (f === filter) {
-      btn.className = 'px-3 py-1 rounded-md font-bold text-teal-800 bg-white shadow-sm transition-all';
+      btn.className = 'px-3 py-1 rounded-full font-bold text-black bg-white shadow-sm transition-all shrink-0 whitespace-nowrap';
     } else {
-      btn.className = 'px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all';
+      btn.className = 'px-3 py-1 rounded-full font-medium text-[#545454] hover:text-black transition-all shrink-0 whitespace-nowrap';
     }
   });
   renderManagerLeads();
@@ -542,12 +538,12 @@ function renderManagerLeads() {
 
   if (displayLeads.length === 0) {
     const emptyMessages = {
-      active: 'No active inquiries waiting for callback. Your inbox is 100% clean!',
+      active: 'No active inquiries waiting for callback. Inbox is clean.',
       all: 'No leads found in the system.',
       resolved: 'No resolved leads in this view.',
       archived: 'Archive is empty.'
     };
-    container.innerHTML = `<div class="col-span-3 p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 text-xs">${emptyMessages[currentLeadsFilter]}</div>`;
+    container.innerHTML = `<div class="col-span-3 p-8 text-center bg-white rounded-2xl border border-[#E2E2E2] text-[#898989] text-xs">${emptyMessages[currentLeadsFilter]}</div>`;
     return;
   }
 
@@ -558,52 +554,52 @@ function renderManagerLeads() {
     const attempts = lead.attempts || 1;
 
     return `
-      <div class="bg-white p-5 rounded-2xl border ${isUrgent && !isResolved && !isArchived ? 'border-red-300 ring-2 ring-red-100' : 'border-slate-200'} shadow-sm space-y-3 relative group">
+      <div class="bg-white p-5 rounded-2xl border ${isUrgent && !isResolved && !isArchived ? 'border-[#E11900] ring-1 ring-[#E11900]' : 'border-[#E2E2E2]'} space-y-3 relative">
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-1.5 flex-wrap">
-              <span class="font-bold text-slate-900 text-sm">${lead.customerName}</span>
-              ${attempts > 1 ? `<span class="bg-amber-100 text-amber-800 text-[9px] font-black px-1.5 py-0.5 rounded border border-amber-300 animate-pulse">⚠ Called ${attempts}x</span>` : ''}
-              ${isUrgent && !isResolved && !isArchived ? '<span class="bg-red-100 text-red-700 text-[9px] font-black px-1.5 py-0.5 rounded">SLA URGENT</span>' : ''}
+              <span class="font-bold text-black text-sm">${lead.customerName}</span>
+              ${attempts > 1 ? `<span class="bg-[#FFC043]/20 text-black text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#FFC043]">Called ${attempts}x</span>` : ''}
+              ${isUrgent && !isResolved && !isArchived ? '<span class="bg-red-50 text-[#E11900] text-[9px] font-bold px-1.5 py-0.5 rounded-full">SLA URGENT</span>' : ''}
             </div>
-            <span class="text-xs font-mono text-slate-500">${lead.phone}</span>
+            <span class="text-xs font-mono text-[#545454]">${lead.phone}</span>
           </div>
 
           <div class="flex items-center space-x-1.5">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isResolved ? 'bg-emerald-100 text-emerald-800' : isArchived ? 'bg-slate-100 text-slate-500' : 'bg-amber-100 text-amber-800'}">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isResolved ? 'bg-emerald-50 text-[#06C167]' : isArchived ? 'bg-[#EEEEEE] text-[#545454]' : 'bg-amber-50 text-amber-900'}">
               ${lead.status.replace(/_/g, ' ')}
             </span>
-            <button onclick="deleteLead('${lead.id}')" title="Delete lead card permanently" class="p-1 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded transition-colors">
+            <button onclick="deleteLead('${lead.id}')" title="Delete lead card permanently" class="p-1 hover:bg-red-50 text-[#898989] hover:text-[#E11900] rounded-full transition-colors">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
             </button>
           </div>
         </div>
 
-        <div class="p-3 bg-slate-50 rounded-xl text-xs text-slate-700 border border-slate-100">
-          <div class="flex items-center space-x-1.5 font-bold text-slate-500 text-[10px] uppercase mb-1">
-            <i data-lucide="message-square" class="w-3 h-3"></i>
+        <div class="p-3 bg-[#F6F6F6] rounded-xl text-xs text-black border border-[#E2E2E2]">
+          <div class="flex items-center space-x-1.5 font-bold text-[#545454] text-[10px] uppercase mb-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#06C167]"></span>
             <span>${lead.channel}</span>
           </div>
           <p class="leading-relaxed">${lead.message}</p>
-          ${lead.address ? `<div class="mt-2 text-[11px] text-teal-800 font-medium">📍 ${lead.address} (${lead.zone})</div>` : ''}
+          ${lead.address ? `<div class="mt-2 text-[11px] text-black font-medium">${lead.address} (${lead.zone})</div>` : ''}
         </div>
 
-        <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+        <div class="flex items-center justify-between text-xs text-[#545454] pt-2 border-t border-[#E2E2E2]">
           <span>
-            ${!isResolved && !isArchived ? `Callback SLA: <strong class="${lead.slaMinutesRemaining < 10 ? 'text-red-600' : 'text-slate-800'}">${lead.slaMinutesRemaining}m left</strong>` : `<span class="text-slate-400 font-medium">Closed</span>`}
+            ${!isResolved && !isArchived ? `Callback SLA: <strong class="${lead.slaMinutesRemaining < 10 ? 'text-[#E11900]' : 'text-black'}">${lead.slaMinutesRemaining}m left</strong>` : `<span class="text-[#898989]">Closed</span>`}
           </span>
 
           <div class="flex items-center space-x-1.5">
             ${!isResolved && !isArchived ? `
-              <button onclick="markLeadResolved('${lead.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold text-[11px]">
+              <button onclick="markLeadResolved('${lead.id}')" class="px-3 py-1.5 bg-[#EEEEEE] hover:bg-[#E2E2E2] text-black rounded-full font-semibold text-xs transition-all">
                 Mark Called
               </button>
-              <button onclick="convertLeadToOrder('${lead.id}')" class="px-3 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold text-[11px] flex items-center space-x-1 shadow-sm">
+              <button onclick="convertLeadToOrder('${lead.id}')" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full font-bold text-xs flex items-center space-x-1 shadow-sm transition-all">
                 <i data-lucide="plus" class="w-3 h-3"></i>
                 <span>Book Order</span>
               </button>
             ` : `
-              <button onclick="archiveLead('${lead.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg font-semibold text-[11px] flex items-center space-x-1">
+              <button onclick="archiveLead('${lead.id}')" class="px-3 py-1.5 bg-[#EEEEEE] hover:bg-[#E2E2E2] text-black rounded-full font-semibold text-xs flex items-center space-x-1 transition-all">
                 <i data-lucide="archive" class="w-3 h-3"></i>
                 <span>${isArchived ? 'Archived' : 'Archive'}</span>
               </button>
@@ -712,7 +708,7 @@ function renderManagerTagging() {
   const ordersToTag = allOrders.filter(o => ['PICKED_UP', 'RECEIVED_IN_STORE'].includes(o.status));
 
   if (ordersToTag.length === 0) {
-    container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">No orders currently awaiting garment tagging. All incoming clothes are tagged!</div>`;
+    container.innerHTML = `<div class="p-8 text-center text-[#898989] text-xs">No orders awaiting garment tagging. All incoming clothes are tagged.</div>`;
     return;
   }
 
@@ -720,28 +716,28 @@ function renderManagerTagging() {
     <div class="py-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div>
         <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-          <span class="font-mono font-bold text-slate-900 shrink-0 whitespace-nowrap">${o.id}</span>
-          <span class="text-xs font-bold text-slate-700">${o.customerName}</span>
-          <span class="bg-cyan-100 text-cyan-800 text-[10px] font-bold px-2 py-0.5 rounded shrink-0 whitespace-nowrap">${o.status.replace(/_/g, ' ')}</span>
-          ${o.isExpress ? '<span class="bg-red-100 text-red-700 text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 whitespace-nowrap">⚡ EXPRESS</span>' : ''}
+          <span class="font-mono font-bold text-black shrink-0 whitespace-nowrap">${o.id}</span>
+          <span class="text-xs font-bold text-black">${o.customerName}</span>
+          <span class="bg-[#EEEEEE] text-black text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">${o.status.replace(/_/g, ' ')}</span>
+          ${o.isExpress ? '<span class="bg-black text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#E11900] shrink-0 whitespace-nowrap">EXPRESS</span>' : ''}
         </div>
-        <p class="text-xs text-slate-500 mt-1">${o.totalPieces} Pieces Counted • Zone: ${o.zone} • ${o.customerPhone}</p>
+        <p class="text-xs text-[#545454] mt-1">${o.totalPieces} Pieces Counted • Zone: ${o.zone} • ${o.customerPhone}</p>
         <div class="flex flex-wrap gap-1.5 mt-2">
           ${(o.items || []).map(item => `
-            <span class="bg-slate-100 border border-slate-200 text-slate-700 text-[10px] px-2 py-0.5 rounded-md font-medium">
+            <span class="bg-[#F6F6F6] border border-[#E2E2E2] text-black text-[10px] px-2.5 py-0.5 rounded-full font-medium">
               #${item.pieceNumber} ${item.garmentName} (${item.service})
-              ${item.hasStain ? '<strong class="text-red-600">⚠ Stain</strong>' : ''}
+              ${item.hasStain ? '<strong class="text-[#E11900]">Stain Care</strong>' : ''}
             </span>
           `).join('')}
         </div>
       </div>
       <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 shrink-0 mt-2 md:mt-0">
-        <button onclick="previewThermalTags('${o.id}')" class="px-3 py-1.5 bg-slate-900 hover:bg-black text-white rounded-lg text-xs font-bold shadow-sm flex items-center space-x-1.5">
+        <button onclick="previewThermalTags('${o.id}')" class="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5 transition-all">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-          <span>Print Thermal Tags</span>
+          <span>Print Tags</span>
         </button>
         ${o.status === 'RECEIVED_IN_STORE' ? `
-          <button onclick="updateOrderStatus('${o.id}', 'WASHING')" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold flex items-center space-x-1 shadow-sm">
+          <button onclick="updateOrderStatus('${o.id}', 'WASHING')" class="px-4 py-2 bg-[#06C167] hover:bg-emerald-600 text-white rounded-full text-xs font-bold flex items-center space-x-1 shadow-sm transition-all">
             <span>Send to Washers →</span>
           </button>
         ` : ''}
@@ -782,24 +778,24 @@ function searchCustomers(query) {
     const mobileCards = document.getElementById('customers-mobile-cards');
 
     if (list.length === 0) {
-      if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">No customers found matching "${query}".</td></tr>`;
-      if (mobileCards) mobileCards.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">No customers found matching "${query}".</div>`;
+      if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-[#898989]">No customers found matching "${query}".</td></tr>`;
+      if (mobileCards) mobileCards.innerHTML = `<div class="p-6 text-center text-[#898989] text-xs">No customers found matching "${query}".</div>`;
       return;
     }
 
     if (tbody) {
       tbody.innerHTML = list.map(c => `
-        <tr class="hover:bg-slate-50">
-          <td class="p-3 font-mono font-bold text-teal-700">${c.id}</td>
-          <td class="p-3 font-bold text-slate-900">${c.name}</td>
-          <td class="p-3 font-mono text-slate-600">${c.phone}</td>
-          <td class="p-3 text-slate-600">
+        <tr class="hover:bg-[#F6F6F6] transition-colors">
+          <td class="p-3 font-mono font-bold text-black">${c.id}</td>
+          <td class="p-3 font-bold text-black">${c.name}</td>
+          <td class="p-3 font-mono text-[#545454]">${c.phone}</td>
+          <td class="p-3 text-[#545454]">
             <div>${c.address}</div>
-            <span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">${c.zone}</span>
+            <span class="text-[10px] bg-[#EEEEEE] text-black px-2 py-0.5 rounded-full font-medium">${c.zone}</span>
           </td>
-          <td class="p-3 font-bold text-slate-800">${c.totalOrders} Orders</td>
+          <td class="p-3 font-bold text-black">${c.totalOrders} Orders</td>
           <td class="p-3 text-right">
-            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-2.5 py-1 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-md font-bold text-[11px]">
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full font-bold text-xs shadow-sm transition-all">
               + New Order
             </button>
           </td>
@@ -809,21 +805,21 @@ function searchCustomers(query) {
 
     if (mobileCards) {
       mobileCards.innerHTML = list.map(c => `
-        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+        <div class="p-3.5 bg-white border border-[#E2E2E2] rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-1.5">
-              <span class="font-mono text-[10px] font-bold text-teal-700 bg-teal-100/70 px-1.5 py-0.5 rounded">${c.id}</span>
-              <span class="font-bold text-slate-900 text-xs">${c.name}</span>
+              <span class="font-mono text-[10px] font-bold text-black bg-[#EEEEEE] px-2 py-0.5 rounded-full">${c.id}</span>
+              <span class="font-bold text-black text-xs">${c.name}</span>
             </div>
-            <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-semibold shrink-0">${c.zone}</span>
+            <span class="text-[10px] bg-[#EEEEEE] text-black px-2 py-0.5 rounded-full font-semibold shrink-0">${c.zone}</span>
           </div>
-          <div class="text-xs text-slate-600">
-            <div class="font-mono text-[11px] text-slate-700">${c.phone}</div>
-            <div class="text-[11px] text-slate-500 truncate">${c.address}</div>
+          <div class="text-xs text-[#545454]">
+            <div class="font-mono text-[11px] text-black">${c.phone}</div>
+            <div class="text-[11px] text-[#898989] truncate">${c.address}</div>
           </div>
-          <div class="flex items-center justify-between pt-1.5 border-t border-slate-200/80 text-[11px]">
-            <span class="font-semibold text-slate-700">${c.totalOrders} Past Orders</span>
-            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold text-xs shadow-sm">
+          <div class="flex items-center justify-between pt-2 border-t border-[#E2E2E2] text-xs">
+            <span class="font-medium text-[#545454]">${c.totalOrders} Orders</span>
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full font-bold text-xs shadow-sm transition-all">
               + New Order
             </button>
           </div>
@@ -892,14 +888,14 @@ function renderWasherKanban() {
   intakeCol.innerHTML = renderKanbanColumn(intakeOrders, 'WASHING', 'Move to Washers →');
   washingCol.innerHTML = renderKanbanColumn(washingOrders, 'DRYING', 'Move to Drying →');
   ironingCol.innerHTML = renderKanbanColumn(ironingOrders, 'PACKED', 'Pack & Ready for Rider →');
-  packedCol.innerHTML = renderKanbanColumn(packedOrders, 'OUT_FOR_DELIVERY', 'Ready for Dispatch ✓', true);
+  packedCol.innerHTML = renderKanbanColumn(packedOrders, 'OUT_FOR_DELIVERY', 'Ready for Dispatch', true);
 
   lucide.createIcons();
 }
 
 function renderKanbanColumn(ordersList, nextStatus, nextBtnLabel, isFinal = false) {
   if (ordersList.length === 0) {
-    return `<div class="h-32 flex items-center justify-center text-slate-400 text-xs border border-dashed border-slate-300 rounded-xl">Empty Queue</div>`;
+    return `<div class="h-28 flex items-center justify-center text-neutral-400 text-xs border border-dashed border-[#E2E2E2] rounded-2xl">Queue empty</div>`;
   }
 
   const sorted = [...ordersList].sort((a, b) => (b.isExpress ? 1 : 0) - (a.isExpress ? 1 : 0));
@@ -907,38 +903,38 @@ function renderKanbanColumn(ordersList, nextStatus, nextBtnLabel, isFinal = fals
   return sorted.map(o => {
     const isExpress = o.isExpress;
     return `
-      <div class="bg-white p-4 rounded-xl border ${isExpress ? 'border-red-400 ring-2 ring-red-100 shadow-md' : 'border-slate-200'} shadow-sm space-y-3">
+      <div class="bg-white p-4 rounded-2xl border ${isExpress ? 'border-black ring-1 ring-black' : 'border-[#E2E2E2]'} shadow-sm space-y-3">
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-1.5">
-              <span class="font-mono font-black text-slate-900 text-sm">${o.id}</span>
-              ${isExpress ? '<span class="bg-red-500 text-white text-[9px] font-black px-1.5 py-0.2 rounded">⚡ EXPRESS 24H</span>' : ''}
+              <span class="font-mono font-bold text-black text-sm">${o.id}</span>
+              ${isExpress ? '<span class="bg-black text-white text-[9px] font-bold px-2 py-0.5 rounded-full border border-[#E11900]">EXPRESS 24H</span>' : ''}
             </div>
-            <span class="text-xs font-bold text-slate-700">${o.customerName}</span>
+            <span class="text-xs font-semibold text-neutral-700">${o.customerName}</span>
           </div>
-          <span class="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full">${o.totalPieces} Pcs</span>
+          <span class="text-xs font-semibold bg-[#F6F6F6] text-black px-2.5 py-0.5 rounded-full">${o.totalPieces} Pcs</span>
         </div>
 
-        <div class="space-y-1 bg-slate-50 p-2.5 rounded-lg border border-slate-100 text-xs">
+        <div class="space-y-1 bg-[#F6F6F6] p-3 rounded-xl border border-[#EEEEEE] text-xs">
           ${(o.items || []).map(item => `
-            <div class="flex items-center justify-between text-[11px] text-slate-700">
+            <div class="flex items-center justify-between text-[11px] text-neutral-700">
               <span>#${item.pieceNumber} ${item.garmentName}</span>
-              <span class="text-slate-500 font-medium">${item.service}</span>
+              <span class="text-neutral-500 font-medium">${item.service}</span>
             </div>
-            ${item.hasStain ? `<div class="text-[10px] text-red-600 font-bold pl-2">⚠ Special: ${item.specialNote || 'Stain Treatment'}</div>` : ''}
+            ${item.hasStain ? `<div class="text-[10px] text-[#E11900] font-semibold pl-2">Special: ${item.specialNote || 'Stain Treatment'}</div>` : ''}
           `).join('')}
         </div>
 
-        <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-          <span class="text-slate-500 text-[10px]">Due: ${new Date(o.promisedDelivery).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+        <div class="flex items-center justify-between pt-2 border-t border-[#EEEEEE] text-xs">
+          <span class="text-neutral-500 text-[10px]">Due ${new Date(o.promisedDelivery).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
           ${!isFinal ? `
-            <button onclick="updateOrderStatus('${o.id}', '${nextStatus}')" class="px-3 py-1.5 bg-slate-900 hover:bg-black text-white text-[11px] font-bold rounded-lg shadow-sm transition-transform active:scale-95">
+            <button onclick="updateOrderStatus('${o.id}', '${nextStatus}')" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white text-xs font-semibold rounded-full transition-transform active:scale-95">
               ${nextBtnLabel}
             </button>
           ` : `
-            <span class="text-emerald-700 font-bold text-[11px] flex items-center space-x-1">
+            <span class="text-[#06C167] font-semibold text-xs flex items-center space-x-1">
               <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
-              <span>Packed in Poly-wrap</span>
+              <span>Packed</span>
             </span>
           `}
         </div>
@@ -972,39 +968,39 @@ function renderRiderPickups(pickups) {
   if (!container) return;
 
   if (pickups.length === 0) {
-    container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">No pending pickups right now. Standby for new orders!</div>`;
+    container.innerHTML = `<div class="p-8 text-center text-neutral-400 text-xs">No pending pickups right now.</div>`;
     return;
   }
 
   container.innerHTML = pickups.map(p => `
-    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+    <div class="bg-white p-4 rounded-2xl border border-[#E2E2E2] shadow-sm space-y-3">
       <div class="flex items-start justify-between">
         <div>
-          <span class="font-mono text-teal-700 font-bold text-xs">${p.id}</span>
-          <h4 class="font-bold text-slate-900 text-sm">${p.customerName}</h4>
-          <span class="text-xs text-slate-600 font-mono">${p.customerPhone}</span>
+          <span class="font-mono text-neutral-500 font-semibold text-xs">${p.id}</span>
+          <h4 class="font-bold text-black text-sm">${p.customerName}</h4>
+          <span class="text-xs text-neutral-500 font-mono">${p.customerPhone}</span>
         </div>
-        <span class="text-[10px] bg-teal-100 text-teal-800 font-bold px-2 py-0.5 rounded">${p.zone}</span>
+        <span class="text-[10px] bg-[#EEEEEE] text-black font-semibold px-2.5 py-0.5 rounded-full">${p.zone}</span>
       </div>
 
-      <div class="text-xs text-slate-600 bg-white p-2.5 rounded-xl border border-slate-200">
-        📍 ${p.customerAddress}
+      <div class="text-xs text-neutral-700 bg-[#F6F6F6] p-3 rounded-xl border border-[#EEEEEE]">
+        ${p.customerAddress}
       </div>
 
       <div class="grid grid-cols-2 gap-2 text-xs">
-        <a href="tel:${p.customerPhone}" class="py-2 bg-white border border-slate-200 rounded-xl font-bold text-slate-700 flex items-center justify-center space-x-1.5 shadow-sm">
-          <i data-lucide="phone" class="w-3.5 h-3.5 text-teal-600"></i>
-          <span>Call Customer</span>
+        <a href="tel:${p.customerPhone}" class="py-2.5 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full font-semibold text-black flex items-center justify-center space-x-1.5 transition">
+          <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+          <span>Call</span>
         </a>
-        <a href="https://maps.google.com/?q=${encodeURIComponent(p.customerAddress)}" target="_blank" class="py-2 bg-white border border-slate-200 rounded-xl font-bold text-slate-700 flex items-center justify-center space-x-1.5 shadow-sm">
-          <i data-lucide="navigation" class="w-3.5 h-3.5 text-blue-600"></i>
-          <span>Google Maps</span>
+        <a href="https://maps.google.com/?q=${encodeURIComponent(p.customerAddress)}" target="_blank" class="py-2.5 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full font-semibold text-black flex items-center justify-center space-x-1.5 transition">
+          <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
+          <span>Directions</span>
         </a>
       </div>
 
-      <button onclick="promptRiderPickupIntake('${p.id}')" class="w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-bold text-xs shadow flex items-center justify-center space-x-1.5">
+      <button onclick="promptRiderPickupIntake('${p.id}')" class="w-full py-3 bg-black hover:bg-neutral-800 text-white rounded-full font-semibold text-xs transition flex items-center justify-center space-x-1.5 active:scale-98">
         <i data-lucide="check" class="w-4 h-4"></i>
-        <span>Confirm Pickup & Bring to Store</span>
+        <span>Confirm Pickup</span>
       </button>
     </div>
   `).join('');
@@ -1038,44 +1034,44 @@ async function renderRiderDeliveries() {
   }
 
   if (clusters.length === 0) {
-    container.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs">No orders ready for delivery at the moment.</div>`;
+    container.innerHTML = `<div class="p-8 text-center text-neutral-400 text-xs">No orders ready for delivery.</div>`;
     return;
   }
 
   container.innerHTML = clusters.map(cluster => `
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div class="bg-slate-100 p-3 flex items-center justify-between border-b border-slate-200">
+    <div class="bg-white rounded-2xl border border-[#E2E2E2] shadow-sm overflow-hidden">
+      <div class="bg-[#F6F6F6] p-4 flex items-center justify-between border-b border-[#E2E2E2]">
         <div>
-          <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Delivery Cluster</span>
-          <h4 class="font-bold text-slate-900 text-sm">${cluster.zoneName}</h4>
+          <span class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">Cluster</span>
+          <h4 class="font-bold text-black text-sm">${cluster.zoneName}</h4>
         </div>
         <div class="text-right">
-          <span class="bg-teal-600 text-white text-xs font-black px-2.5 py-0.5 rounded-full">${cluster.orders.length} Orders</span>
-          <div class="text-[10px] text-slate-600 font-bold mt-0.5">Collect: ₹${cluster.totalAmountToCollect}</div>
+          <span class="bg-black text-white text-xs font-bold px-2.5 py-0.5 rounded-full">${cluster.orders.length} Orders</span>
+          <div class="text-[10px] text-neutral-600 font-semibold mt-0.5">Collect ₹${cluster.totalAmountToCollect}</div>
         </div>
       </div>
 
-      <div class="p-3 divide-y divide-slate-100 space-y-3">
+      <div class="p-4 divide-y divide-[#EEEEEE] space-y-3">
         ${cluster.orders.map(o => `
           <div class="pt-3 first:pt-0 space-y-2 text-xs">
             <div class="flex items-start justify-between">
               <div>
-                <div class="font-bold text-slate-900">${o.customerName}</div>
-                <div class="text-slate-500 font-mono text-[11px]">${o.customerPhone}</div>
+                <div class="font-bold text-black">${o.customerName}</div>
+                <div class="text-neutral-500 font-mono text-[11px]">${o.customerPhone}</div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-slate-900">₹${o.subtotal}</div>
-                <span class="text-[10px] ${o.paymentStatus === 'PAID' ? 'text-emerald-600 font-bold' : 'text-amber-600 font-bold'}">${o.paymentStatus}</span>
+                <div class="font-bold text-black">₹${o.subtotal}</div>
+                <span class="text-[10px] font-semibold ${o.paymentStatus === 'PAID' ? 'text-[#06C167]' : 'text-[#FFC043]'}">${o.paymentStatus}</span>
               </div>
             </div>
-            <div class="text-slate-600 text-[11px]">📍 ${o.customerAddress}</div>
+            <div class="text-neutral-600 text-[11px]">${o.customerAddress}</div>
             <div class="flex space-x-2 pt-1">
               ${o.status === 'PACKED' ? `
-                <button onclick="updateOrderStatus('${o.id}', 'OUT_FOR_DELIVERY')" class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-[11px]">
-                  Load & Start Trip
+                <button onclick="updateOrderStatus('${o.id}', 'OUT_FOR_DELIVERY')" class="flex-1 py-2 bg-black hover:bg-neutral-800 text-white rounded-full font-semibold text-xs transition">
+                  Start Trip
                 </button>
               ` : `
-                <button onclick="completeRiderDelivery('${o.id}', ${o.subtotal})" class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[11px] flex items-center justify-center space-x-1">
+                <button onclick="completeRiderDelivery('${o.id}', ${o.subtotal})" class="flex-1 py-2 bg-[#06C167] hover:bg-emerald-600 text-white rounded-full font-semibold text-xs flex items-center justify-center space-x-1 transition">
                   <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
                   <span>Mark Delivered & Paid</span>
                 </button>
@@ -1182,8 +1178,8 @@ async function previewThermalTags(orderId) {
         <div class="border-t border-b border-black py-1">
           <div class="font-black text-xs">${tag.garmentName}</div>
           <div class="font-bold">${tag.service}</div>
-          ${tag.hasStain ? `<div class="bg-black text-white px-1 text-[10px] font-bold mt-1">⚠ CARE: ${tag.specialNote || 'STAIN REMOVAL'}</div>` : ''}
-          ${tag.isExpress ? `<div class="bg-black text-white px-1 text-[10px] font-black mt-1">⚡ 24H EXPRESS PRIORITY</div>` : ''}
+          ${tag.hasStain ? `<div class="bg-black text-white px-1 text-[10px] font-bold mt-1">CARE: ${tag.specialNote || 'STAIN REMOVAL'}</div>` : ''}
+          ${tag.isExpress ? `<div class="bg-black text-white px-1 text-[10px] font-black mt-1">24H EXPRESS PRIORITY</div>` : ''}
         </div>
 
         <div class="text-center pt-1">
@@ -1342,7 +1338,7 @@ async function submitWhatsAppSim() {
     const resultBox = document.getElementById('sim-result-box');
     const resultText = document.getElementById('sim-result-text');
     resultBox.classList.remove('hidden');
-    resultText.innerHTML = `<strong>Auto-Reply Sent via WhatsApp:</strong><br><em>"${autoReply}"</em><br><br>✓ Lead recorded in Front Desk Callback Hub!`;
+    resultText.innerHTML = `<strong>Auto-Reply Sent via WhatsApp:</strong><br><em>"${autoReply}"</em><br><br>Lead recorded in Front Desk Callback Hub.`;
     await refreshAll();
     return;
   }
@@ -1357,7 +1353,7 @@ async function submitWhatsAppSim() {
     const resultBox = document.getElementById('sim-result-box');
     const resultText = document.getElementById('sim-result-text');
     resultBox.classList.remove('hidden');
-    resultText.innerHTML = `<strong>Auto-Reply Sent via WhatsApp:</strong><br><em>"${result.autoReplyDispatched}"</em><br><br>✓ Lead recorded in Front Desk Callback Hub!`;
+    resultText.innerHTML = `<strong>Auto-Reply Sent via WhatsApp:</strong><br><em>"${result.autoReplyDispatched}"</em><br><br>Lead recorded in Front Desk Callback Hub.`;
     await refreshAll();
   } catch (err) {
     console.error(err);
@@ -1496,12 +1492,12 @@ function renderOrderItemsTable() {
   tbody.innerHTML = currentNewOrderItems.map((item, idx) => `
     <tr>
       <td class="p-2.5 font-bold font-mono">${idx + 1}</td>
-      <td class="p-2.5 font-bold text-slate-800">${item.garmentName}</td>
+      <td class="p-2.5 font-semibold text-black">${item.garmentName}</td>
       <td class="p-2.5">${item.service}</td>
-      <td class="p-2.5">${item.hasStain ? `<span class="text-red-600 font-bold">⚠ ${item.specialNote}</span>` : '—'}</td>
+      <td class="p-2.5">${item.hasStain ? `<span class="text-[#E11900] font-semibold">${item.specialNote}</span>` : '—'}</td>
       <td class="p-2.5 text-right font-bold font-mono">₹${item.rate}</td>
       <td class="p-2.5 text-right">
-        <button onclick="removeGarmentItem(${idx})" class="text-red-500 hover:text-red-700 font-bold">✕</button>
+        <button onclick="removeGarmentItem(${idx})" class="text-neutral-500 hover:text-black font-semibold text-xs">Remove</button>
       </td>
     </tr>
   `).join('');
@@ -1712,7 +1708,7 @@ function handleExcelFileSelected(event) {
 function processSelectedExcelFile(file) {
   selectedExcelFile = file;
   const filenameEl = document.getElementById('excel-selected-filename');
-  filenameEl.innerText = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+  filenameEl.innerText = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
   filenameEl.classList.remove('hidden');
 
   document.getElementById('btn-submit-excel').disabled = false;
@@ -1728,7 +1724,7 @@ function setupExcelDropZone() {
     dropZone.addEventListener(eventName, (e) => {
       e.preventDefault();
       e.stopPropagation();
-      dropZone.classList.add('border-emerald-600', 'bg-emerald-100');
+      dropZone.classList.add('border-black', 'bg-[#EEEEEE]');
     }, false);
   });
 
@@ -1736,7 +1732,7 @@ function setupExcelDropZone() {
     dropZone.addEventListener(eventName, (e) => {
       e.preventDefault();
       e.stopPropagation();
-      dropZone.classList.remove('border-emerald-600', 'bg-emerald-100');
+      dropZone.classList.remove('border-black', 'bg-[#EEEEEE]');
     }, false);
   });
 
@@ -1825,7 +1821,7 @@ async function uploadExcelFile() {
         await refreshAll();
         searchCustomers('');
 
-        btn.innerHTML = `✓ Imported Successfully!`;
+        btn.innerHTML = `Imported Successfully`;
         setTimeout(() => { btn.innerHTML = originalHtml; btn.disabled = false; }, 2000);
       };
       reader.readAsArrayBuffer(selectedExcelFile);
@@ -1855,7 +1851,7 @@ async function uploadExcelFile() {
     await refreshAll();
     searchCustomers('');
 
-    btn.innerHTML = `✓ Imported Successfully!`;
+    btn.innerHTML = `Imported Successfully`;
     setTimeout(() => { btn.innerHTML = originalHtml; btn.disabled = false; }, 2000);
     lucide.createIcons();
   } catch (err) {
@@ -1897,67 +1893,67 @@ function renderFleetCards(riders) {
 
     let statusBadge = '';
     if (isOverdue) {
-      statusBadge = `<span class="bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full animate-pulse">⚠ OVERDUE RETURN (+${r.currentRun ? r.currentRun.unaccountedGapMinutes : 12}m Gap)</span>`;
+      statusBadge = `<span class="bg-red-50 text-[#E11900] border border-red-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Delayed (+${r.currentRun ? r.currentRun.unaccountedGapMinutes : 12}m)</span>`;
     } else if (isReturning) {
-      statusBadge = `<span class="bg-cyan-100 text-cyan-800 text-[10px] font-bold px-2 py-0.5 rounded-full">En Route to Store</span>`;
+      statusBadge = `<span class="bg-[#EEEEEE] text-black text-[10px] font-semibold px-2.5 py-0.5 rounded-full">En Route</span>`;
     } else if (isIdle) {
-      statusBadge = `<span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">At Store (Available)</span>`;
+      statusBadge = `<span class="bg-emerald-50 text-[#06C167] text-[10px] font-semibold px-2.5 py-0.5 rounded-full">Available</span>`;
     } else {
-      statusBadge = `<span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Out Delivering</span>`;
+      statusBadge = `<span class="bg-[#EEEEEE] text-neutral-800 text-[10px] font-semibold px-2.5 py-0.5 rounded-full">In Transit</span>`;
     }
 
     return `
-      <div class="bg-slate-50 p-4 rounded-xl border ${isOverdue ? 'border-red-300 ring-2 ring-red-100 shadow-sm' : 'border-slate-200'} space-y-3">
+      <div class="bg-white p-4 rounded-2xl border ${isOverdue ? 'border-red-300 ring-1 ring-red-200' : 'border-[#E2E2E2]'} shadow-sm space-y-3">
         <div class="flex items-start justify-between">
-          <div class="flex items-center space-x-2.5">
-            <div class="w-9 h-9 rounded-full ${isOverdue ? 'bg-red-600' : isIdle ? 'bg-emerald-600' : 'bg-teal-600'} text-white flex items-center justify-center font-bold text-xs">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-full ${isOverdue ? 'bg-[#E11900]' : isIdle ? 'bg-[#06C167]' : 'bg-black'} text-white flex items-center justify-center font-bold text-xs">
               ${r.name.split(' ').map(n => n[0]).join('')}
             </div>
             <div>
               <div class="flex items-center space-x-1.5">
-                <h4 class="font-bold text-slate-900 text-sm">${r.name}</h4>
-                <span class="text-[10px] text-slate-500 font-mono">(${r.vehicle})</span>
+                <h4 class="font-bold text-black text-sm">${r.name}</h4>
+                <span class="text-[10px] text-neutral-500 font-mono">(${r.vehicle})</span>
               </div>
-              <div class="text-[11px] text-slate-500">${r.phone}</div>
+              <div class="text-[11px] text-neutral-500">${r.phone}</div>
             </div>
           </div>
           <div>${statusBadge}</div>
         </div>
 
-        <div class="p-2.5 bg-white rounded-lg border border-slate-200 text-xs space-y-1.5">
+        <div class="p-3 bg-[#F6F6F6] rounded-xl border border-[#EEEEEE] text-xs space-y-1.5">
           <div class="flex items-center justify-between text-[11px]">
-            <span class="text-slate-600 truncate">📍 <strong>Location:</strong> ${r.location.address}</span>
-            <span class="text-slate-400 font-mono shrink-0">🔋 ${r.location.batteryLevel}</span>
+            <span class="text-neutral-700 truncate"><strong>Location:</strong> ${r.location.address}</span>
+            <span class="text-neutral-500 font-mono shrink-0 font-semibold">${r.location.batteryLevel}</span>
           </div>
 
           ${r.currentRun ? `
-            <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-600">
+            <div class="pt-1.5 border-t border-[#E2E2E2] flex items-center justify-between text-[11px] text-neutral-600">
               <span>Run: <strong>${r.currentRun.zone}</strong> (${r.currentRun.totalOrders} orders)</span>
-              <span>Due Back: <strong class="${isOverdue ? 'text-red-600 font-black' : 'text-slate-800'}">${new Date(r.currentRun.expectedReturnAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</strong></span>
+              <span>Due: <strong class="${isOverdue ? 'text-[#E11900] font-bold' : 'text-black'}">${new Date(r.currentRun.expectedReturnAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</strong></span>
             </div>
             ${isOverdue ? `
-              <div class="p-1.5 bg-red-50 text-red-700 text-[11px] rounded font-bold">
-                🚨 Transit Gap Detected: Rider completed delivery 25m ago (3.8 km away). Delayed returning by +${r.currentRun.unaccountedGapMinutes} minutes.
+              <div class="p-2 bg-red-50 text-[#E11900] text-[11px] rounded-lg font-semibold border border-red-100">
+                Transit Gap: Completed delivery 25m ago. Delayed by +${r.currentRun.unaccountedGapMinutes}m.
               </div>
             ` : ''}
           ` : `
-            <div class="pt-1 text-[11px] text-emerald-700 font-medium">✓ Ready at counter. No active orders assigned.</div>
+            <div class="pt-1 text-[11px] text-[#06C167] font-semibold">Available at store. Standby.</div>
           `}
         </div>
 
         <div class="flex items-center justify-between pt-1">
-          <span class="text-[10px] text-slate-400">Punctuality Score: <strong class="text-slate-700">${r.todayStats.integrityScore}%</strong></span>
-          <div class="flex space-x-1.5">
+          <span class="text-[10px] text-neutral-500">Punctuality: <strong class="text-black font-semibold">${r.todayStats.integrityScore}%</strong></span>
+          <div class="flex space-x-2">
             ${isOverdue ? `
-              <button onclick="sendRiderWarning('${r.id}')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold flex items-center space-x-1 shadow-sm">
+              <button onclick="sendRiderWarning('${r.id}')" class="px-3.5 py-1.5 bg-[#E11900] hover:bg-red-700 text-white rounded-full text-xs font-semibold flex items-center space-x-1 transition">
                 <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i>
-                <span>Send WA Warning</span>
+                <span>Send Alert</span>
               </button>
             ` : ''}
             ${!isIdle ? `
-              <button onclick="checkInAtStoreCounter('${r.id}')" class="px-3 py-1.5 bg-slate-900 hover:bg-black text-white rounded-lg text-xs font-bold flex items-center space-x-1 shadow-sm">
+              <button onclick="checkInAtStoreCounter('${r.id}')" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-semibold flex items-center space-x-1 transition">
                 <i data-lucide="check" class="w-3.5 h-3.5"></i>
-                <span>Mark Arrived at Store</span>
+                <span>Check In</span>
               </button>
             ` : ''}
           </div>
@@ -1975,20 +1971,20 @@ function renderFleetAuditTable(riders) {
   tbody.innerHTML = riders.map(r => {
     const isGood = r.todayStats.integrityScore >= 90;
     return `
-      <tr class="hover:bg-slate-50">
-        <td class="p-2.5 font-bold text-slate-900">${r.name}</td>
-        <td class="p-2.5 text-slate-500 font-mono text-[11px]">${r.vehicle}</td>
-        <td class="p-2.5 font-bold">${r.todayStats.completedRuns} Trips</td>
-        <td class="p-2.5">
-          <span class="font-bold ${r.todayStats.delayedReturns > 0 ? 'text-amber-600' : 'text-emerald-600'}">
+      <tr class="hover:bg-[#F6F6F6] transition-colors border-b border-[#EEEEEE]">
+        <td class="p-3 font-semibold text-black">${r.name}</td>
+        <td class="p-3 text-neutral-500 font-mono text-[11px]">${r.vehicle}</td>
+        <td class="p-3 font-semibold text-black">${r.todayStats.completedRuns} Trips</td>
+        <td class="p-3">
+          <span class="font-semibold ${r.todayStats.delayedReturns > 0 ? 'text-[#FFC043]' : 'text-[#06C167]'}">
             ${Math.round((r.todayStats.onTimeRuns / Math.max(1, r.todayStats.completedRuns)) * 100)}%
           </span>
-          <span class="text-[10px] text-slate-400 block">${r.todayStats.delayedReturns} delayed</span>
+          <span class="text-[10px] text-neutral-400 block">${r.todayStats.delayedReturns} delayed</span>
         </td>
-        <td class="p-2.5 font-mono ${r.todayStats.totalUnaccountedGapMins > 0 ? 'text-red-600 font-bold' : 'text-slate-500'}">
-          ${r.todayStats.totalUnaccountedGapMins > 0 ? `+${r.todayStats.totalUnaccountedGapMins} mins` : '0 mins'}
+        <td class="p-3 font-mono ${r.todayStats.totalUnaccountedGapMins > 0 ? 'text-[#E11900] font-semibold' : 'text-neutral-500'}">
+          ${r.todayStats.totalUnaccountedGapMins > 0 ? `+${r.todayStats.totalUnaccountedGapMins}m` : '0m'}
         </td>
-        <td class="p-2.5 text-right font-black ${isGood ? 'text-emerald-600' : 'text-amber-600'}">
+        <td class="p-3 text-right font-bold ${isGood ? 'text-[#06C167]' : 'text-[#FFC043]'}">
           ${r.todayStats.integrityScore} / 100
         </td>
       </tr>

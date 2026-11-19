@@ -3,33 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SuperDry - Smart Laundry & Operations Platform</title>
+  <title>SuperDry PRO • Operations Platform</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
+  <!-- Inter & JetBrains Mono Fonts (Uber Base Typography) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- SheetJS CDN (for in-browser client-side Excel upload on GitHub Pages) -->
+  <!-- SheetJS CDN (for in-browser client-side Excel upload) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"Space Mono"', 'monospace'],
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            brand: {
-              50: '#f0fdfa',
-              100: '#ccfbf1',
-              500: '#14b8a6',
-              600: '#0d9488',
-              700: '#0f766e',
-              900: '#134e4a',
+            uber: {
+              black: '#000000',
+              white: '#FFFFFF',
+              gray50: '#F6F6F6',
+              gray100: '#EEEEEE',
+              gray200: '#E2E2E2',
+              gray300: '#CBCBCB',
+              gray400: '#898989',
+              gray500: '#545454',
+              gray800: '#1F1F1F',
+              blue: '#276EF1',
+              green: '#06C167',
+              amber: '#FFC043',
+              red: '#E11900',
             }
           }
         }
@@ -60,57 +67,62 @@
       }
     }
     .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
+      background: #E2E2E2;
+      border-radius: 9999px;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden w-full">
+<body class="bg-[#F6F6F6] text-black font-sans antialiased min-h-screen flex flex-col overflow-x-hidden w-full selection:bg-black selection:text-white">
 
-  <!-- TOP NAVIGATION & PERSONA SWITCHER -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-14 sm:h-16 gap-2">
-        <!-- Brand: Clean Typography -->
-        <div class="flex items-center shrink-0">
-          <div>
-            <div class="flex items-center space-x-1.5 sm:space-x-2">
-              <h1 class="text-xl sm:text-2xl font-black tracking-tight text-slate-900 leading-none">Super<span class="text-amber-500">Dry</span></h1>
-              <span class="bg-amber-500 text-white text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">PRO</span>
-            </div>
-            <p class="text-[9px] sm:text-[10px] font-bold text-slate-400 tracking-wider uppercase mt-0.5">Laundry Operations</p>
-          </div>
+  <!-- ============================================================== -->
+  <!-- UBER-STYLE MINIMALIST APP HEADER                                -->
+  <!-- ============================================================== -->
+  <header class="bg-white border-b border-[#E2E2E2] sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-3">
+        
+        <!-- Brand: High-contrast typography -->
+        <div class="flex items-center space-x-2 shrink-0">
+          <span class="text-xl sm:text-2xl font-black tracking-tight text-black">SuperDry</span>
+          <span class="bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">PRO</span>
         </div>
 
-        <!-- Desktop Persona Selector Bar (Hidden on Mobile/Tablet) -->
-        <div class="hidden lg:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
-          <button onclick="setPersona('admin')" id="btn-persona-admin" class="persona-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 text-slate-700 hover:text-slate-900">
-            <i data-lucide="shield-check" class="w-4 h-4"></i>
-            <span>Super Admin</span>
+        <!-- Desktop Persona Segmented Control (Uber Base Switcher) -->
+        <div class="hidden lg:flex items-center bg-[#EEEEEE] p-1 rounded-full">
+          <button onclick="setPersona('admin')" id="btn-persona-admin" class="persona-tab px-4 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center space-x-1.5 text-black bg-white shadow-sm">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            <span>Admin</span>
           </button>
-          <button onclick="setPersona('manager')" id="btn-persona-manager" class="persona-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 text-slate-700 hover:text-slate-900">
-            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <button onclick="setPersona('manager')" id="btn-persona-manager" class="persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-black">
+            <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
             <span>Front Desk</span>
           </button>
-          <button onclick="setPersona('washer')" id="btn-persona-washer" class="persona-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 text-slate-700 hover:text-slate-900">
-            <i data-lucide="shirt" class="w-4 h-4"></i>
-            <span>Laundry Master</span>
+          <button onclick="setPersona('washer')" id="btn-persona-washer" class="persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-black">
+            <i data-lucide="shirt" class="w-3.5 h-3.5"></i>
+            <span>Washer</span>
           </button>
-          <button onclick="setPersona('rider')" id="btn-persona-rider" class="persona-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 text-slate-700 hover:text-slate-900">
-            <i data-lucide="bike" class="w-4 h-4"></i>
+          <button onclick="setPersona('rider')" id="btn-persona-rider" class="persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-black">
+            <i data-lucide="bike" class="w-3.5 h-3.5"></i>
             <span>Field Agent</span>
           </button>
         </div>
 
-        <!-- Right Side Actions: WhatsApp Simulator + Mobile Role Selector -->
-        <div class="flex items-center space-x-1.5 sm:space-x-2">
+        <!-- Right Side: Fast Actions & Mobile Persona Dropdown -->
+        <div class="flex items-center space-x-2">
           <!-- Mobile Role Selector Dropdown -->
           <div class="flex lg:hidden">
-            <select id="mobile-persona-select" onchange="setPersona(this.value)" class="text-[11px] font-bold bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+            <select id="mobile-persona-select" onchange="setPersona(this.value)" class="text-xs font-semibold bg-[#EEEEEE] border-none rounded-full px-3 py-1.5 text-black focus:outline-none focus:ring-2 focus:ring-black">
               <option value="admin">Admin</option>
               <option value="manager">Desk</option>
               <option value="washer">Washer</option>
@@ -119,7 +131,7 @@
           </div>
 
           <!-- WhatsApp Simulator Trigger Button -->
-          <button onclick="openWhatsAppModal()" class="shrink-0 px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] sm:text-xs font-semibold shadow-sm transition-all flex items-center space-x-1">
+          <button onclick="openWhatsAppModal()" class="shrink-0 px-3.5 py-1.5 rounded-full bg-black hover:bg-neutral-800 text-white text-xs font-semibold transition-all flex items-center space-x-1.5 shadow-sm">
             <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
             <span class="hidden sm:inline">Simulate WhatsApp</span>
             <span class="inline sm:hidden">WA Sim</span>
@@ -127,144 +139,125 @@
         </div>
       </div>
 
-      <!-- Mobile Touch Persona Bar (Scrollable clean pill tabs for quick switching on iPhone) -->
-      <div class="flex lg:hidden overflow-x-auto custom-scrollbar py-2 border-t border-slate-100 gap-1.5">
-        <button onclick="setPersona('admin')" id="mbtn-persona-admin" class="mobile-persona-pill shrink-0 px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center space-x-1 bg-teal-600 text-white shadow-sm">
-          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+      <!-- Mobile Touch Persona Bar (Scrollable clean pill tabs for iPhone) -->
+      <div class="flex lg:hidden overflow-x-auto no-scrollbar py-2 border-t border-[#E2E2E2] gap-1.5">
+        <button onclick="setPersona('admin')" id="mbtn-persona-admin" class="mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1 bg-black text-white shadow-sm">
           <span>Admin</span>
         </button>
-        <button onclick="setPersona('manager')" id="mbtn-persona-manager" class="mobile-persona-pill shrink-0 px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center space-x-1 bg-slate-100 text-slate-700">
-          <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+        <button onclick="setPersona('manager')" id="mbtn-persona-manager" class="mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 bg-[#EEEEEE] text-[#545454]">
           <span>Front Desk</span>
         </button>
-        <button onclick="setPersona('washer')" id="mbtn-persona-washer" class="mobile-persona-pill shrink-0 px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center space-x-1 bg-slate-100 text-slate-700">
-          <i data-lucide="shirt" class="w-3.5 h-3.5"></i>
+        <button onclick="setPersona('washer')" id="mbtn-persona-washer" class="mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 bg-[#EEEEEE] text-[#545454]">
           <span>Washer</span>
         </button>
-        <button onclick="setPersona('rider')" id="mbtn-persona-rider" class="mobile-persona-pill shrink-0 px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center space-x-1 bg-slate-100 text-slate-700">
-          <i data-lucide="bike" class="w-3.5 h-3.5"></i>
+        <button onclick="setPersona('rider')" id="mbtn-persona-rider" class="mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 bg-[#EEEEEE] text-[#545454]">
           <span>Field Agent</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- NOTIFICATION BANNER / ACTIVE CONTEXT -->
-  <div class="bg-slate-900 text-slate-200 text-[11px] sm:text-xs py-1.5 px-3 sm:px-4">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+  <!-- SUBTLE GLANCEABLE STATUS STRIP -->
+  <div class="bg-white border-b border-[#E2E2E2] px-4 sm:px-8 py-2 text-xs text-[#545454]">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center space-x-2 truncate">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
-        <span id="role-context-label" class="font-medium truncate">Active Screen: Super Admin</span>
-        <span class="text-slate-500">|</span>
-        <span class="text-slate-400 truncate"><strong class="text-white">2,000 Customers</strong> connected</span>
+        <span class="w-2 h-2 rounded-full bg-[#06C167] shrink-0"></span>
+        <span id="role-context-label" class="font-medium text-black truncate">Active: Super Admin</span>
+        <span class="text-[#CBCBCB]">|</span>
+        <span class="truncate">2,000 Customers connected</span>
       </div>
-      <div class="hidden sm:flex items-center space-x-4 text-slate-300 shrink-0">
+      <div class="hidden sm:flex items-center space-x-3 text-[#545454] shrink-0">
         <span>Sector 15 Main Store</span>
-        <span id="live-clock" class="font-mono text-slate-400"></span>
+        <span id="live-clock" class="font-mono text-[#898989]"></span>
       </div>
     </div>
   </div>
 
   <!-- MAIN APP CONTAINER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 overflow-x-hidden">
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 overflow-x-hidden">
 
     <!-- ============================================================== -->
     <!-- PERSONA 1: STORE OWNER / SUPER ADMIN SCREEN                    -->
     <!-- ============================================================== -->
     <div id="screen-admin" class="persona-screen space-y-6">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      
+      <!-- Screen Header with Minimalist Actions -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Store Performance & Executive Overview</h2>
-          <p class="text-xs sm:text-sm text-slate-500">Monitor daily revenue, SLA turnaround, active garments in plant, and store metrics.</p>
+          <h1 class="text-2xl sm:text-3xl font-black text-black tracking-tight">Overview</h1>
+          <p class="text-xs text-[#545454] mt-0.5">Live revenue, orders velocity, and fleet status</p>
         </div>
-        <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
-          <button onclick="openExcelUploadModal()" class="col-span-2 sm:col-span-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center justify-center space-x-1.5">
+        <div class="flex items-center gap-2">
+          <button onclick="openExcelUploadModal()" class="px-3.5 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] text-black rounded-full text-xs font-semibold transition-all flex items-center space-x-1.5">
             <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
-            <span>Upload Customers Excel</span>
+            <span>Import CSV</span>
           </button>
-          <button onclick="refreshAll()" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-50 flex items-center justify-center space-x-1.5 shadow-sm">
+          <button onclick="refreshAll()" class="px-3.5 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] text-black rounded-full text-xs font-semibold transition-all flex items-center space-x-1.5">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-            <span>Sync Data</span>
+            <span>Sync</span>
           </button>
-          <button onclick="setPersona('manager'); openNewOrderModal();" class="px-3 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center justify-center space-x-1.5">
+          <button onclick="setPersona('manager'); openNewOrderModal();" class="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-semibold shadow-sm flex items-center space-x-1.5">
             <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-            <span>Create Order</span>
+            <span>New Order</span>
           </button>
         </div>
       </div>
 
-      <!-- High-level Metric Cards -->
+      <!-- High-level Metric Cards (Uber Style) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Collected Revenue</span>
-            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
-              <i data-lucide="indian-rupee" class="w-4 h-4"></i>
-            </div>
-          </div>
-          <div class="mt-3">
-            <span id="stat-revenue" class="text-2xl font-black text-slate-900">₹0</span>
-            <span class="text-xs text-emerald-600 font-semibold block mt-1">+ ₹<span id="stat-pending-revenue">0</span> pending COD/UPI</span>
+        <div class="bg-white p-5 rounded-2xl border border-[#E2E2E2]">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">Collected Revenue</span>
+          <div class="mt-2 flex items-baseline justify-between">
+            <span id="stat-revenue" class="text-3xl font-black text-black tracking-tight">₹0</span>
+            <span class="text-[11px] font-bold text-[#06C167] bg-emerald-50 px-2 py-0.5 rounded-full">+₹<span id="stat-pending-revenue">0</span> pending</span>
           </div>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active In-Process Orders</span>
-            <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-              <i data-lucide="package" class="w-4 h-4"></i>
-            </div>
-          </div>
-          <div class="mt-3">
-            <span id="stat-active-orders" class="text-2xl font-black text-slate-900">0</span>
-            <span class="text-xs text-slate-500 font-medium block mt-1"><span id="stat-completed-orders">0</span> orders delivered today</span>
+        <div class="bg-white p-5 rounded-2xl border border-[#E2E2E2]">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">In-Process Orders</span>
+          <div class="mt-2 flex items-baseline justify-between">
+            <span id="stat-active-orders" class="text-3xl font-black text-black tracking-tight">0</span>
+            <span class="text-[11px] font-semibold text-[#545454]"><span id="stat-completed-orders">0</span> delivered today</span>
           </div>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending Leads / Inquiries</span>
-            <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
-              <i data-lucide="phone-incoming" class="w-4 h-4"></i>
-            </div>
-          </div>
-          <div class="mt-3">
-            <span id="stat-pending-leads" class="text-2xl font-black text-slate-900">0</span>
-            <span class="text-xs text-amber-600 font-semibold block mt-1">Requires Front Desk callback</span>
+        <div class="bg-white p-5 rounded-2xl border border-[#E2E2E2]">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">Pending Leads</span>
+          <div class="mt-2 flex items-baseline justify-between">
+            <span id="stat-pending-leads" class="text-3xl font-black text-black tracking-tight">0</span>
+            <span class="text-[11px] font-bold text-[#E11900] bg-red-50 px-2 py-0.5 rounded-full">Requires Callback</span>
           </div>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Customer Base</span>
-            <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
-              <i data-lucide="users" class="w-4 h-4"></i>
-            </div>
-          </div>
-          <div class="mt-3">
-            <span id="stat-total-customers" class="text-2xl font-black text-slate-900">2,000</span>
-            <span class="text-xs text-purple-600 font-semibold block mt-1">Searchable across Gurugram zones</span>
+        <div class="bg-white p-5 rounded-2xl border border-[#E2E2E2]">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">Connected Customers</span>
+          <div class="mt-2 flex items-baseline justify-between">
+            <span id="stat-total-customers" class="text-3xl font-black text-black tracking-tight">2,000</span>
+            <span class="text-[11px] font-medium text-[#545454]">Gurugram</span>
           </div>
         </div>
       </div>
 
-      <!-- Store Pipeline Stage Breakdown -->
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4">Live Laundry Pipeline Velocity</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3" id="admin-pipeline-breakdown">
+      <!-- Live Laundry Pipeline Velocity -->
+      <div class="bg-white p-5 rounded-2xl border border-[#E2E2E2]">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-black">Pipeline Velocity</h3>
+          <span class="text-[11px] text-[#545454]">8 Operational Stages</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5" id="admin-pipeline-breakdown">
           <!-- Populated dynamically -->
         </div>
       </div>
 
       <!-- Master Orders Table with Filtering -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div class="bg-white rounded-2xl border border-[#E2E2E2] overflow-hidden">
+        <div class="p-4 sm:p-5 border-b border-[#E2E2E2] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h3 class="font-bold text-slate-900">Store Master Orders Ledger</h3>
-            <p class="text-xs text-slate-500">Live order state, customer details, and fulfillment assignments</p>
+            <h3 class="font-bold text-black text-base">Orders Ledger</h3>
+            <p class="text-xs text-[#545454]">Live order fulfillment and customer assignments</p>
           </div>
           <div class="flex items-center space-x-2">
-            <select id="admin-filter-status" onchange="renderAdminOrders()" class="text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 font-medium">
+            <select id="admin-filter-status" onchange="renderAdminOrders()" class="text-xs font-semibold bg-[#F6F6F6] border-none rounded-full px-3 py-1.5 text-black focus:outline-none focus:ring-2 focus:ring-black">
               <option value="">All Statuses</option>
               <option value="PICKUP_REQUESTED">Pickup Requested</option>
               <option value="RECEIVED_IN_STORE">Received in Store</option>
@@ -279,40 +272,38 @@
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-xs">
-            <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+            <thead class="bg-[#F6F6F6] border-b border-[#E2E2E2] text-[#545454] font-semibold">
               <tr>
                 <th class="p-3.5">Order ID</th>
                 <th class="p-3.5">Customer</th>
                 <th class="p-3.5">Zone</th>
-                <th class="p-3.5">Pieces & Garments</th>
+                <th class="p-3.5">Items</th>
                 <th class="p-3.5">Amount</th>
                 <th class="p-3.5">Status</th>
-                <th class="p-3.5">Promised Delivery</th>
+                <th class="p-3.5">ETA</th>
                 <th class="p-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody id="admin-orders-table" class="divide-y divide-slate-100 text-slate-700">
+            <tbody id="admin-orders-table" class="divide-y divide-[#E2E2E2] text-black">
               <!-- Rendered via JS -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- FLEET RADAR & ANTI-SLACKING CONTROLLER -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+      <!-- FLEET RADAR & TRANSIT GAP TRACKER (Uber Fleet Portal) -->
+      <div class="bg-white rounded-2xl border border-[#E2E2E2] p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E2E2E2] pb-4">
           <div>
             <div class="flex items-center space-x-2">
-              <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
-              <h3 class="font-bold text-slate-900 text-base">Fleet Radar & Anti-Slacking Tracker</h3>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#06C167] animate-pulse"></span>
+              <h3 class="font-bold text-black text-base">Fleet Radar & Transit Gap Tracker</h3>
             </div>
-            <p class="text-xs text-slate-500 mt-0.5">Automated Round-Trip SLA timers, Live GPS telemetry, and transit gap moonlighting alerts.</p>
+            <p class="text-xs text-[#545454] mt-0.5">Round-trip SLA telemetry and anti-moonlighting audit</p>
           </div>
-          <div class="flex items-center space-x-2">
-            <span class="text-[11px] font-bold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200">
-              ⚡ Geofence Radius: 150m from Store
-            </span>
-          </div>
+          <span class="text-xs font-semibold bg-[#F6F6F6] text-black px-3 py-1 rounded-full w-fit">
+            150m Store Geofence
+          </span>
         </div>
 
         <!-- Live Fleet Cards Grid -->
@@ -320,25 +311,25 @@
           <!-- Rendered dynamically -->
         </div>
 
-        <!-- Owner's Transit Gap & Integrity Audit Table -->
-        <div class="mt-4 pt-4 border-t border-slate-100 space-y-2">
-          <div class="flex items-center justify-between text-xs font-bold text-slate-700">
-            <span class="uppercase tracking-wider text-[11px] text-slate-400">Daily Rider Transit Gap & Punctuality Audit</span>
-            <span class="text-teal-700 font-semibold">Updated Every 30s</span>
+        <!-- Transit Gap & Integrity Audit Table -->
+        <div class="mt-4 pt-4 border-t border-[#E2E2E2] space-y-2">
+          <div class="flex items-center justify-between text-xs font-bold text-black">
+            <span class="uppercase tracking-wider text-[11px] text-[#545454]">Rider Transit Gap Audit</span>
+            <span class="text-[#545454] font-normal">Auto-updated</span>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs border-collapse">
-              <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+              <thead class="bg-[#F6F6F6] border-b border-[#E2E2E2] text-[#545454] font-semibold">
                 <tr>
                   <th class="p-2.5">Rider</th>
                   <th class="p-2.5">Vehicle</th>
-                  <th class="p-2.5">Completed Runs</th>
-                  <th class="p-2.5">On-Time Rate</th>
-                  <th class="p-2.5">Unaccounted Transit Gap</th>
-                  <th class="p-2.5 text-right">Integrity Score</th>
+                  <th class="p-2.5">Trips</th>
+                  <th class="p-2.5">On-Time</th>
+                  <th class="p-2.5">Transit Gap</th>
+                  <th class="p-2.5 text-right">Score</th>
                 </tr>
               </thead>
-              <tbody id="fleet-audit-table" class="divide-y divide-slate-100 text-slate-700">
+              <tbody id="fleet-audit-table" class="divide-y divide-[#E2E2E2] text-black">
                 <!-- Rendered dynamically -->
               </tbody>
             </table>
@@ -348,81 +339,77 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- PERSONA 2: FRONT DESK / STORE MANAGER SCREEN                  -->
+    <!-- PERSONA 2: FRONT DESK SCREEN                                   -->
     <!-- ============================================================== -->
     <div id="screen-manager" class="persona-screen space-y-6 hidden w-full max-w-full overflow-x-hidden">
       <!-- Header Banner with Fast Action -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Front Desk & Operations Counter</h2>
-          <p class="text-xs sm:text-sm text-slate-500">Capture inquiries, fast billing, count & print garment thermal tags, assign dispatches.</p>
+          <h1 class="text-2xl sm:text-3xl font-black text-black tracking-tight">Front Desk</h1>
+          <p class="text-xs text-[#545454] mt-0.5">Inbound inquiries, garment intake, and billing counter</p>
         </div>
-        <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
-          <button onclick="openNewCustomerModal()" class="flex-1 sm:flex-initial px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-sm flex items-center justify-center space-x-1.5">
-            <i data-lucide="user-plus" class="w-4 h-4"></i>
-            <span>New Customer</span>
+        <div class="flex items-center space-x-2 shrink-0">
+          <button onclick="openNewCustomerModal()" class="px-3.5 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] text-black rounded-full text-xs font-semibold transition-all">
+            + New Customer
           </button>
-          <button onclick="openNewOrderModal()" class="flex-1 sm:flex-initial px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center justify-center space-x-1.5">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            <span>New Order POS</span>
+          <button onclick="openNewOrderModal()" class="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-semibold shadow-sm transition-all">
+            + New Order POS
           </button>
         </div>
       </div>
 
-      <!-- Manager Tabs -->
-      <div class="flex border-b border-slate-200 overflow-x-auto no-scrollbar flex-nowrap space-x-2 sm:space-x-6 text-xs sm:text-sm font-semibold w-full pb-0.5">
-        <button onclick="setManagerTab('leads')" id="mtab-leads" class="pb-2.5 sm:pb-3 border-b-2 border-teal-600 text-teal-700 flex items-center space-x-1.5 sm:space-x-2 shrink-0 whitespace-nowrap">
-          <i data-lucide="phone-call" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
-          <span>Inbound Leads & Missed Calls</span>
-          <span id="badge-leads-count" class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+      <!-- Manager Sub-Tabs (Uber Pill Segmented Control) -->
+      <div class="flex bg-[#EEEEEE] p-1 rounded-full gap-1 overflow-x-auto no-scrollbar w-fit">
+        <button onclick="setManagerTab('leads')" id="mtab-leads" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-black text-white shadow-sm flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+          <span>Inbound Leads</span>
+          <span id="badge-leads-count" class="bg-white/20 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-1">0</span>
         </button>
-        <button onclick="setManagerTab('tagging')" id="mtab-tagging" class="pb-2.5 sm:pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-1.5 sm:space-x-2 shrink-0 whitespace-nowrap">
-          <i data-lucide="tag" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
-          <span>Tagging & Intake Counter</span>
+        <button onclick="setManagerTab('tagging')" id="mtab-tagging" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-black flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all">
+          <i data-lucide="tag" class="w-3.5 h-3.5"></i>
+          <span>Tagging & Intake</span>
         </button>
-        <button onclick="setManagerTab('customers')" id="mtab-customers" class="pb-2.5 sm:pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-1.5 sm:space-x-2 shrink-0 whitespace-nowrap">
-          <i data-lucide="contact" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
-          <span>Search 2,000 Customers</span>
+        <button onclick="setManagerTab('customers')" id="mtab-customers" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-black flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all">
+          <i data-lucide="users" class="w-3.5 h-3.5"></i>
+          <span>2,000 Customers</span>
         </button>
       </div>
 
       <!-- TAB 1: INBOUND LEADS & MISSED CALLS -->
       <div id="manager-view-leads" class="space-y-4">
-        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-amber-900 text-xs">
+        <div class="bg-white border border-[#E2E2E2] rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div class="flex items-center space-x-2">
-            <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600 shrink-0"></i>
-            <span><strong>Anti-Loss Lead Tracker:</strong> Calls and WhatsApp inquiries are logged automatically with SLA countdowns. Repeated calls update the same card instead of creating duplicates.</span>
+            <span class="w-2 h-2 rounded-full bg-[#276EF1] shrink-0"></span>
+            <span><strong>Anti-Loss Lead Tracker:</strong> Inbound calls and WhatsApp messages are logged automatically with SLA countdowns.</span>
           </div>
-          <button onclick="openWhatsAppModal('MISSED_CALL')" class="underline font-bold text-amber-800 hover:text-amber-950 shrink-0">Test Missed Call Event</button>
+          <button onclick="openWhatsAppModal('MISSED_CALL')" class="underline font-bold text-black hover:opacity-75 shrink-0">Test Call Event</button>
         </div>
 
         <!-- Filter & Inbox Cleanup Toolbar -->
-        <div class="bg-white p-3 rounded-xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs w-full max-w-full">
+        <div class="bg-white p-3 rounded-2xl border border-[#E2E2E2] flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs w-full max-w-full">
           <!-- Filter Tabs -->
-          <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 overflow-x-auto no-scrollbar flex-nowrap">
-            <button onclick="setLeadsFilter('active')" id="lfilter-active" class="px-2.5 sm:px-3 py-1 rounded-md font-bold text-teal-800 bg-white shadow-sm transition-all shrink-0 whitespace-nowrap">
-              Active Pending (<span id="lcount-active">0</span>)
+          <div class="flex items-center bg-[#F6F6F6] p-1 rounded-full overflow-x-auto no-scrollbar flex-nowrap">
+            <button onclick="setLeadsFilter('active')" id="lfilter-active" class="px-3 py-1 rounded-full font-bold text-black bg-white shadow-sm transition-all shrink-0 whitespace-nowrap">
+              Active (<span id="lcount-active">0</span>)
             </button>
-            <button onclick="setLeadsFilter('all')" id="lfilter-all" class="px-2.5 sm:px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all shrink-0 whitespace-nowrap">
+            <button onclick="setLeadsFilter('all')" id="lfilter-all" class="px-3 py-1 rounded-full font-medium text-[#545454] hover:text-black transition-all shrink-0 whitespace-nowrap">
               All (<span id="lcount-all">0</span>)
             </button>
-            <button onclick="setLeadsFilter('resolved')" id="lfilter-resolved" class="px-2.5 sm:px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all shrink-0 whitespace-nowrap">
+            <button onclick="setLeadsFilter('resolved')" id="lfilter-resolved" class="px-3 py-1 rounded-full font-medium text-[#545454] hover:text-black transition-all shrink-0 whitespace-nowrap">
               Resolved (<span id="lcount-resolved">0</span>)
             </button>
-            <button onclick="setLeadsFilter('archived')" id="lfilter-archived" class="px-2.5 sm:px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all shrink-0 whitespace-nowrap">
+            <button onclick="setLeadsFilter('archived')" id="lfilter-archived" class="px-3 py-1 rounded-full font-medium text-[#545454] hover:text-black transition-all shrink-0 whitespace-nowrap">
               Archived (<span id="lcount-archived">0</span>)
             </button>
           </div>
 
           <!-- Cleanup Actions -->
           <div class="flex items-center space-x-2 shrink-0">
-            <button onclick="clearResolvedLeads('archive')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold flex items-center space-x-1 transition-colors text-xs" title="Move processed cards to Archive">
-              <i data-lucide="archive" class="w-3.5 h-3.5 text-slate-500"></i>
-              <span>Archive Resolved</span>
+            <button onclick="clearResolvedLeads('archive')" class="px-3 py-1.5 bg-[#EEEEEE] hover:bg-[#E2E2E2] text-black rounded-full font-semibold text-xs transition-all">
+              Archive Resolved
             </button>
-            <button onclick="clearResolvedLeads('delete')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg font-semibold flex items-center space-x-1 transition-colors text-xs" title="Permanently delete processed cards">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5 text-red-500"></i>
-              <span>Clean Resolved</span>
+            <button onclick="clearResolvedLeads('delete')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-[#E11900] rounded-full font-semibold text-xs transition-all">
+              Clean Resolved
             </button>
           </div>
         </div>
@@ -434,11 +421,11 @@
 
       <!-- TAB 2: TAGGING & INTAKE COUNTER -->
       <div id="manager-view-tagging" class="space-y-4 hidden">
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <h3 class="font-bold text-slate-900 text-base">Orders Awaiting Garment Tagging & Verification</h3>
-          <p class="text-xs text-slate-500 mt-0.5">Clothes arrived from pickup or customer walk-in. Count pieces, inspect stains, and print thermal tags.</p>
+        <div class="bg-white p-5 rounded-2xl border border-[#E2E2E2]">
+          <h3 class="font-bold text-black text-base">Orders Awaiting Garment Tagging</h3>
+          <p class="text-xs text-[#545454] mt-0.5">Inspect clothes from pickup, verify pieces, and print thermal barcode tags.</p>
           
-          <div class="mt-4 divide-y divide-slate-100" id="tagging-orders-list">
+          <div class="mt-4 divide-y divide-[#E2E2E2]" id="tagging-orders-list">
             <!-- Rendered via JS -->
           </div>
         </div>
@@ -446,27 +433,27 @@
 
       <!-- TAB 3: CUSTOMER SEARCH DIRECTORY (2,000 records) -->
       <div id="manager-view-customers" class="space-y-4 hidden w-full max-w-full">
-        <div class="bg-white p-3 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4 w-full max-w-full">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-[#E2E2E2] space-y-4 w-full max-w-full">
           <div class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
-              <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-slate-400"></i>
-              <input type="text" id="cust-search-input" onkeyup="searchCustomers(this.value)" placeholder="Search across 2,000 customers by name, phone (+91...), address, or zone..." class="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none">
+              <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-[#898989]"></i>
+              <input type="text" id="cust-search-input" onkeyup="searchCustomers(this.value)" placeholder="Search 2,000 customers by name, phone, or zone..." class="w-full pl-10 pr-4 py-2.5 bg-[#F6F6F6] focus:bg-white border border-transparent focus:border-black rounded-xl text-xs focus:outline-none transition-all">
             </div>
-            <button onclick="openExcelUploadModal()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-semibold flex items-center justify-center space-x-1.5 shrink-0">
+            <button onclick="openExcelUploadModal()" class="px-4 py-2.5 bg-[#EEEEEE] hover:bg-[#E2E2E2] text-black rounded-full text-xs font-semibold flex items-center justify-center space-x-1.5 shrink-0 transition-all">
               <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
-              <span>Import Excel / CSV</span>
+              <span>Import Excel</span>
             </button>
           </div>
 
-          <!-- Mobile Cards View for Small Screens (< 640px) -->
+          <!-- Mobile Cards View (< 640px) -->
           <div id="customers-mobile-cards" class="block sm:hidden space-y-2.5">
             <!-- Rendered dynamically -->
           </div>
 
-          <!-- Desktop Table View for Screens (>= 640px) -->
+          <!-- Desktop Table View (>= 640px) -->
           <div class="hidden sm:block overflow-x-auto w-full max-w-full">
             <table class="w-full text-left text-xs border-collapse">
-              <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+              <thead class="bg-[#F6F6F6] border-b border-[#E2E2E2] text-[#545454] font-semibold">
                 <tr>
                   <th class="p-3">Customer ID</th>
                   <th class="p-3">Full Name</th>
@@ -476,7 +463,7 @@
                   <th class="p-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody id="customers-table-body" class="divide-y divide-slate-100 text-slate-700">
+              <tbody id="customers-table-body" class="divide-y divide-[#E2E2E2] text-black">
                 <!-- Rendered dynamically -->
               </tbody>
             </table>
@@ -489,193 +476,163 @@
     <!-- PERSONA 3: LAUNDRY MASTER / WASHERMAN SCREEN                   -->
     <!-- ============================================================== -->
     <div id="screen-washer" class="persona-screen space-y-6 hidden">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 bg-gradient-to-r from-cyan-900 to-slate-900 p-4 sm:p-6 rounded-2xl text-white shadow-md">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <span class="bg-cyan-500/20 text-cyan-300 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Floor Operator View</span>
-          <h2 class="text-xl sm:text-2xl font-black mt-1">Laundry Plant & Urgency Kanban</h2>
-          <p class="text-xs text-slate-300 mt-1">Urgent & Express orders are pinned at the top. Tap cards to advance garments through washing stages.</p>
+          <h1 class="text-2xl sm:text-3xl font-black text-black tracking-tight">Wash Plant Kanban</h1>
+          <p class="text-xs text-[#545454] mt-0.5">Floor operator processing queue with Express priority</p>
         </div>
-        <div class="flex items-center space-x-2 text-xs bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700 w-fit">
-          <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
-          <span>Express Priority Queue Active</span>
+        <div class="flex items-center space-x-2 text-xs bg-white border border-[#E2E2E2] px-3 py-1.5 rounded-full w-fit">
+          <span class="w-2 h-2 rounded-full bg-[#E11900] animate-pulse"></span>
+          <span class="font-semibold text-black">Express Priority Queue Active</span>
         </div>
       </div>
 
-      <!-- Mobile Stage Switcher Pills (visible only on mobile) -->
-      <div class="flex lg:hidden overflow-x-auto gap-1.5 pb-1 custom-scrollbar">
-        <button onclick="filterWasherMobileCol('all')" id="wstage-all" class="washer-stage-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white shadow-sm shrink-0">
+      <!-- Mobile Stage Switcher Pills -->
+      <div class="flex lg:hidden overflow-x-auto gap-1.5 pb-1 no-scrollbar">
+        <button onclick="filterWasherMobileCol('all')" id="wstage-all" class="washer-stage-pill px-3 py-1.5 rounded-full text-xs font-bold bg-black text-white shadow-sm shrink-0">
           All Stages
         </button>
-        <button onclick="filterWasherMobileCol('intake')" id="wstage-intake" class="washer-stage-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">
-          1. Intake (<span id="mcount-wintake">0</span>)
+        <button onclick="filterWasherMobileCol('intake')" id="wstage-intake" class="washer-stage-pill px-3 py-1.5 rounded-full text-xs font-medium bg-[#EEEEEE] text-[#545454] shrink-0">
+          Intake (<span id="mcount-wintake">0</span>)
         </button>
-        <button onclick="filterWasherMobileCol('washing')" id="wstage-washing" class="washer-stage-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">
-          2. Washers (<span id="mcount-wwashing">0</span>)
+        <button onclick="filterWasherMobileCol('washing')" id="wstage-washing" class="washer-stage-pill px-3 py-1.5 rounded-full text-xs font-medium bg-[#EEEEEE] text-[#545454] shrink-0">
+          Washers (<span id="mcount-wwashing">0</span>)
         </button>
-        <button onclick="filterWasherMobileCol('ironing')" id="wstage-ironing" class="washer-stage-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">
-          3. Ironing (<span id="mcount-wironing">0</span>)
+        <button onclick="filterWasherMobileCol('ironing')" id="wstage-ironing" class="washer-stage-pill px-3 py-1.5 rounded-full text-xs font-medium bg-[#EEEEEE] text-[#545454] shrink-0">
+          Ironing (<span id="mcount-wironing">0</span>)
         </button>
-        <button onclick="filterWasherMobileCol('packed')" id="wstage-packed" class="washer-stage-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 shrink-0">
-          4. Packed (<span id="mcount-wpacked">0</span>)
+        <button onclick="filterWasherMobileCol('packed')" id="wstage-packed" class="washer-stage-pill px-3 py-1.5 rounded-full text-xs font-medium bg-[#EEEEEE] text-[#545454] shrink-0">
+          Packed (<span id="mcount-wpacked">0</span>)
         </button>
       </div>
 
-      <!-- Kanban Board -->
+      <!-- Kanban Board (Uber Style) -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="washer-kanban-board">
         <!-- Col 1: Ready to Wash -->
-        <div id="washer-card-col-intake" class="washer-column bg-slate-100 rounded-2xl p-4 flex flex-col h-[550px] sm:h-[750px] border border-slate-200">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-3">
-            <div class="flex items-center space-x-2">
-              <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
-              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-700">1. Intake / To Wash</h3>
-            </div>
-            <span id="washer-count-intake" class="text-xs font-bold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-700">0</span>
+        <div id="washer-card-col-intake" class="washer-column bg-white rounded-2xl p-4 flex flex-col h-[550px] sm:h-[700px] border border-[#E2E2E2]">
+          <div class="flex items-center justify-between pb-3 border-b border-[#E2E2E2] mb-3">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-black">1. Intake / To Wash</h3>
+            <span id="washer-count-intake" class="text-xs font-bold bg-[#F6F6F6] px-2 py-0.5 rounded-full text-black">0</span>
           </div>
-          <div id="washer-col-intake" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1">
-            <!-- Cards -->
-          </div>
+          <div id="washer-col-intake" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1"></div>
         </div>
 
         <!-- Col 2: In Washing -->
-        <div id="washer-card-col-washing" class="washer-column bg-slate-100 rounded-2xl p-4 flex flex-col h-[550px] sm:h-[750px] border border-slate-200">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-3">
-            <div class="flex items-center space-x-2">
-              <span class="w-3 h-3 rounded-full bg-blue-500"></span>
-              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-700">2. In Washers</h3>
-            </div>
-            <span id="washer-count-washing" class="text-xs font-bold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-700">0</span>
+        <div id="washer-card-col-washing" class="washer-column bg-white rounded-2xl p-4 flex flex-col h-[550px] sm:h-[700px] border border-[#E2E2E2]">
+          <div class="flex items-center justify-between pb-3 border-b border-[#E2E2E2] mb-3">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-black">2. In Washers</h3>
+            <span id="washer-count-washing" class="text-xs font-bold bg-[#F6F6F6] px-2 py-0.5 rounded-full text-black">0</span>
           </div>
-          <div id="washer-col-washing" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1">
-            <!-- Cards -->
-          </div>
+          <div id="washer-col-washing" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1"></div>
         </div>
 
         <!-- Col 3: In Drying & Ironing -->
-        <div id="washer-card-col-ironing" class="washer-column bg-slate-100 rounded-2xl p-4 flex flex-col h-[550px] sm:h-[750px] border border-slate-200">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-3">
-            <div class="flex items-center space-x-2">
-              <span class="w-3 h-3 rounded-full bg-amber-500"></span>
-              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-700">3. Dry & Steam Iron</h3>
-            </div>
-            <span id="washer-count-ironing" class="text-xs font-bold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-700">0</span>
+        <div id="washer-card-col-ironing" class="washer-column bg-white rounded-2xl p-4 flex flex-col h-[550px] sm:h-[700px] border border-[#E2E2E2]">
+          <div class="flex items-center justify-between pb-3 border-b border-[#E2E2E2] mb-3">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-black">3. Steam Press</h3>
+            <span id="washer-count-ironing" class="text-xs font-bold bg-[#F6F6F6] px-2 py-0.5 rounded-full text-black">0</span>
           </div>
-          <div id="washer-col-ironing" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1">
-            <!-- Cards -->
-          </div>
+          <div id="washer-col-ironing" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1"></div>
         </div>
 
         <!-- Col 4: Quality Check & Packed -->
-        <div id="washer-card-col-packed" class="washer-column bg-slate-100 rounded-2xl p-4 flex flex-col h-[550px] sm:h-[750px] border border-slate-200">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-3">
-            <div class="flex items-center space-x-2">
-              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-700">4. Packed & Ready</h3>
-            </div>
-            <span id="washer-count-packed" class="text-xs font-bold bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-700">0</span>
+        <div id="washer-card-col-packed" class="washer-column bg-white rounded-2xl p-4 flex flex-col h-[550px] sm:h-[700px] border border-[#E2E2E2]">
+          <div class="flex items-center justify-between pb-3 border-b border-[#E2E2E2] mb-3">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-black">4. Packed & Ready</h3>
+            <span id="washer-count-packed" class="text-xs font-bold bg-[#F6F6F6] px-2 py-0.5 rounded-full text-black">0</span>
           </div>
-          <div id="washer-col-packed" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1">
-            <!-- Cards -->
-          </div>
+          <div id="washer-col-packed" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1"></div>
         </div>
       </div>
     </div>
 
     <!-- ============================================================== -->
-    <!-- PERSONA 4: FIELD AGENT (PICKUP & DELIVERY PWA)                 -->
+    <!-- PERSONA 4: FIELD AGENT (UBER DRIVER PWA APP STYLE)             -->
     <!-- ============================================================== -->
     <div id="screen-rider" class="persona-screen space-y-4 sm:space-y-6 hidden">
-      <!-- Mobile Container Simulation (Clean full-bleed on mobile, iPhone frame on desktop) -->
-      <div class="w-full max-w-md mx-auto bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm sm:shadow-xl overflow-hidden min-h-[600px] flex flex-col">
-        <!-- PWA Top Bar -->
-        <div class="bg-slate-900 text-white p-3.5 sm:p-4">
+      <!-- Phone Frame Container -->
+      <div class="w-full max-w-md mx-auto bg-white rounded-3xl border border-[#E2E2E2] shadow-sm sm:shadow-lg overflow-hidden min-h-[600px] flex flex-col">
+        
+        <!-- Driver Top Header (Pure Uber Driver Look) -->
+        <div class="bg-black text-white p-5">
           <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <div class="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center font-bold text-xs text-white">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-black text-sm">
                 RK
               </div>
               <div>
-                <h4 class="font-bold text-sm leading-none">Rajesh Kumar</h4>
-                <span class="text-[10px] text-teal-400 font-medium">Field Logistics Agent • On Shift</span>
+                <h4 class="font-bold text-base leading-tight">Rajesh Kumar</h4>
+                <div class="flex items-center space-x-1.5 mt-0.5">
+                  <span class="w-2 h-2 rounded-full bg-[#06C167]"></span>
+                  <span class="text-xs text-[#CBCBCB]">Online • Active Shift</span>
+                </div>
               </div>
             </div>
-            <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-slate-300">Gurugram</span>
+            <span class="text-xs font-mono bg-neutral-800 px-2.5 py-1 rounded-full text-white">HR26-BW-4821</span>
           </div>
 
-          <!-- Pickup vs Delivery Switcher -->
-          <div class="grid grid-cols-2 gap-2 mt-4 bg-slate-800 p-1 rounded-xl text-xs font-semibold">
-            <button onclick="setRiderMode('pickup')" id="rider-tab-pickup" class="py-2 rounded-lg bg-teal-600 text-white shadow transition-all flex items-center justify-center space-x-1.5">
-              <i data-lucide="package-plus" class="w-4 h-4"></i>
+          <!-- Pickup vs Delivery Toggle (Uber Driver Segmented Switcher) -->
+          <div class="grid grid-cols-2 gap-1.5 mt-4 bg-neutral-900 p-1 rounded-full text-xs font-semibold">
+            <button onclick="setRiderMode('pickup')" id="rider-tab-pickup" class="py-2 rounded-full bg-white text-black shadow transition-all flex items-center justify-center space-x-1.5">
               <span>Pickups (<span id="rider-badge-pickups">0</span>)</span>
             </button>
-            <button onclick="setRiderMode('delivery')" id="rider-tab-delivery" class="py-2 rounded-lg text-slate-300 hover:text-white transition-all flex items-center justify-center space-x-1.5">
-              <i data-lucide="truck" class="w-4 h-4"></i>
+            <button onclick="setRiderMode('delivery')" id="rider-tab-delivery" class="py-2 rounded-full text-neutral-400 hover:text-white transition-all flex items-center justify-center space-x-1.5">
               <span>Deliveries (<span id="rider-badge-deliveries">0</span>)</span>
             </button>
           </div>
 
-          <!-- Live Telemetry Bar -->
-          <div class="flex items-center justify-between text-[10px] text-slate-400 mt-2.5 px-1 font-medium">
-            <span class="flex items-center space-x-1 text-emerald-400">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>GPS Tracking Active</span>
+          <!-- Battery & GPS -->
+          <div class="flex items-center justify-between text-[11px] text-neutral-400 mt-3 px-1">
+            <span class="flex items-center space-x-1 text-[#06C167]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#06C167]"></span>
+              <span>GPS Live Telemetry</span>
             </span>
-            <span id="rider-battery-status">🔋 Battery: 74%</span>
+            <span id="rider-battery-status">74%</span>
           </div>
         </div>
 
-        <!-- Rider Content -->
-        <div class="p-4 flex-1 overflow-y-auto space-y-4 custom-scrollbar">
+        <!-- Rider Content Area -->
+        <div class="p-4 flex-1 overflow-y-auto space-y-4 custom-scrollbar bg-[#F6F6F6]">
 
-          <!-- ACTIVE RETURN-TO-STORE BANNER (Phase 2 Loop) -->
-          <div id="rider-return-loop-banner" class="bg-gradient-to-r from-blue-900 to-indigo-950 p-4 rounded-2xl text-white space-y-3 shadow-md">
+          <!-- ACTIVE RETURN-TO-STORE BANNER -->
+          <div id="rider-return-loop-banner" class="bg-black p-4 rounded-2xl text-white space-y-3">
             <div class="flex items-start justify-between">
               <div>
-                <span class="bg-blue-500/30 text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Phase 2: Return Loop</span>
-                <h4 class="font-extrabold text-sm mt-1">Heading Back to Store</h4>
-                <p class="text-[11px] text-slate-300">Deliveries done. Store manager expects you for next batch.</p>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Return to Store</span>
+                <h4 class="font-bold text-sm mt-0.5">Heading to Sector 15 Counter</h4>
+                <p class="text-[11px] text-neutral-400">Deliveries completed. Return for next batch.</p>
               </div>
-              <span id="rider-return-eta-badge" class="bg-amber-500 text-slate-900 text-xs font-black px-2 py-1 rounded-lg">12m Due</span>
+              <span id="rider-return-eta-badge" class="bg-[#FFC043] text-black text-xs font-black px-2 py-0.5 rounded-full">12m Due</span>
             </div>
 
-            <div class="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700 text-xs space-y-1">
-              <div class="flex justify-between text-slate-400 text-[11px]">
-                <span>Distance: <strong>3.8 km</strong></span>
-                <span>Normal Return: <strong>12 mins</strong></span>
-              </div>
-              <div class="text-[11px] text-slate-300 truncate">📍 SuperDry Store: Shop 4B, Sector 15 Market</div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <a href="https://maps.google.com/?q=Sector+15+Main+Market+Gurugram" target="_blank" class="py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold flex items-center justify-center space-x-1 border border-slate-700">
-                <i data-lucide="navigation" class="w-3.5 h-3.5 text-blue-400"></i>
-                <span>Navigate Store</span>
+            <div class="grid grid-cols-2 gap-2 text-xs pt-1">
+              <a href="https://maps.google.com/?q=Sector+15+Main+Market+Gurugram" target="_blank" class="py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-full font-semibold flex items-center justify-center space-x-1 transition-all">
+                <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
+                <span>Navigate</span>
               </a>
-              <button onclick="checkInAtStoreCounter('RIDER-01')" class="py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 rounded-xl font-black flex items-center justify-center space-x-1 shadow">
-                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
-                <span>Check-in Store</span>
+              <button onclick="checkInAtStoreCounter('RIDER-01')" class="py-2 bg-[#06C167] hover:bg-emerald-600 text-white rounded-full font-bold flex items-center justify-center space-x-1 transition-all">
+                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                <span>At Store</span>
               </button>
             </div>
           </div>
 
           <!-- RIDER PICKUP QUEUE -->
           <div id="rider-view-pickup" class="space-y-3">
-            <div class="flex items-center justify-between text-xs text-slate-500 font-semibold px-1">
+            <div class="flex items-center justify-between text-xs text-[#545454] font-semibold px-1">
               <span>ASSIGNED DOORSTEP PICKUPS</span>
-              <span>Sorted by Proximity</span>
+              <span>By Proximity</span>
             </div>
             <div id="rider-pickups-list" class="space-y-3">
               <!-- Rendered via JS -->
             </div>
           </div>
 
-          <!-- RIDER DELIVERY QUEUE WITH ROUTE BATCHING -->
+          <!-- RIDER DELIVERY QUEUE -->
           <div id="rider-view-delivery" class="space-y-4 hidden">
-            <div class="bg-teal-50 border border-teal-200 rounded-xl p-3 text-xs text-teal-900">
-              <div class="flex items-center space-x-1.5 font-bold mb-1">
-                <i data-lucide="route" class="w-4 h-4 text-teal-600"></i>
-                <span>Zonal Route Optimization</span>
-              </div>
-              <p class="text-[11px] text-teal-700">Orders grouped in the same sector/direction. Complete a whole cluster in one trip to save fuel and time.</p>
+            <div class="bg-white border border-[#E2E2E2] rounded-2xl p-3 text-xs text-black">
+              <span class="font-bold block">Zonal Cluster Route Active</span>
+              <p class="text-[11px] text-[#545454] mt-0.5">Orders grouped by sector for minimal transit time.</p>
             </div>
 
             <!-- Route Clusters -->
@@ -691,39 +648,33 @@
   </main>
 
   <!-- ============================================================== -->
-  <!-- MODALS & OVERLAYS                                              -->
+  <!-- MODALS & OVERLAYS (UBER BASE CLEAN STYLE)                      -->
   <!-- ============================================================== -->
 
-  <!-- MODAL 1: THERMAL GARMENT TAG PRINTER MODAL (58mm / 80mm ESC/POS) -->
-  <div id="modal-thermal-tags" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-      <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-        <div class="flex items-center space-x-2">
-          <i data-lucide="printer" class="w-5 h-5 text-teal-600"></i>
-          <div>
-            <h3 class="font-bold text-sm text-slate-900">Thermal Garment Tag Preview</h3>
-            <p class="text-[11px] text-slate-500">ESC/POS 58mm & 80mm Printer Compatible Format</p>
-          </div>
+  <!-- MODAL 1: THERMAL GARMENT TAG PRINTER -->
+  <div id="modal-thermal-tags" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E2E2]">
+      <div class="p-5 border-b border-[#E2E2E2] flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-base text-black">Thermal Garment Tags</h3>
+          <p class="text-xs text-[#545454]">ESC/POS 58mm & 80mm Tag Format</p>
         </div>
-        <button onclick="closeThermalModal()" class="text-slate-400 hover:text-slate-600">
+        <button onclick="closeThermalModal()" class="text-[#545454] hover:text-black">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <!-- Scrollable Thermal Slips Container -->
-      <div class="p-6 overflow-y-auto flex-1 bg-slate-100 flex flex-col items-center custom-scrollbar">
-        <div id="print-thermal-container" class="space-y-4 w-full flex flex-col items-center">
-          <!-- Rendered dynamically -->
-        </div>
+      <div class="p-6 overflow-y-auto flex-1 bg-[#F6F6F6] flex flex-col items-center custom-scrollbar">
+        <div id="print-thermal-container" class="space-y-4 w-full flex flex-col items-center"></div>
       </div>
 
-      <div class="p-4 border-t border-slate-200 bg-white flex items-center justify-between">
-        <span class="text-xs text-slate-500 font-medium">Ready for thermal roll printer</span>
+      <div class="p-4 border-t border-[#E2E2E2] bg-white flex items-center justify-between">
+        <span class="text-xs text-[#545454]">Thermal roll ready</span>
         <div class="flex space-x-2">
-          <button onclick="closeThermalModal()" class="px-3.5 py-2 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50">Close</button>
-          <button onclick="window.print()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold shadow-sm flex items-center space-x-1.5">
-            <i data-lucide="printer" class="w-4 h-4"></i>
-            <span>Print All Piece Tags</span>
+          <button onclick="closeThermalModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Close</button>
+          <button onclick="window.print()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+            <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+            <span>Print All Tags</span>
           </button>
         </div>
       </div>
@@ -731,205 +682,183 @@
   </div>
 
   <!-- MODAL 2: WHATSAPP WEBHOOK SIMULATOR -->
-  <div id="modal-whatsapp-sim" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-200">
-      <div class="bg-[#075E54] text-white p-4 flex items-center justify-between">
+  <div id="modal-whatsapp-sim" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-xl overflow-hidden border border-[#E2E2E2]">
+      <div class="p-5 border-b border-[#E2E2E2] flex items-center justify-between">
         <div class="flex items-center space-x-2.5">
-          <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white">
-            <i data-lucide="message-circle" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <h3 class="font-bold text-sm">WhatsApp Cloud API Simulator</h3>
-            <p class="text-[10px] text-emerald-200">Test inbound customer webhooks & auto-leads</p>
-          </div>
+          <span class="w-2.5 h-2.5 rounded-full bg-[#06C167]"></span>
+          <h3 class="font-bold text-base text-black">Inbound WhatsApp Simulator</h3>
         </div>
-        <button onclick="closeWhatsAppModal()" class="text-white/80 hover:text-white">
+        <button onclick="closeWhatsAppModal()" class="text-[#545454] hover:text-black">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
       <div class="p-5 space-y-4 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Select Event Type to Simulate:</label>
-          <select id="sim-event-type" onchange="updateSimForm()" class="w-full border border-slate-200 rounded-lg p-2.5 bg-slate-50 font-medium">
+          <label class="block font-bold text-black mb-1">Event Type:</label>
+          <select id="sim-event-type" onchange="updateSimForm()" class="w-full bg-[#F6F6F6] border-none rounded-xl p-2.5 font-medium text-black focus:outline-none focus:ring-2 focus:ring-black">
             <option value="MISSED_CALL">1. Customer Missed Call (Auto Callback SLA)</option>
-            <option value="LOCATION_PIN">2. Customer Shares Live GPS Location</option>
-            <option value="CHAT_INQUIRY">3. WhatsApp Chat Inquiry ("Need Dry Cleaning")</option>
+            <option value="LOCATION_PIN">2. Customer Shares Live Location</option>
+            <option value="CHAT_INQUIRY">3. WhatsApp Chat Inquiry</option>
           </select>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Customer Phone Number:</label>
-          <input type="text" id="sim-phone" value="+91 9811223344" class="w-full border border-slate-200 rounded-lg p-2 font-mono">
+          <label class="block font-bold text-black mb-1">Phone Number:</label>
+          <input type="text" id="sim-phone" value="+91 9811223344" class="w-full bg-[#F6F6F6] border-none rounded-xl p-2.5 font-mono text-black focus:outline-none focus:ring-2 focus:ring-black">
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Customer Name:</label>
-          <input type="text" id="sim-name" value="Sunita Mehta" class="w-full border border-slate-200 rounded-lg p-2">
+          <label class="block font-bold text-black mb-1">Customer Name:</label>
+          <input type="text" id="sim-name" value="Sunita Mehta" class="w-full bg-[#F6F6F6] border-none rounded-xl p-2.5 text-black focus:outline-none focus:ring-2 focus:ring-black">
         </div>
 
         <div id="sim-field-message">
-          <label class="block font-bold text-slate-700 mb-1">Inbound Message / Event Payload:</label>
-          <textarea id="sim-message" rows="2" class="w-full border border-slate-200 rounded-lg p-2">Missed voice call at 11:30 AM</textarea>
+          <label class="block font-bold text-black mb-1">Message:</label>
+          <textarea id="sim-message" rows="2" class="w-full bg-[#F6F6F6] border-none rounded-xl p-2.5 text-black focus:outline-none focus:ring-2 focus:ring-black">Missed voice call at 11:30 AM</textarea>
         </div>
 
         <div id="sim-field-address" class="hidden">
-          <label class="block font-bold text-slate-700 mb-1">Decoded Address from Location Pin:</label>
-          <input type="text" id="sim-address" value="#501, Tower 4, DLF Phase 2, Gurugram" class="w-full border border-slate-200 rounded-lg p-2">
+          <label class="block font-bold text-black mb-1">Address from Pin:</label>
+          <input type="text" id="sim-address" value="#501, Tower 4, DLF Phase 2, Gurugram" class="w-full bg-[#F6F6F6] border-none rounded-xl p-2.5 text-black focus:outline-none focus:ring-2 focus:ring-black">
         </div>
 
-        <div id="sim-result-box" class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600 space-y-1 hidden">
-          <span class="font-bold text-emerald-700 block">✓ Webhook Processed!</span>
-          <p id="sim-result-text"></p>
+        <div id="sim-result-box" class="p-3 bg-emerald-50 text-[#06C167] rounded-xl text-xs font-semibold hidden">
+          <span>Webhook processed successfully.</span>
+          <p id="sim-result-text" class="text-[11px] text-black font-normal mt-0.5"></p>
         </div>
       </div>
 
-      <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end space-x-2">
-        <button onclick="closeWhatsAppModal()" class="px-3.5 py-2 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100">Cancel</button>
-        <button onclick="submitWhatsAppSim()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-sm flex items-center space-x-1.5">
-          <i data-lucide="send" class="w-3.5 h-3.5"></i>
-          <span>Fire Webhook Event</span>
-        </button>
+      <div class="p-4 border-t border-[#E2E2E2] bg-white flex justify-end space-x-2">
+        <button onclick="closeWhatsAppModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Cancel</button>
+        <button onclick="submitWhatsAppSim()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm">Send Webhook</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL 3: NEW ORDER POS MODAL -->
-  <div id="modal-new-order" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-      <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-        <div class="flex items-center space-x-2">
-          <i data-lucide="receipt" class="w-5 h-5 text-teal-600"></i>
-          <div>
-            <h3 class="font-bold text-sm text-slate-900">Front Desk Order Intake & Billing</h3>
-            <p class="text-[11px] text-slate-500">Pick customer, add garments, note stains, calculate total</p>
-          </div>
+  <div id="modal-new-order" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E2E2]">
+      <div class="p-5 border-b border-[#E2E2E2] flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-base text-black">New Order & Billing POS</h3>
+          <p class="text-xs text-[#545454]">Select customer, add garments, calculate bill</p>
         </div>
-        <button onclick="closeNewOrderModal()" class="text-slate-400 hover:text-slate-600">
+        <button onclick="closeNewOrderModal()" class="text-[#545454] hover:text-black">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
       <div class="p-6 overflow-y-auto flex-1 space-y-5 text-xs custom-scrollbar">
-        <!-- Step 1: Customer Selection -->
+        <!-- Customer Selection -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Select Customer (Search across 2,000 DB):</label>
+          <label class="block font-bold text-black mb-1">Select Customer:</label>
           <div class="relative">
-            <input type="text" id="order-cust-search" onkeyup="searchOrderCustomer(this.value)" placeholder="Type name or phone number..." class="w-full border border-slate-200 rounded-lg p-2.5 text-xs">
-            <div id="order-cust-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto hidden divide-y divide-slate-100">
-              <!-- Search results -->
-            </div>
+            <input type="text" id="order-cust-search" onkeyup="searchOrderCustomer(this.value)" placeholder="Search by name or phone (+91...)" class="w-full bg-[#F6F6F6] focus:bg-white border border-transparent focus:border-black rounded-xl p-3 text-xs focus:outline-none transition-all">
+            <div id="order-cust-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E2E2E2] rounded-2xl shadow-xl z-20 max-h-48 overflow-y-auto hidden divide-y divide-[#E2E2E2]"></div>
           </div>
-          <!-- Selected Customer Card -->
-          <div id="selected-cust-card" class="mt-2 p-3 bg-teal-50 border border-teal-200 rounded-xl hidden">
+          <div id="selected-cust-card" class="mt-2 p-3 bg-[#F6F6F6] rounded-xl border border-[#E2E2E2] hidden">
             <div class="flex items-center justify-between">
               <div>
-                <strong id="sel-cust-name" class="text-teal-900 block text-sm"></strong>
-                <span id="sel-cust-phone" class="text-slate-600 font-mono text-[11px]"></span>
-                <span id="sel-cust-address" class="text-slate-500 block text-[11px]"></span>
+                <strong id="sel-cust-name" class="text-black block text-sm font-bold"></strong>
+                <span id="sel-cust-phone" class="text-[#545454] font-mono text-xs"></span>
+                <span id="sel-cust-address" class="text-[#898989] block text-[11px]"></span>
               </div>
-              <span id="sel-cust-zone" class="bg-teal-200 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded"></span>
+              <span id="sel-cust-zone" class="bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-full"></span>
             </div>
           </div>
         </div>
 
-        <!-- Step 2: Garment Items Adder -->
+        <!-- Garments Breakdown -->
         <div>
           <div class="flex items-center justify-between mb-2">
-            <label class="font-bold text-slate-700">Garment Breakdown & Pieces:</label>
-            <span class="text-slate-500">Total Items: <strong id="order-items-count" class="text-slate-900">0</strong></span>
+            <label class="font-bold text-black">Garment Breakdown:</label>
+            <span class="text-[#545454]">Total: <strong id="order-items-count" class="text-black">0</strong> pcs</span>
           </div>
 
-          <!-- Quick Garment Add Bar -->
-          <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <select id="quick-garment-select" class="text-xs border border-slate-200 rounded-lg p-2 bg-white">
-              <!-- Catalog options -->
-            </select>
-            <select id="quick-service-select" class="text-xs border border-slate-200 rounded-lg p-2 bg-white">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 bg-[#F6F6F6] p-3 rounded-2xl border border-[#E2E2E2]">
+            <select id="quick-garment-select" class="text-xs border border-[#E2E2E2] rounded-xl p-2 bg-white text-black"></select>
+            <select id="quick-service-select" class="text-xs border border-[#E2E2E2] rounded-xl p-2 bg-white text-black">
               <option value="Wash & Steam Iron">Wash & Steam Iron</option>
               <option value="Dry Clean">Dry Clean</option>
               <option value="Wash & Fold">Wash & Fold</option>
               <option value="Steam Iron Only">Steam Iron Only</option>
             </select>
-            <input type="text" id="quick-stain-note" placeholder="Special note (e.g. cuff stain)" class="text-xs border border-slate-200 rounded-lg p-2 bg-white">
-            <button onclick="addGarmentItem()" class="bg-slate-900 hover:bg-black text-white rounded-lg font-bold text-xs py-2 flex items-center justify-center space-x-1">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-              <span>Add Item</span>
+            <input type="text" id="quick-stain-note" placeholder="Care note (e.g. collar stain)" class="text-xs border border-[#E2E2E2] rounded-xl p-2 bg-white text-black">
+            <button onclick="addGarmentItem()" class="bg-black hover:bg-neutral-800 text-white rounded-xl font-bold text-xs py-2 flex items-center justify-center space-x-1">
+              <span>+ Add Item</span>
             </button>
           </div>
 
-          <!-- Added Items Table -->
-          <div class="mt-3 border border-slate-200 rounded-xl overflow-hidden">
+          <div class="mt-3 border border-[#E2E2E2] rounded-2xl overflow-hidden">
             <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 border-b border-slate-200 text-slate-500">
+              <thead class="bg-[#F6F6F6] border-b border-[#E2E2E2] text-[#545454]">
                 <tr>
                   <th class="p-2.5">#</th>
                   <th class="p-2.5">Garment</th>
                   <th class="p-2.5">Service</th>
-                  <th class="p-2.5">Care Note</th>
+                  <th class="p-2.5">Note</th>
                   <th class="p-2.5 text-right">Rate</th>
-                  <th class="p-2.5 text-right">Remove</th>
+                  <th class="p-2.5 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody id="order-items-table" class="divide-y divide-slate-100 text-slate-700">
+              <tbody id="order-items-table" class="divide-y divide-[#E2E2E2] text-black">
                 <tr>
-                  <td colspan="6" class="p-4 text-center text-slate-400">No garments added yet. Use the selector above.</td>
+                  <td colspan="6" class="p-4 text-center text-[#898989]">No garments added yet.</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Step 3: Express & Summary -->
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Express Option & Total -->
+        <div class="bg-[#F6F6F6] p-4 rounded-2xl border border-[#E2E2E2] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div class="flex items-center space-x-2">
-            <input type="checkbox" id="order-express-check" onchange="recalculateOrderTotal()" class="w-4 h-4 text-teal-600 rounded">
-            <label for="order-express-check" class="font-bold text-slate-800 cursor-pointer">
-              ⚡ Express Delivery (24-Hour Turnaround +50%)
+            <input type="checkbox" id="order-express-check" onchange="recalculateOrderTotal()" class="w-4 h-4 text-black rounded accent-black">
+            <label for="order-express-check" class="font-bold text-black cursor-pointer">
+              Express Delivery (24-Hour Turnaround +50%)
             </label>
           </div>
           <div class="text-right">
-            <span class="text-xs text-slate-500 block">Total Payable:</span>
-            <span id="order-total-amount" class="text-xl font-black text-slate-900">₹0</span>
+            <span class="text-xs text-[#545454] block">Total Amount:</span>
+            <span id="order-total-amount" class="text-2xl font-black text-black">₹0</span>
           </div>
         </div>
       </div>
 
-      <div class="p-4 border-t border-slate-200 bg-white flex justify-end space-x-2">
-        <button onclick="closeNewOrderModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
-        <button onclick="submitNewOrder()" class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold shadow-sm flex items-center space-x-1.5">
-          <i data-lucide="check" class="w-4 h-4"></i>
-          <span>Save & Generate Thermal Tags</span>
-        </button>
+      <div class="p-4 border-t border-[#E2E2E2] bg-white flex justify-end space-x-2">
+        <button onclick="closeNewOrderModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Cancel</button>
+        <button onclick="submitNewOrder()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm">Save & Print Thermal Tags</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL 4: NEW CUSTOMER MODAL -->
-  <div id="modal-new-customer" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-200">
-      <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-        <h3 class="font-bold text-sm text-slate-900">Register New Customer</h3>
-        <button onclick="closeNewCustomerModal()" class="text-slate-400 hover:text-slate-600">
+  <div id="modal-new-customer" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-xl overflow-hidden border border-[#E2E2E2]">
+      <div class="p-5 border-b border-[#E2E2E2] flex items-center justify-between">
+        <h3 class="font-bold text-base text-black">Register Customer</h3>
+        <button onclick="closeNewCustomerModal()" class="text-[#545454] hover:text-black">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
       <div class="p-5 space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Full Name *</label>
-          <input type="text" id="new-cust-name" placeholder="e.g. Ankit Verma" class="w-full border border-slate-200 rounded-lg p-2">
+          <label class="block font-bold text-black mb-1">Full Name *</label>
+          <input type="text" id="new-cust-name" placeholder="e.g. Ankit Verma" class="w-full bg-[#F6F6F6] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Phone Number *</label>
-          <input type="text" id="new-cust-phone" placeholder="+91 9876543210" class="w-full border border-slate-200 rounded-lg p-2 font-mono">
+          <label class="block font-bold text-black mb-1">Phone Number *</label>
+          <input type="text" id="new-cust-phone" placeholder="+91 9876543210" class="w-full bg-[#F6F6F6] rounded-xl p-2.5 font-mono text-black border border-transparent focus:border-black focus:outline-none">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Delivery Address *</label>
-          <textarea id="new-cust-address" rows="2" placeholder="House/Flat number, Street, Landmark" class="w-full border border-slate-200 rounded-lg p-2"></textarea>
+          <label class="block font-bold text-black mb-1">Address *</label>
+          <textarea id="new-cust-address" rows="2" placeholder="House/Flat number, Street, Landmark" class="w-full bg-[#F6F6F6] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none"></textarea>
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Cluster Zone *</label>
-          <select id="new-cust-zone" class="w-full border border-slate-200 rounded-lg p-2 bg-slate-50">
+          <label class="block font-bold text-black mb-1">Delivery Zone *</label>
+          <select id="new-cust-zone" class="w-full bg-[#F6F6F6] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none font-medium">
             <option value="Sector 14 - North">Sector 14 - North</option>
             <option value="Sector 15 - North" selected>Sector 15 - North</option>
             <option value="Sector 22 - Central">Sector 22 - Central</option>
@@ -941,105 +870,80 @@
           </select>
         </div>
       </div>
-      <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end space-x-2">
-        <button onclick="closeNewCustomerModal()" class="px-3.5 py-2 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100">Cancel</button>
-        <button onclick="submitNewCustomer()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold shadow-sm">Save Customer</button>
+      <div class="p-4 border-t border-[#E2E2E2] bg-white flex justify-end space-x-2">
+        <button onclick="closeNewCustomerModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Cancel</button>
+        <button onclick="submitNewCustomer()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm">Save</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL 5: BULK CUSTOMER EXCEL UPLOAD MODAL -->
-  <div id="modal-excel-upload" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl overflow-hidden border border-slate-200">
-      <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-5 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-          <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-emerald-300">
-            <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <h3 class="font-bold text-sm">Bulk Upload Customer Data</h3>
-            <p class="text-[11px] text-emerald-200">Automatically import or update your entire customer base from Excel / CSV</p>
-          </div>
+  <div id="modal-excel-upload" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-xl w-full shadow-xl overflow-hidden border border-[#E2E2E2]">
+      <div class="p-5 border-b border-[#E2E2E2] flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-base text-black">Bulk Customer Import</h3>
+          <p class="text-xs text-[#545454]">Import or update your customer base via Excel / CSV</p>
         </div>
-        <button onclick="closeExcelUploadModal()" class="text-white/80 hover:text-white">
+        <button onclick="closeExcelUploadModal()" class="text-[#545454] hover:text-black">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <div class="p-6 space-y-5 text-xs">
-        <!-- Download Sample Templates -->
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between">
+      <div class="p-6 space-y-4 text-xs">
+        <!-- Sample Templates -->
+        <div class="bg-[#F6F6F6] rounded-2xl p-4 flex items-center justify-between border border-[#E2E2E2]">
           <div>
-            <strong class="text-slate-800 block text-xs">Need an Excel format template?</strong>
-            <span class="text-slate-500 text-[11px]">Download our ready-made template with columns: Name, Phone, Address, Zone.</span>
+            <strong class="text-black block text-xs">Download Format Template</strong>
+            <span class="text-[#545454] text-[11px]">Ready-made format: Name, Phone, Address, Zone.</span>
           </div>
           <div class="flex space-x-2 shrink-0">
-            <a href="./sample_customers_template.xlsx" download class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold flex items-center space-x-1 shadow-sm">
-              <i data-lucide="download" class="w-3.5 h-3.5"></i>
-              <span>.XLSX</span>
-            </a>
-            <a href="./sample_customers_template.csv" download class="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-[11px] font-semibold flex items-center space-x-1 shadow-sm">
-              <i data-lucide="download" class="w-3.5 h-3.5"></i>
-              <span>.CSV</span>
-            </a>
+            <a href="./sample_customers_template.xlsx" download class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full text-[11px] font-semibold">.XLSX</a>
+            <a href="./sample_customers_template.csv" download class="px-3.5 py-1.5 bg-[#EEEEEE] hover:bg-[#E2E2E2] text-black rounded-full text-[11px] font-semibold">.CSV</a>
           </div>
         </div>
 
         <!-- File Upload Drag & Drop Area -->
-        <div id="excel-drop-zone" onclick="document.getElementById('excel-file-input').click()" class="border-2 border-dashed border-emerald-300 hover:border-emerald-500 bg-emerald-50/50 hover:bg-emerald-50 rounded-2xl p-6 text-center cursor-pointer transition-colors space-y-2">
+        <div id="excel-drop-zone" onclick="document.getElementById('excel-file-input').click()" class="border-2 border-dashed border-[#CBCBCB] hover:border-black bg-[#F6F6F6] rounded-2xl p-6 text-center cursor-pointer transition-colors space-y-2">
           <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" class="hidden" onchange="handleExcelFileSelected(event)">
-          <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 mx-auto flex items-center justify-center">
-            <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+          <div class="w-10 h-10 rounded-full bg-white text-black mx-auto flex items-center justify-center shadow-sm">
+            <i data-lucide="upload-cloud" class="w-5 h-5"></i>
           </div>
           <div>
-            <span class="font-bold text-slate-800 text-sm block">Click to select or drag & drop your Excel sheet</span>
-            <span class="text-slate-500 text-[11px]">Supports Microsoft Excel (.xlsx, .xls) and CSV files</span>
+            <span class="font-bold text-black text-sm block">Select or drop Excel sheet</span>
+            <span class="text-[#545454] text-[11px]">Supports .xlsx and .csv files</span>
           </div>
-          <div id="excel-selected-filename" class="text-xs font-bold text-emerald-800 hidden font-mono bg-emerald-100 py-1 px-3 rounded-full inline-block"></div>
-        </div>
-
-        <!-- Column Guide -->
-        <div class="text-[11px] text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-200">
-          <strong class="text-slate-700 block mb-1">Smart Auto-Mapping Features:</strong>
-          <ul class="list-disc pl-4 space-y-0.5">
-            <li><strong>Auto-detects columns:</strong> Name, Phone / Mobile, Address, Zone / Sector, Past Orders.</li>
-            <li><strong>Deduplication:</strong> Existing customers with matching phone numbers are automatically updated.</li>
-            <li><strong>Auto-formatting:</strong> Phone numbers are normalized with international (+91) format.</li>
-          </ul>
+          <div id="excel-selected-filename" class="text-xs font-bold text-black hidden font-mono bg-white py-1 px-3 rounded-full inline-block border border-[#E2E2E2]"></div>
         </div>
 
         <!-- Upload Status / Result Box -->
-        <div id="excel-upload-result" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2 hidden">
-          <div class="flex items-center space-x-2 text-emerald-900 font-bold text-xs">
-            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
-            <span>Upload Completed Successfully!</span>
+        <div id="excel-upload-result" class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2 hidden">
+          <div class="flex items-center space-x-2 text-[#06C167] font-bold text-xs">
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+            <span>Upload Completed Successfully</span>
           </div>
           <div class="grid grid-cols-3 gap-2 text-center pt-1">
-            <div class="bg-white p-2 rounded-lg border border-emerald-200">
-              <span class="text-[10px] text-slate-500 font-medium block">New Added</span>
-              <strong id="excel-stat-new" class="text-emerald-700 text-sm">0</strong>
+            <div class="bg-white p-2 rounded-xl border border-emerald-200">
+              <span class="text-[10px] text-[#545454] block">New Added</span>
+              <strong id="excel-stat-new" class="text-black text-sm">0</strong>
             </div>
-            <div class="bg-white p-2 rounded-lg border border-emerald-200">
-              <span class="text-[10px] text-slate-500 font-medium block">Updated</span>
-              <strong id="excel-stat-updated" class="text-blue-700 text-sm">0</strong>
+            <div class="bg-white p-2 rounded-xl border border-emerald-200">
+              <span class="text-[10px] text-[#545454] block">Updated</span>
+              <strong id="excel-stat-updated" class="text-black text-sm">0</strong>
             </div>
-            <div class="bg-white p-2 rounded-lg border border-emerald-200">
-              <span class="text-[10px] text-slate-500 font-medium block">Total Customer Base</span>
-              <strong id="excel-stat-total" class="text-slate-900 text-sm">0</strong>
+            <div class="bg-white p-2 rounded-xl border border-emerald-200">
+              <span class="text-[10px] text-[#545454] block">Total Database</span>
+              <strong id="excel-stat-total" class="text-black text-sm">0</strong>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-        <span class="text-xs text-slate-500 font-medium">Automatic instant reload</span>
-        <div class="flex space-x-2">
-          <button onclick="closeExcelUploadModal()" class="px-3.5 py-2 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100">Close</button>
-          <button id="btn-submit-excel" onclick="uploadExcelFile()" disabled class="px-5 py-2 bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-sm flex items-center space-x-1.5">
-            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-            <span>Import Now</span>
-          </button>
-        </div>
+      <div class="p-4 border-t border-[#E2E2E2] bg-white flex justify-end space-x-2">
+        <button onclick="closeExcelUploadModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Close</button>
+        <button id="btn-submit-excel" onclick="uploadExcelFile()" disabled class="px-5 py-2 bg-black disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+          <span>Import Now</span>
+        </button>
       </div>
     </div>
   </div>
