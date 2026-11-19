@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setInterval(updateClock, 1000);
 
   await detectModeAndInit();
+  initAuth();
   await refreshAll();
 
   // Multi-user Real-time Auto-Sync every 4 seconds
@@ -212,58 +213,217 @@ function saveDemoState() {
 }
 
 // -----------------------------------------------------------------
-// PERSONA NAVIGATION (UBER BASE CLEAN CONTROL)
+// AUTHENTICATION & ROLE-BASED ACCESS CONTROL (RBAC)
 // -----------------------------------------------------------------
-function setPersona(persona) {
-  currentPersona = persona;
+const AUTH_USERS = [
+  {
+    username: 'admin',
+    password: 'admin123',
+    role: 'admin',
+    name: 'Deepak Verma',
+    title: 'Super Admin',
+    icon: '👑',
+    scope: 'Central Executive Console & POD Audit'
+  },
+  {
+    username: 'manager',
+    password: 'manager123',
+    role: 'manager',
+    name: 'Aakash Sharma',
+    title: 'Store Operations Manager',
+    icon: '📋',
+    scope: 'Front Desk, Inbound Leads & Smart Dispatch'
+  },
+  {
+    username: 'washer',
+    password: 'washer123',
+    role: 'washer',
+    name: 'Ramesh Singh',
+    title: 'Workshop Master',
+    icon: '👕',
+    scope: 'Washing, Ironing & WhatsApp Ready Alerts'
+  },
+  {
+    username: 'rider',
+    password: 'rider123',
+    role: 'rider',
+    name: 'Rajesh Kumar',
+    title: 'Field Delivery Agent',
+    icon: '🛵',
+    scope: 'Sector 14/15 Doorstep Route & Payment Camera'
+  }
+];
 
-  // Toggle active tab buttons
-  document.querySelectorAll('.persona-tab').forEach(tab => {
-    tab.className = 'persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-[#1E293B]';
-  });
+let currentUser = null;
 
-  const activeBtn = document.getElementById(`btn-persona-${persona}`);
-  if (activeBtn) {
-    activeBtn.className = 'persona-tab px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center space-x-1.5 text-[#1E3304] bg-[#A6CE39] shadow-sm';
+function initAuth() {
+  const saved = localStorage.getItem('tumbledry_auth_user');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      const matched = AUTH_USERS.find(u => u.username.toLowerCase() === parsed.username.toLowerCase());
+      if (matched) {
+        authenticateSuccess(matched, false);
+        return;
+      }
+    } catch (e) {}
+  }
+  showLoginView();
+}
+
+function showLoginView() {
+  currentUser = null;
+  const authView = document.getElementById('auth-view');
+  const appView = document.getElementById('authenticated-app-view');
+  if (authView) authView.classList.remove('hidden');
+  if (appView) appView.classList.add('hidden');
+
+  const err = document.getElementById('auth-error');
+  if (err) err.classList.add('hidden');
+  const pass = document.getElementById('login-password');
+  if (pass) pass.value = '';
+}
+
+function handleLoginSubmit(e) {
+  if (e) e.preventDefault();
+  const uInput = document.getElementById('login-username');
+  const pInput = document.getElementById('login-password');
+  const username = (uInput ? uInput.value : '').trim().toLowerCase();
+  const password = (pInput ? pInput.value : '').trim();
+
+  const user = AUTH_USERS.find(u => u.username.toLowerCase() === username && u.password === password);
+  if (!user) {
+    showAuthError('Invalid username or password. Check test credentials below.');
+    return;
   }
 
-  // Sync mobile dropdown
-  const mobileSelect = document.getElementById('mobile-persona-select');
-  if (mobileSelect) mobileSelect.value = persona;
+  authenticateSuccess(user, true);
+}
 
-  // Sync mobile pill buttons
-  document.querySelectorAll('.mobile-persona-pill').forEach(pill => {
-    pill.className = 'mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 bg-[#EEF4E3] text-[#545454]';
-  });
-  const activeMobilePill = document.getElementById(`mbtn-persona-${persona}`);
-  if (activeMobilePill) {
-    activeMobilePill.className = 'mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-bold flex items-center space-x-1 bg-[#A6CE39] text-[#1E3304] shadow-sm';
+function quickLogin(username, password) {
+  const uInput = document.getElementById('login-username');
+  const pInput = document.getElementById('login-password');
+  if (uInput) uInput.value = username;
+  if (pInput) pInput.value = password;
+
+  const user = AUTH_USERS.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+  if (user) {
+    authenticateSuccess(user, true);
+  }
+}
+
+function showAuthError(msg) {
+  const err = document.getElementById('auth-error');
+  const txt = document.getElementById('auth-error-text');
+  if (err && txt) {
+    txt.innerText = msg;
+    err.classList.remove('hidden');
+  }
+}
+
+function authenticateSuccess(user, persist = true) {
+  currentUser = user;
+  if (persist) {
+    localStorage.setItem('tumbledry_auth_user', JSON.stringify(user));
   }
 
-  // Toggle screens
-  document.querySelectorAll('.persona-screen').forEach(screen => screen.classList.add('hidden'));
-  const activeScreen = document.getElementById(`screen-${persona}`);
-  if (activeScreen) {
-    activeScreen.classList.remove('hidden');
+  const authView = document.getElementById('auth-view');
+  const appView = document.getElementById('authenticated-app-view');
+  if (authView) authView.classList.add('hidden');
+  if (appView) appView.classList.remove('hidden');
+
+  // Update Header User Profile Pill with Pretty Icons
+  const iconEl = document.getElementById('current-user-icon');
+  const nameEl = document.getElementById('current-user-name');
+  const badgeEl = document.getElementById('current-user-role-badge');
+  const scopeEl = document.getElementById('current-user-scope');
+
+  if (iconEl) iconEl.innerText = user.icon;
+  if (nameEl) nameEl.innerText = user.name;
+  if (badgeEl) badgeEl.innerText = user.title;
+  if (scopeEl) scopeEl.innerText = user.scope;
+
+  applyUserScreenVisibility(user.role);
+  renderActiveScreen();
+  lucide.createIcons();
+}
+
+function logoutUser() {
+  localStorage.removeItem('tumbledry_auth_user');
+  showLoginView();
+  lucide.createIcons();
+}
+
+function applyUserScreenVisibility(role) {
+  currentPersona = role;
+
+  // Hide all screens
+  document.querySelectorAll('.persona-screen').forEach(s => s.classList.add('hidden'));
+
+  // Show ONLY relevant screen
+  const targetScreen = document.getElementById(`screen-${role}`);
+  if (targetScreen) {
+    targetScreen.classList.remove('hidden');
   }
 
-  // Update role badge
-  const labelMap = {
-    admin: 'Super Admin',
-    manager: 'Front Desk',
-    washer: 'Laundry Master',
-    rider: 'Field Agent'
-  };
-  const roleEl = document.getElementById('role-context-label');
-  if (roleEl) {
-    roleEl.innerText = `Active: ${labelMap[persona]}`;
-    if (isStaticMode) {
-      roleEl.innerHTML = `${roleEl.innerText} <span class="bg-[#EEF4E3] text-[#1E293B] text-[10px] px-2 py-0.5 rounded-full font-bold ml-1">Demo Mode</span>`;
+  // Admin station monitor visibility
+  const adminMonitor = document.getElementById('admin-station-monitor');
+  if (adminMonitor) {
+    if (currentUser && currentUser.role === 'admin') {
+      adminMonitor.classList.remove('hidden');
+      updateAdminMonitorTabs(role);
+    } else {
+      adminMonitor.classList.add('hidden');
     }
   }
 
+  // Admin inspector return bars on non-admin screens
+  ['manager', 'washer', 'rider'].forEach(station => {
+    const bar = document.getElementById(`admin-return-bar-${station}`);
+    if (bar) {
+      if (currentUser && currentUser.role === 'admin' && role === station) {
+        bar.classList.remove('hidden');
+      } else {
+        bar.classList.add('hidden');
+      }
+    }
+  });
+
+  // Update Status Strip with pretty icon
+  const roleEl = document.getElementById('role-context-label');
+  if (roleEl && currentUser) {
+    roleEl.innerHTML = `Active: <span class="font-bold text-[#1E3304]">${currentUser.icon} ${currentUser.title}</span> <span class="text-[#898989]">(${currentUser.name})</span>`;
+    if (isStaticMode) {
+      roleEl.innerHTML += ` <span class="bg-[#EEF4E3] text-[#1E3304] text-[10px] px-2 py-0.5 rounded-full font-bold ml-1 border border-[#D8ECAB]">Standalone Mode</span>`;
+    }
+  }
+}
+
+function adminSwitchView(targetRole) {
+  if (!currentUser || currentUser.role !== 'admin') return;
+  applyUserScreenVisibility(targetRole);
   renderActiveScreen();
   lucide.createIcons();
+}
+
+function updateAdminMonitorTabs(activeRole) {
+  ['admin', 'manager', 'washer', 'rider'].forEach(r => {
+    const btn = document.getElementById(`admin-tab-${r}`);
+    if (!btn) return;
+    if (r === activeRole) {
+      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#A6CE39] text-[#1E3304] shadow-xs';
+    } else {
+      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] hover:bg-[#EEF4E3]';
+    }
+  });
+}
+
+function setPersona(persona) {
+  if (currentUser && currentUser.role === 'admin') {
+    adminSwitchView(persona);
+  } else if (currentUser) {
+    applyUserScreenVisibility(currentUser.role);
+  }
 }
 
 function setManagerTab(tab) {

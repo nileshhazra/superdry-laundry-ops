@@ -25,6 +25,62 @@ let leads = [...initialState.leads];
 let garmentsCatalog = [...initialState.garmentsCatalog];
 const storeSettings = { ...initialState.storeSettings };
 
+// Staff Test Users for Authentication & RBAC
+const AUTH_USERS = [
+  {
+    username: 'admin',
+    password: 'admin123',
+    role: 'admin',
+    name: 'Deepak Verma',
+    title: 'Super Admin',
+    icon: '👑',
+    scope: 'Central Executive Console'
+  },
+  {
+    username: 'manager',
+    password: 'manager123',
+    role: 'manager',
+    name: 'Aakash Sharma',
+    title: 'Store Operations Manager',
+    icon: '📋',
+    scope: 'Front Desk & Dispatch'
+  },
+  {
+    username: 'washer',
+    password: 'washer123',
+    role: 'washer',
+    name: 'Ramesh Singh',
+    title: 'Workshop Master',
+    icon: '👕',
+    scope: 'Washing, Ironing & QC'
+  },
+  {
+    username: 'rider',
+    password: 'rider123',
+    role: 'rider',
+    name: 'Rajesh Kumar',
+    title: 'Field Delivery Agent',
+    icon: '🛵',
+    scope: 'Sector 14/15 Route'
+  }
+];
+
+// Authentication API
+app.post('/api/auth/login', (req, res) => {
+  const { username, password } = req.body || {};
+  const user = AUTH_USERS.find(u => u.username === username && u.password === password);
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid username or password' });
+  }
+  const { password: _, ...safeUser } = user;
+  res.json({ success: true, user: safeUser });
+});
+
+app.get('/api/auth/users', (req, res) => {
+  const safeUsers = AUTH_USERS.map(({ password, ...u }) => u);
+  res.json({ users: safeUsers });
+});
+
 // -------------------------------------------------------------
 // 1. STATS / ANALYTICS (For Store Owner / Admin)
 // -------------------------------------------------------------
