@@ -12,6 +12,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- SheetJS CDN (for in-browser client-side Excel upload on GitHub Pages) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -965,11 +967,11 @@
             <span class="text-slate-500 text-[11px]">Download our ready-made template with columns: Name, Phone, Address, Zone.</span>
           </div>
           <div class="flex space-x-2 shrink-0">
-            <a href="/sample_customers_template.xlsx" download class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold flex items-center space-x-1 shadow-sm">
+            <a href="./sample_customers_template.xlsx" download class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold flex items-center space-x-1 shadow-sm">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
               <span>.XLSX</span>
             </a>
-            <a href="/sample_customers_template.csv" download class="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-[11px] font-semibold flex items-center space-x-1 shadow-sm">
+            <a href="./sample_customers_template.csv" download class="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-[11px] font-semibold flex items-center space-x-1 shadow-sm">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
               <span>.CSV</span>
             </a>
@@ -1036,6 +1038,6 @@
   </div>
 
   <!-- APPLICATION LOGIC SCRIPT -->
-  <script src="/app.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
