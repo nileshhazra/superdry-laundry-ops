@@ -32,17 +32,19 @@ const AUTH_USERS = [
     password: 'admin123',
     role: 'admin',
     name: 'Deepak Verma',
+    shortRole: 'Admin',
     title: 'Super Admin',
-    icon: '👑',
-    scope: 'Central Executive Console'
+    iconName: 'shield-check',
+    scope: 'Central Operations'
   },
   {
     username: 'manager',
     password: 'manager123',
     role: 'manager',
     name: 'Aakash Sharma',
-    title: 'Store Operations Manager',
-    icon: '📋',
+    shortRole: 'Manager',
+    title: 'Store Manager',
+    iconName: 'clipboard-list',
     scope: 'Front Desk & Dispatch'
   },
   {
@@ -50,18 +52,20 @@ const AUTH_USERS = [
     password: 'washer123',
     role: 'washer',
     name: 'Ramesh Singh',
+    shortRole: 'Workshop',
     title: 'Workshop Master',
-    icon: '👕',
-    scope: 'Washing, Ironing & QC'
+    iconName: 'shirt',
+    scope: 'Washing & Ironing'
   },
   {
     username: 'rider',
     password: 'rider123',
     role: 'rider',
     name: 'Rajesh Kumar',
-    title: 'Field Delivery Agent',
-    icon: '🛵',
-    scope: 'Sector 14/15 Route'
+    shortRole: 'Rider',
+    title: 'Field Agent',
+    iconName: 'bike',
+    scope: 'Delivery & Pickups'
   }
 ];
 
@@ -482,7 +486,7 @@ app.post('/api/orders/:id/notify-ready', (req, res) => {
   const order = orders.find(o => o.id === id);
   if (!order) return res.status(404).json({ error: 'Order not found' });
 
-  const msg = `Hello ${order.customerName}! Your SuperDry laundry order #${order.id} (${order.totalPieces} pieces) is packed and ready. Please reply with your availability today or tomorrow (e.g., Morning 10-12 or Evening 5-7) so our rider can deliver smoothly!`;
+  const msg = `Hello ${order.customerName}! Your Bumbledry laundry order #${order.id} (${order.totalPieces} pieces) is packed and ready. Please reply with your availability today or tomorrow (e.g., Morning 10-12 or Evening 5-7) so our rider can deliver smoothly!`;
 
   order.readyNotificationSent = true;
   order.readyNotificationSentAt = new Date().toISOString();
@@ -878,7 +882,7 @@ app.post('/api/fleet/send-warning', (req, res) => {
   const rider = riders.find(r => r.id === (riderId || 'RIDER-01'));
   if (!rider) return res.status(404).json({ error: 'Rider not found' });
 
-  const msg = `ALERT from SuperDry Store Manager: Your Sector 14 delivery run was completed ${rider.currentRun ? rider.currentRun.unaccountedGapMinutes : 15} minutes ago. Next batch of 3 customer orders is packed and waiting. Please report back to the store immediately.`;
+  const msg = `ALERT from Bumbledry Store Manager: Your Sector 14 delivery run was completed ${rider.currentRun ? rider.currentRun.unaccountedGapMinutes : 15} minutes ago. Next batch of 3 customer orders is packed and waiting. Please report back to the store immediately.`;
   
   res.json({
     success: true,
@@ -902,7 +906,7 @@ app.post('/api/whatsapp/simulate', (req, res) => {
   const existingLead = leads.find(l => l.phone.replace(/\D/g, '') === cleanPhone);
 
   if (type === 'MISSED_CALL') {
-    autoReply = `Hi ${senderName || 'there'}! We noticed we missed your call at SuperDry Laundry. Would you like to schedule an instant doorstep pickup? Reply 1 for Pickup, or drop your location pin!`;
+    autoReply = `Hi ${senderName || 'there'}! We noticed we missed your call at Bumbledry Laundry. Would you like to schedule an instant doorstep pickup? Reply 1 for Pickup, or drop your location pin!`;
 
     if (existingLead) {
       existingLead.attempts = (existingLead.attempts || 1) + 1;
@@ -986,7 +990,7 @@ app.post('/api/whatsapp/simulate', (req, res) => {
     autoReply = `Thank you! We have received your location pin. Rider Rajesh Kumar has been dispatched for pickup between 3:00 PM - 5:00 PM. Order tracking ID: ORD-${nextOrderNum}.`;
   } else {
     // Normal Chat Inquiry
-    autoReply = `Hello from SuperDry Laundry! Our dry cleaning rate is ₹90 for shirts, ₹110 for trousers, and ₹280 for suits with free doorstep pickup. Would you like to schedule a pickup today?`;
+    autoReply = `Hello from Bumbledry Laundry! Our dry cleaning rate is ₹90 for shirts, ₹110 for trousers, and ₹280 for suits with free doorstep pickup. Would you like to schedule a pickup today?`;
 
     if (existingLead) {
       existingLead.attempts = (existingLead.attempts || 1) + 1;
@@ -1021,5 +1025,5 @@ app.post('/api/whatsapp/simulate', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`SuperDry Laundry Management System is live at http://localhost:${PORT}`);
+  console.log(`Bumbledry Laundry Management System is live at http://localhost:${PORT}`);
 });

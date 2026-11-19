@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tumbledry PRO • Operations Platform</title>
+  <title>Bumbledry PRO • Operations Platform</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Inter & JetBrains Mono Fonts -->
@@ -24,9 +24,9 @@
           },
           colors: {
             tumble: {
-              lime: '#A6CE39',       // Tumbledry Signature Lime Green (Atlantis)
+              lime: '#A6CE39',       // Bumbledry Signature Lime Green
               limeHover: '#92BA2B',  // Richer lime for active hover
-              dark: '#1E3304',       // Tumbledry Charcoal / Thunder text
+              dark: '#1E3304',       // Bumbledry Dark Pine Forest text
               textGreen: '#5A7812',  // Accessible deep green text
               lightGreen: '#F3F9E4', // Soft lime surface tint
               borderGreen: '#D8ECAB',// Subtle lime border
@@ -92,7 +92,7 @@
       <!-- Brand Logo & Header -->
       <div class="text-center space-y-2">
         <div class="inline-flex items-center justify-center space-x-2">
-          <span class="text-3xl font-black tracking-tight text-[#1E3304]">Tumble<span class="text-[#8FB828]">dry</span></span>
+          <span class="text-3xl font-black tracking-tight text-[#1E3304]">Bumble<span class="text-[#8FB828]">dry</span></span>
           <span class="bg-[#A6CE39] text-[#1E3304] text-[11px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">OPERATIONS</span>
         </div>
         <p class="text-xs font-semibold text-[#545454]">Operations Portal & Role-Based Workstation Access</p>
@@ -129,7 +129,7 @@
           </button>
         </form>
 
-        <!-- Quick 1-Tap Login Section with Pretty Icons -->
+        <!-- Quick 1-Tap Login Section with Monochromatic Icons (No Emojis) -->
         <div class="pt-4 border-t border-[#E2E8D5] space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-[11px] font-black uppercase tracking-wider text-[#545454]">Sample Test Accounts (1-Tap Login)</span>
@@ -139,9 +139,11 @@
           <div class="grid grid-cols-2 gap-2">
             <!-- Admin -->
             <button type="button" onclick="quickLogin('admin', 'admin123')" class="p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group">
-              <div class="flex items-center space-x-2">
-                <span class="text-xl group-hover:scale-110 transition-transform">👑</span>
-                <div>
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <i data-lucide="shield-check" class="w-4 h-4"></i>
+                </div>
+                <div class="min-w-0">
                   <div class="text-xs font-black text-[#1E293B]">Admin</div>
                   <div class="text-[10px] text-[#545454]">Pass: <code class="font-mono text-[#1E3304] font-bold">admin123</code></div>
                 </div>
@@ -150,9 +152,11 @@
 
             <!-- Manager -->
             <button type="button" onclick="quickLogin('manager', 'manager123')" class="p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group">
-              <div class="flex items-center space-x-2">
-                <span class="text-xl group-hover:scale-110 transition-transform">📋</span>
-                <div>
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+                </div>
+                <div class="min-w-0">
                   <div class="text-xs font-black text-[#1E293B]">Manager</div>
                   <div class="text-[10px] text-[#545454]">Pass: <code class="font-mono text-[#1E3304] font-bold">manager123</code></div>
                 </div>
@@ -161,9 +165,11 @@
 
             <!-- Washer -->
             <button type="button" onclick="quickLogin('washer', 'washer123')" class="p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group">
-              <div class="flex items-center space-x-2">
-                <span class="text-xl group-hover:scale-110 transition-transform">👕</span>
-                <div>
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <i data-lucide="shirt" class="w-4 h-4"></i>
+                </div>
+                <div class="min-w-0">
                   <div class="text-xs font-black text-[#1E293B]">Washer</div>
                   <div class="text-[10px] text-[#545454]">Pass: <code class="font-mono text-[#1E3304] font-bold">washer123</code></div>
                 </div>
@@ -172,9 +178,11 @@
 
             <!-- Rider -->
             <button type="button" onclick="quickLogin('rider', 'rider123')" class="p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group">
-              <div class="flex items-center space-x-2">
-                <span class="text-xl group-hover:scale-110 transition-transform">🛵</span>
-                <div>
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <i data-lucide="bike" class="w-4 h-4"></i>
+                </div>
+                <div class="min-w-0">
                   <div class="text-xs font-black text-[#1E293B]">Rider</div>
                   <div class="text-[10px] text-[#545454]">Pass: <code class="font-mono text-[#1E3304] font-bold">rider123</code></div>
                 </div>
@@ -186,7 +194,7 @@
       </div>
 
       <div class="text-center text-[11px] text-[#545454]">
-        <span>Sector 15 Main Store Console • Dual Local/GitHub Pages Support</span>
+        <span>Bumbledry Sector 15 Main Store Console • Multi-Station Access</span>
       </div>
 
     </div>
@@ -198,42 +206,41 @@
   <div id="authenticated-app-view" class="hidden min-h-screen flex flex-col w-full">
 
     <!-- ============================================================== -->
-    <!-- TUMBLEDRY-THEMED APP HEADER                                    -->
+    <!-- BUMBLEDRY-THEMED APP HEADER                                    -->
     <!-- ============================================================== -->
     <header class="bg-white border-b border-[#E2E8D5] border-t-4 border-[#A6CE39] sticky top-0 z-40 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 gap-3">
+      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 gap-2 sm:gap-3">
           
-          <!-- Brand: Tumbledry Signature Typography -->
-          <div class="flex items-center space-x-2 shrink-0">
-            <span class="text-xl sm:text-2xl font-black tracking-tight text-[#1E3304]">Tumble<span class="text-[#8FB828]">dry</span></span>
-            <span class="bg-[#A6CE39] text-[#1E3304] text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">OPERATIONS</span>
+          <!-- Brand: Bumbledry Signature Typography -->
+          <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+            <span class="text-lg sm:text-2xl font-black tracking-tight text-[#1E3304]">Bumble<span class="text-[#8FB828]">dry</span></span>
+            <span class="bg-[#A6CE39] text-[#1E3304] text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full uppercase tracking-wider">OPS</span>
           </div>
 
-          <!-- Logged In User Profile & Pretty Role Icon (Replaces dropdown) -->
-          <div class="flex items-center space-x-2 sm:space-x-3">
+          <!-- Logged In User Profile & Monochromatic Role Badge -->
+          <div class="flex items-center space-x-1.5 sm:space-x-3 min-w-0">
             
-            <!-- User Profile Pill -->
-            <div class="flex items-center space-x-2 bg-[#EEF4E3] border border-[#D8ECAB] px-3 py-1.5 rounded-full shadow-xs">
-              <span id="current-user-icon" class="text-base sm:text-lg shrink-0">👑</span>
-              <div class="flex flex-col text-left">
-                <div class="flex items-center space-x-1.5">
-                  <span id="current-user-name" class="text-xs font-black text-[#1E293B] leading-tight">Staff Member</span>
-                  <span id="current-user-role-badge" class="bg-[#A6CE39] text-[#1E3304] text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase">Role</span>
-                </div>
-                <span id="current-user-scope" class="text-[10px] text-[#545454] leading-tight hidden md:block">Active Console</span>
+            <!-- User Profile Pill: Responsive, no text wrapping or overflow -->
+            <div class="flex items-center space-x-2 bg-[#EEF4E3] border border-[#D8ECAB] px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-xs shrink min-w-0">
+              <div id="current-user-icon" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="flex items-center space-x-1.5 sm:space-x-2 min-w-0">
+                <span id="current-user-name" class="text-xs font-black text-[#1E293B] truncate max-w-[85px] sm:max-w-[120px] leading-tight">Staff Member</span>
+                <span id="current-user-role-badge" class="bg-[#A6CE39] text-[#1E3304] text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 whitespace-nowrap leading-none">Role</span>
               </div>
             </div>
 
             <!-- WhatsApp Simulator Trigger Button -->
-            <button onclick="openWhatsAppModal()" class="shrink-0 px-3 py-1.5 rounded-full bg-[#2D5A1E] hover:bg-[#234717] text-white text-xs font-semibold transition-all flex items-center space-x-1.5 shadow-sm">
+            <button onclick="openWhatsAppModal()" class="shrink-0 px-2.5 sm:px-3 py-1.5 rounded-full bg-[#2D5A1E] hover:bg-[#234717] text-white text-xs font-semibold transition-all flex items-center space-x-1.5 shadow-sm">
               <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
-              <span class="hidden sm:inline">Simulate WhatsApp</span>
-              <span class="inline sm:hidden">WA Sim</span>
+              <span class="hidden md:inline">Simulate WhatsApp</span>
+              <span class="inline md:hidden">WA</span>
             </button>
 
             <!-- Logout / Switch User Button -->
-            <button onclick="logoutUser()" title="Logout and return to Login Screen" class="shrink-0 px-3 py-1.5 bg-[#EEF4E3] hover:bg-rose-50 text-[#1E293B] hover:text-rose-700 border border-[#E2E8D5] hover:border-rose-200 rounded-full text-xs font-bold transition-all flex items-center space-x-1.5 shadow-xs">
+            <button onclick="logoutUser()" title="Logout and return to Login Screen" class="shrink-0 px-2.5 sm:px-3 py-1.5 bg-[#EEF4E3] hover:bg-rose-50 text-[#1E293B] hover:text-rose-700 border border-[#E2E8D5] hover:border-rose-200 rounded-full text-xs font-bold transition-all flex items-center space-x-1 shadow-xs">
               <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
               <span class="hidden sm:inline">Logout</span>
             </button>
@@ -245,15 +252,15 @@
     </header>
 
   <!-- SUBTLE GLANCEABLE STATUS STRIP -->
-  <div class="bg-white border-b border-[#E2E8D5] px-4 sm:px-8 py-2 text-xs text-[#545454]">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center space-x-2 truncate">
+  <div class="bg-white border-b border-[#E2E8D5] px-3 sm:px-6 lg:px-8 py-2 text-xs text-[#545454]">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 min-w-0">
+      <div class="flex items-center space-x-2 min-w-0 truncate">
         <span class="w-2 h-2 rounded-full bg-[#A6CE39] shrink-0"></span>
-        <span id="role-context-label" class="font-medium text-[#1E293B] truncate">Active: Super Admin</span>
-        <span class="text-[#CBCBCB]">|</span>
-        <span class="truncate">2,000 Customers connected</span>
+        <span id="role-context-label" class="font-medium text-[#1E293B] truncate">Active Console</span>
+        <span class="text-[#CBCBCB] hidden sm:inline">|</span>
+        <span class="truncate hidden sm:inline">2,000 Customers connected</span>
       </div>
-      <div class="hidden sm:flex items-center space-x-3 text-[#545454] shrink-0">
+      <div class="hidden md:flex items-center space-x-3 text-[#545454] shrink-0">
         <span>Sector 15 Main Store</span>
         <span id="live-clock" class="font-mono text-[#898989]"></span>
       </div>
@@ -269,17 +276,29 @@
     <div id="screen-admin" class="persona-screen space-y-6">
       
       <!-- Admin Station Monitor (For Super Admin to inspect other desks if needed) -->
-      <div id="admin-station-monitor" class="bg-white rounded-2xl p-3 border border-[#E2E8D5] flex flex-wrap items-center justify-between gap-3 shadow-xs">
+      <div id="admin-station-monitor" class="bg-white rounded-2xl p-2.5 sm:p-3 border border-[#E2E8D5] flex flex-wrap items-center justify-between gap-2 sm:gap-3 shadow-xs">
         <div class="flex items-center space-x-2 text-xs font-bold text-[#1E293B]">
-          <span class="text-base">👑</span>
+          <i data-lucide="shield-check" class="w-4 h-4 text-[#1E3A2F]"></i>
           <span>Station View Monitor:</span>
-          <span class="text-[11px] font-normal text-[#545454] hidden sm:inline">(Inspect other staff consoles as Admin)</span>
+          <span class="text-[11px] font-normal text-[#545454] hidden sm:inline">(Inspect staff consoles as Admin)</span>
         </div>
         <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar">
-          <button onclick="adminSwitchView('admin')" id="admin-tab-admin" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#A6CE39] text-[#1E3304] shadow-xs">👑 Admin Overview</button>
-          <button onclick="adminSwitchView('manager')" id="admin-tab-manager" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] hover:bg-[#EEF4E3]">📋 Front Desk</button>
-          <button onclick="adminSwitchView('washer')" id="admin-tab-washer" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] hover:bg-[#EEF4E3]">👕 Workshop</button>
-          <button onclick="adminSwitchView('rider')" id="admin-tab-rider" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] hover:bg-[#EEF4E3]">🛵 Field Agent</button>
+          <button onclick="adminSwitchView('admin')" id="admin-tab-admin" class="px-3 py-1.5 rounded-full text-xs font-bold bg-[#A6CE39] text-[#1E3304] shadow-xs flex items-center space-x-1 whitespace-nowrap">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            <span>Admin Overview</span>
+          </button>
+          <button onclick="adminSwitchView('manager')" id="admin-tab-manager" class="px-3 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] hover:bg-[#EEF4E3] flex items-center space-x-1 whitespace-nowrap">
+            <i data-lucide="clipboard-list" class="w-3.5 h-3.5"></i>
+            <span>Front Desk</span>
+          </button>
+          <button onclick="adminSwitchView('washer')" id="admin-tab-washer" class="px-3 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] hover:bg-[#EEF4E3] flex items-center space-x-1 whitespace-nowrap">
+            <i data-lucide="shirt" class="w-3.5 h-3.5"></i>
+            <span>Workshop</span>
+          </button>
+          <button onclick="adminSwitchView('rider')" id="admin-tab-rider" class="px-3 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] hover:bg-[#EEF4E3] flex items-center space-x-1 whitespace-nowrap">
+            <i data-lucide="bike" class="w-3.5 h-3.5"></i>
+            <span>Field Agent</span>
+          </button>
         </div>
       </div>
 
@@ -287,7 +306,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 class="text-2xl sm:text-3xl font-black text-[#1E293B] tracking-tight flex items-center space-x-2">
-            <span>👑</span>
+            <i data-lucide="shield-check" class="w-7 h-7 text-[#1E3A2F]"></i>
             <span>Overview</span>
           </h1>
           <p class="text-xs text-[#545454] mt-0.5">Live revenue, orders velocity, and fleet status</p>
@@ -478,7 +497,7 @@
       <!-- Admin Inspector Return Bar (Visible only when Admin is monitoring Front Desk) -->
       <div id="admin-return-bar-manager" class="hidden bg-[#1E3A2F] text-white px-4 py-2.5 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-xs">
         <div class="flex items-center space-x-2">
-          <span>👑</span>
+          <i data-lucide="shield-check" class="w-4 h-4 text-[#A6CE39]"></i>
           <span>Admin Monitor Mode • Viewing Front Desk</span>
         </div>
         <button onclick="adminSwitchView('admin')" class="px-3.5 py-1 bg-[#A6CE39] text-[#1E3304] font-bold rounded-full text-xs hover:bg-[#92BA2B] transition-all">
@@ -490,7 +509,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 class="text-2xl sm:text-3xl font-black text-[#1E293B] tracking-tight flex items-center space-x-2">
-            <span>📋</span>
+            <i data-lucide="clipboard-list" class="w-7 h-7 text-[#1E3A2F]"></i>
             <span>Front Desk</span>
           </h1>
           <p class="text-xs text-[#545454] mt-0.5">Inbound inquiries, garment intake, and billing counter</p>
@@ -640,7 +659,7 @@
       <!-- Admin Inspector Return Bar (Visible only when Admin is monitoring Workshop) -->
       <div id="admin-return-bar-washer" class="hidden bg-[#1E3A2F] text-white px-4 py-2.5 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-xs">
         <div class="flex items-center space-x-2">
-          <span>👑</span>
+          <i data-lucide="shield-check" class="w-4 h-4 text-[#A6CE39]"></i>
           <span>Admin Monitor Mode • Viewing Workshop</span>
         </div>
         <button onclick="adminSwitchView('admin')" class="px-3.5 py-1 bg-[#A6CE39] text-[#1E3304] font-bold rounded-full text-xs hover:bg-[#92BA2B] transition-all">
@@ -651,7 +670,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 class="text-2xl sm:text-3xl font-black text-[#1E293B] tracking-tight flex items-center space-x-2">
-            <span>👕</span>
+            <i data-lucide="shirt" class="w-7 h-7 text-[#1E3A2F]"></i>
             <span>Wash Plant Kanban</span>
           </h1>
           <p class="text-xs text-[#545454] mt-0.5">Floor operator processing queue with Express priority</p>
@@ -667,7 +686,7 @@
         <div class="flex items-center space-x-2">
           <span class="w-2 h-2 rounded-full bg-[#A6CE39]"></span>
           <span class="font-semibold text-[#1E293B]">Active Shift Accountability:</span>
-          <span class="text-[#545454]">Washing: 👕 Ramesh • Dry Cleaning: 👕 Mahender • Steam Press: 👕 Suresh</span>
+          <span class="text-[#545454]">Washing: Ramesh • Dry Cleaning: Mahender • Steam Press: Suresh</span>
         </div>
         <span class="text-[11px] bg-[#F8FAF3] text-[#1E293B] font-semibold px-2.5 py-0.5 rounded-full w-fit">
           Real-time Sync Active
@@ -740,7 +759,7 @@
       <!-- Admin Inspector Return Bar (Visible only when Admin is monitoring Rider) -->
       <div id="admin-return-bar-rider" class="hidden max-w-md mx-auto bg-[#1E3A2F] text-white px-4 py-2.5 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-xs">
         <div class="flex items-center space-x-2">
-          <span>👑</span>
+          <i data-lucide="shield-check" class="w-4 h-4 text-[#A6CE39]"></i>
           <span>Admin Monitor Mode • Viewing Rider</span>
         </div>
         <button onclick="adminSwitchView('admin')" class="px-3.5 py-1 bg-[#A6CE39] text-[#1E3304] font-bold rounded-full text-xs hover:bg-[#92BA2B] transition-all">
@@ -755,14 +774,14 @@
         <div class="bg-[#1E3A2F] text-white p-5">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-full bg-white text-[#1E293B] flex items-center justify-center font-black text-xl shadow-xs">
-                🛵
+              <div class="w-10 h-10 rounded-full bg-white text-[#1E3A2F] flex items-center justify-center font-black shadow-xs">
+                <i data-lucide="bike" class="w-5 h-5 text-[#1E3A2F]"></i>
               </div>
               <div>
                 <h4 class="font-bold text-base leading-tight">Rajesh Kumar</h4>
                 <div class="flex items-center space-x-1.5 mt-0.5">
                   <span class="w-2 h-2 rounded-full bg-[#A6CE39]"></span>
-                  <span class="text-xs text-[#CBCBCB]">🛵 Field Partner • Online</span>
+                  <span class="text-xs text-[#CBCBCB]">Field Partner • Active Shift</span>
                 </div>
               </div>
             </div>

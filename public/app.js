@@ -1,4 +1,4 @@
-// SuperDry PRO - Smart Laundry Operations Client Logic
+// Bumbledry PRO - Smart Laundry Operations Client Logic
 // Dual Mode Architecture: Automatically connects to Node.js backend when running locally,
 // or runs seamlessly in Client-Side Demo Mode on GitHub Pages using in-browser storage.
 
@@ -30,7 +30,7 @@ let mockDb = {
   leads: [],
   garmentsCatalog: [],
   storeSettings: {
-    storeName: 'SuperDry Laundry & Dry Cleaners',
+    storeName: 'Bumbledry Laundry & Dry Cleaners',
     phone: '+91 98765 43210',
     address: 'Shop 4B, Main Market, Sector 15, Gurugram, Haryana',
     gstin: '06AAAAA0000A1Z5',
@@ -94,7 +94,7 @@ async function detectModeAndInit() {
   }
 
   isStaticMode = true;
-  console.log('SuperDry PRO: Running in Standalone Client Demo Mode (GitHub Pages)');
+  console.log('Bumbledry PRO: Running in Standalone Client Demo Mode (GitHub Pages)');
 
   // Try loading saved state from browser localStorage
   const savedState = localStorage.getItem('superdry_demo_state');
@@ -221,43 +221,47 @@ const AUTH_USERS = [
     password: 'admin123',
     role: 'admin',
     name: 'Deepak Verma',
+    shortRole: 'Admin',
     title: 'Super Admin',
-    icon: '👑',
-    scope: 'Central Executive Console & POD Audit'
+    iconName: 'shield-check',
+    scope: 'Central Operations'
   },
   {
     username: 'manager',
     password: 'manager123',
     role: 'manager',
     name: 'Aakash Sharma',
-    title: 'Store Operations Manager',
-    icon: '📋',
-    scope: 'Front Desk, Inbound Leads & Smart Dispatch'
+    shortRole: 'Manager',
+    title: 'Store Manager',
+    iconName: 'clipboard-list',
+    scope: 'Front Desk & Dispatch'
   },
   {
     username: 'washer',
     password: 'washer123',
     role: 'washer',
     name: 'Ramesh Singh',
+    shortRole: 'Workshop',
     title: 'Workshop Master',
-    icon: '👕',
-    scope: 'Washing, Ironing & WhatsApp Ready Alerts'
+    iconName: 'shirt',
+    scope: 'Washing & Ironing'
   },
   {
     username: 'rider',
     password: 'rider123',
     role: 'rider',
     name: 'Rajesh Kumar',
-    title: 'Field Delivery Agent',
-    icon: '🛵',
-    scope: 'Sector 14/15 Doorstep Route & Payment Camera'
+    shortRole: 'Rider',
+    title: 'Field Agent',
+    iconName: 'bike',
+    scope: 'Delivery & Pickups'
   }
 ];
 
 let currentUser = null;
 
 function initAuth() {
-  const saved = localStorage.getItem('tumbledry_auth_user');
+  const saved = localStorage.getItem('bumbledry_auth_user') || localStorage.getItem('tumbledry_auth_user');
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
@@ -324,7 +328,7 @@ function showAuthError(msg) {
 function authenticateSuccess(user, persist = true) {
   currentUser = user;
   if (persist) {
-    localStorage.setItem('tumbledry_auth_user', JSON.stringify(user));
+    localStorage.setItem('bumbledry_auth_user', JSON.stringify(user));
   }
 
   const authView = document.getElementById('auth-view');
@@ -332,15 +336,15 @@ function authenticateSuccess(user, persist = true) {
   if (authView) authView.classList.add('hidden');
   if (appView) appView.classList.remove('hidden');
 
-  // Update Header User Profile Pill with Pretty Icons
+  // Update Header User Profile Pill with Monochromatic Icons & Clean Spacing
   const iconEl = document.getElementById('current-user-icon');
   const nameEl = document.getElementById('current-user-name');
   const badgeEl = document.getElementById('current-user-role-badge');
   const scopeEl = document.getElementById('current-user-scope');
 
-  if (iconEl) iconEl.innerText = user.icon;
+  if (iconEl) iconEl.innerHTML = `<i data-lucide="${user.iconName || 'user'}" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>`;
   if (nameEl) nameEl.innerText = user.name;
-  if (badgeEl) badgeEl.innerText = user.title;
+  if (badgeEl) badgeEl.innerText = user.shortRole || user.title;
   if (scopeEl) scopeEl.innerText = user.scope;
 
   applyUserScreenVisibility(user.role);
@@ -349,6 +353,7 @@ function authenticateSuccess(user, persist = true) {
 }
 
 function logoutUser() {
+  localStorage.removeItem('bumbledry_auth_user');
   localStorage.removeItem('tumbledry_auth_user');
   showLoginView();
   lucide.createIcons();
@@ -389,10 +394,10 @@ function applyUserScreenVisibility(role) {
     }
   });
 
-  // Update Status Strip with pretty icon
+  // Update Status Strip with Monochromatic Icon (No Emoji)
   const roleEl = document.getElementById('role-context-label');
   if (roleEl && currentUser) {
-    roleEl.innerHTML = `Active: <span class="font-bold text-[#1E3304]">${currentUser.icon} ${currentUser.title}</span> <span class="text-[#898989]">(${currentUser.name})</span>`;
+    roleEl.innerHTML = `<span class="inline-flex items-center space-x-1.5"><i data-lucide="${currentUser.iconName || 'user'}" class="w-3.5 h-3.5 text-[#1E3304] inline"></i><span class="font-bold text-[#1E3304]">${currentUser.title}</span> <span class="text-[#898989] font-normal hidden sm:inline">(${currentUser.name})</span></span>`;
     if (isStaticMode) {
       roleEl.innerHTML += ` <span class="bg-[#EEF4E3] text-[#1E3304] text-[10px] px-2 py-0.5 rounded-full font-bold ml-1 border border-[#D8ECAB]">Standalone Mode</span>`;
     }
@@ -407,15 +412,29 @@ function adminSwitchView(targetRole) {
 }
 
 function updateAdminMonitorTabs(activeRole) {
+  const iconMap = {
+    admin: 'shield-check',
+    manager: 'clipboard-list',
+    washer: 'shirt',
+    rider: 'bike'
+  };
+  const labelMap = {
+    admin: 'Admin Overview',
+    manager: 'Front Desk',
+    washer: 'Workshop',
+    rider: 'Field Agent'
+  };
   ['admin', 'manager', 'washer', 'rider'].forEach(r => {
     const btn = document.getElementById(`admin-tab-${r}`);
     if (!btn) return;
+    btn.innerHTML = `<i data-lucide="${iconMap[r]}" class="w-3.5 h-3.5"></i><span>${labelMap[r]}</span>`;
     if (r === activeRole) {
-      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#A6CE39] text-[#1E3304] shadow-xs';
+      btn.className = 'px-3 py-1.5 rounded-full text-xs font-bold bg-[#A6CE39] text-[#1E3304] shadow-xs flex items-center space-x-1 whitespace-nowrap';
     } else {
-      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] hover:bg-[#EEF4E3]';
+      btn.className = 'px-3 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] hover:bg-[#EEF4E3] flex items-center space-x-1 whitespace-nowrap';
     }
   });
+  lucide.createIcons();
 }
 
 function setPersona(persona) {
@@ -1735,7 +1754,7 @@ function openWhatsAppReadyModal(orderId) {
   document.getElementById('wa-ready-cust-phone').innerText = order.customerPhone;
   document.getElementById('wa-ready-order-id').innerText = `Order #${order.id} • ${order.totalPieces} Pieces (${order.zone})`;
 
-  const msg = `Hello ${order.customerName}! Your SuperDry laundry order #${order.id} (${order.totalPieces} pieces) is packed and ready. Please reply with your availability today or tomorrow (e.g. Morning 10-12 or Evening 5-7) so our rider can deliver smoothly!`;
+  const msg = `Hello ${order.customerName}! Your Bumbledry laundry order #${order.id} (${order.totalPieces} pieces) is packed and ready. Please reply with your availability today or tomorrow (e.g. Morning 10-12 or Evening 5-7) so our rider can deliver smoothly!`;
   document.getElementById('wa-ready-msg-text').value = msg;
 
   document.getElementById('modal-whatsapp-ready').classList.remove('hidden');
@@ -1900,7 +1919,7 @@ async function submitWhatsAppSim() {
 
     let autoReply = '';
     if (type === 'MISSED_CALL') {
-      autoReply = `Hi ${senderName || 'there'}! We noticed we missed your call at SuperDry Laundry. Would you like to schedule an instant doorstep pickup? Reply 1 for Pickup, or drop your location pin!`;
+      autoReply = `Hi ${senderName || 'there'}! We noticed we missed your call at Bumbledry Laundry. Would you like to schedule an instant doorstep pickup? Reply 1 for Pickup, or drop your location pin!`;
       if (existing) {
         existing.attempts = (existing.attempts || 1) + 1;
         existing.channel = 'WhatsApp Missed Call';
@@ -1969,7 +1988,7 @@ async function submitWhatsAppSim() {
         assignedRider: 'Rajesh Kumar (Field Agent)'
       });
     } else {
-      autoReply = `Hello from SuperDry Laundry! Our dry cleaning rate is ₹90 for shirts, ₹110 for trousers, and ₹280 for suits with free doorstep pickup. Would you like to schedule a pickup today?`;
+      autoReply = `Hello from Bumbledry Laundry! Our dry cleaning rate is ₹90 for shirts, ₹110 for trousers, and ₹280 for suits with free doorstep pickup. Would you like to schedule a pickup today?`;
       if (existing) {
         existing.attempts = (existing.attempts || 1) + 1;
         existing.message = messageText || existing.message;
@@ -2418,7 +2437,8 @@ async function uploadExcelFile() {
   const btn = document.getElementById('btn-submit-excel');
   const originalHtml = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = `<span class="animate-spin inline-block mr-1">⏳</span> Uploading & Processing...`;
+  btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin inline-block mr-1"></i> Uploading & Processing...`;
+  lucide.createIcons();
 
   // CLIENT-SIDE PARSING (GitHub Pages Demo Mode via SheetJS)
   if (isStaticMode && typeof XLSX !== 'undefined') {
@@ -2660,7 +2680,7 @@ async function sendRiderWarning(riderId) {
   if (isStaticMode) {
     const rider = mockDb.riders.find(r => r.id === riderId);
     if (!rider) return;
-    const msg = `ALERT from SuperDry Store Manager: Your Sector 14 delivery run was completed 25 minutes ago. Next batch of 3 customer orders is packed and waiting. Please report back to the store immediately.`;
+    const msg = `ALERT from Bumbledry Store Manager: Your Sector 14 delivery run was completed 25 minutes ago. Next batch of 3 customer orders is packed and waiting. Please report back to the store immediately.`;
     alert(`WhatsApp Warning dispatched to ${rider.name} (${rider.phone})!\n\n"${msg}"`);
     return;
   }
