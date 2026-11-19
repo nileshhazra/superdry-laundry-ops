@@ -1,0 +1,827 @@
+{
+  "orders": [
+    {
+      "id": "ORD-1040",
+      "customerId": "CUST-0001",
+      "customerName": "Champak Deep",
+      "customerPhone": "+91 9982058724",
+      "customerAddress": "#860, Block D, Sector 14 - North, Gurugram",
+      "zone": "Sector 14 - North",
+      "status": "PICKUP_REQUESTED",
+      "isExpress": false,
+      "totalPieces": 4,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Heavy Winter Blanket",
+          "service": "Dry Clean",
+          "rate": 299,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Heavy Winter Blanket",
+          "service": "Dry Clean",
+          "rate": 299,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 4,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 1158,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-18T13:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-21T17:48:25.532889+00:00",
+      "assignedRider": "Rajesh Kumar (Field Agent)",
+      "assignedWasher": null
+    },
+    {
+      "id": "ORD-1041",
+      "customerId": "CUST-0002",
+      "customerName": "Baljiwan Chauhan",
+      "customerPhone": "+91 7650976330",
+      "customerAddress": "#702, Block B, Sector 14 - North, Gurugram",
+      "zone": "Sector 14 - North",
+      "status": "PICKUP_REQUESTED",
+      "isExpress": false,
+      "totalPieces": 5,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Dry Clean",
+          "rate": 220,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Men Shirt / T-Shirt",
+          "service": "Wash & Steam Iron",
+          "rate": 35,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Trousers / Jeans",
+          "service": "Wash & Fold",
+          "rate": 45,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 4,
+          "garmentName": "Kurta / Salwar Suit",
+          "service": "Wash & Steam Iron",
+          "rate": 70,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 5,
+          "garmentName": "Trousers / Jeans",
+          "service": "Dry Clean",
+          "rate": 110,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 480,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-19T08:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-21T17:48:25.532889+00:00",
+      "assignedRider": "Rajesh Kumar (Field Agent)",
+      "assignedWasher": null
+    },
+    {
+      "id": "ORD-1042",
+      "customerId": "CUST-0003",
+      "customerName": "Jeremiah Raja",
+      "customerPhone": "+91 7081209378",
+      "customerAddress": "#755, Block C, DLF Phase 2 - East, Gurugram",
+      "zone": "DLF Phase 2 - East",
+      "status": "PICKED_UP",
+      "isExpress": false,
+      "totalPieces": 3,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Men Shirt / T-Shirt",
+          "service": "Wash & Steam Iron",
+          "rate": 35,
+          "specialNote": "Collar stain removal requested",
+          "hasStain": true
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Wash & Fold",
+          "rate": 120,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Heavy Winter Blanket",
+          "service": "Dry Clean",
+          "rate": 299,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 454,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-18T22:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-21T17:48:25.532889+00:00",
+      "assignedRider": "Rajesh Kumar (Field Agent)",
+      "assignedWasher": null
+    },
+    {
+      "id": "ORD-1043",
+      "customerId": "CUST-0004",
+      "customerName": "Damini Chandran",
+      "customerPhone": "+91 9162447059",
+      "customerAddress": "#927, Block C, DLF Phase 4 - East, Gurugram",
+      "zone": "DLF Phase 4 - East",
+      "status": "RECEIVED_IN_STORE",
+      "isExpress": true,
+      "totalPieces": 3,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Kurta / Salwar Suit",
+          "service": "Wash & Steam Iron",
+          "rate": 70,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Men Shirt / T-Shirt",
+          "service": "Wash & Steam Iron",
+          "rate": 35,
+          "specialNote": "Collar stain removal requested",
+          "hasStain": true
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Dry Clean",
+          "rate": 220,
+          "specialNote": "Collar stain removal requested",
+          "hasStain": true
+        }
+      ],
+      "subtotal": 487,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-18T19:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-20T05:48:25.532889+00:00",
+      "assignedRider": null,
+      "assignedWasher": null
+    },
+    {
+      "id": "ORD-1044",
+      "customerId": "CUST-0005",
+      "customerName": "Zarna Soman",
+      "customerPhone": "+91 9887951487",
+      "customerAddress": "#666, Block D, Sector 22 - Central, Gurugram",
+      "zone": "Sector 22 - Central",
+      "status": "WASHING",
+      "isExpress": false,
+      "totalPieces": 5,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Men Shirt / T-Shirt",
+          "service": "Dry Clean",
+          "rate": 90,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Dry Clean",
+          "rate": 220,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 4,
+          "garmentName": "Trousers / Jeans",
+          "service": "Wash & Fold",
+          "rate": 45,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 5,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Dry Clean",
+          "rate": 220,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 855,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-18T10:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-21T17:48:25.532889+00:00",
+      "assignedRider": null,
+      "assignedWasher": "Suresh Care Master"
+    },
+    {
+      "id": "ORD-1045",
+      "customerId": "CUST-0006",
+      "customerName": "Akshay Brar",
+      "customerPhone": "+91 7928041892",
+      "customerAddress": "#956, Block B, Sector 15 - North, Gurugram",
+      "zone": "Sector 15 - North",
+      "status": "WASHING",
+      "isExpress": true,
+      "totalPieces": 7,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Heavy Winter Blanket",
+          "service": "Dry Clean",
+          "rate": 299,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Collar stain removal requested",
+          "hasStain": true
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Trousers / Jeans",
+          "service": "Wash & Fold",
+          "rate": 45,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 4,
+          "garmentName": "Kurta / Salwar Suit",
+          "service": "Dry Clean",
+          "rate": 160,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 5,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Wash & Steam Iron",
+          "rate": 120,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 6,
+          "garmentName": "Trousers / Jeans",
+          "service": "Wash & Steam Iron",
+          "rate": 45,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 7,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Dry Clean",
+          "rate": 220,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 1753,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-19T16:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-20T05:48:25.532889+00:00",
+      "assignedRider": null,
+      "assignedWasher": "Suresh Care Master"
+    },
+    {
+      "id": "ORD-1046",
+      "customerId": "CUST-0007",
+      "customerName": "Aryan Shetty",
+      "customerPhone": "+91 9973381261",
+      "customerAddress": "#428, Block D, Golf Course Road - South, Gurugram",
+      "zone": "Golf Course Road - South",
+      "status": "DRYING",
+      "isExpress": false,
+      "totalPieces": 3,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Men Shirt / T-Shirt",
+          "service": "Dry Clean",
+          "rate": 90,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Trousers / Jeans",
+          "service": "Dry Clean",
+          "rate": 110,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Men Shirt / T-Shirt",
+          "service": "Dry Clean",
+          "rate": 90,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 290,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-17T21:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-21T17:48:25.532889+00:00",
+      "assignedRider": null,
+      "assignedWasher": "Suresh Care Master"
+    },
+    {
+      "id": "ORD-1047",
+      "customerId": "CUST-0008",
+      "customerName": "Victor Khurana",
+      "customerPhone": "+91 8634874534",
+      "customerAddress": "#731, Block E, Sector 14 - North, Gurugram",
+      "zone": "Sector 14 - North",
+      "status": "IRONING",
+      "isExpress": true,
+      "totalPieces": 3,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Collar stain removal requested",
+          "hasStain": true
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 1260,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-19T11:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-20T05:48:25.532889+00:00",
+      "assignedRider": null,
+      "assignedWasher": "Suresh Care Master"
+    },
+    {
+      "id": "ORD-1048",
+      "customerId": "CUST-0009",
+      "customerName": "Watika Nagarajan",
+      "customerPhone": "+91 9784402398",
+      "customerAddress": "#893, Block C, Sector 22 - Central, Gurugram",
+      "zone": "Sector 22 - Central",
+      "status": "PACKED",
+      "isExpress": false,
+      "totalPieces": 6,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Collar stain removal requested",
+          "hasStain": true
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Kurta / Salwar Suit",
+          "service": "Wash & Fold",
+          "rate": 70,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 4,
+          "garmentName": "Trousers / Jeans",
+          "service": "Wash & Fold",
+          "rate": 45,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 5,
+          "garmentName": "Men Shirt / T-Shirt",
+          "service": "Wash & Fold",
+          "rate": 35,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 6,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Wash & Fold",
+          "rate": 120,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 830,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-18T09:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-21T17:48:25.532889+00:00",
+      "assignedRider": null,
+      "assignedWasher": null
+    },
+    {
+      "id": "ORD-1049",
+      "customerId": "CUST-0010",
+      "customerName": "Vihaan Dasgupta",
+      "customerPhone": "+91 9267988971",
+      "customerAddress": "#624, Block B, Civil Lines - Central, Gurugram",
+      "zone": "Civil Lines - Central",
+      "status": "PACKED",
+      "isExpress": true,
+      "totalPieces": 7,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Dry Clean",
+          "rate": 220,
+          "specialNote": "Collar stain removal requested",
+          "hasStain": true
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 4,
+          "garmentName": "Heavy Winter Blanket",
+          "service": "Dry Clean",
+          "rate": 299,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 5,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Wash & Fold",
+          "rate": 120,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 6,
+          "garmentName": "Men Shirt / T-Shirt",
+          "service": "Wash & Steam Iron",
+          "rate": 35,
+          "specialNote": "Collar stain removal requested",
+          "hasStain": true
+        },
+        {
+          "pieceNumber": 7,
+          "garmentName": "Heavy Winter Blanket",
+          "service": "Dry Clean",
+          "rate": 299,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 2299,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-17T22:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-20T05:48:25.532889+00:00",
+      "assignedRider": null,
+      "assignedWasher": null
+    },
+    {
+      "id": "ORD-1050",
+      "customerId": "CUST-0011",
+      "customerName": "Abhimanyu Nagarajan",
+      "customerPhone": "+91 9090516106",
+      "customerAddress": "#786, Block C, Sector 14 - North, Gurugram",
+      "zone": "Sector 14 - North",
+      "status": "OUT_FOR_DELIVERY",
+      "isExpress": false,
+      "totalPieces": 4,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Kurta / Salwar Suit",
+          "service": "Dry Clean",
+          "rate": 160,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Kurta / Salwar Suit",
+          "service": "Dry Clean",
+          "rate": 160,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Kurta / Salwar Suit",
+          "service": "Wash & Fold",
+          "rate": 70,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 4,
+          "garmentName": "Heavy Winter Blanket",
+          "service": "Dry Clean",
+          "rate": 299,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 689,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-19T06:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-21T17:48:25.532889+00:00",
+      "assignedRider": "Rajesh Kumar (Field Agent)",
+      "assignedWasher": null
+    },
+    {
+      "id": "ORD-1051",
+      "customerId": "CUST-0012",
+      "customerName": "Logan Dayal",
+      "customerPhone": "+91 9643282016",
+      "customerAddress": "#482, Block C, Sector 14 - North, Gurugram",
+      "zone": "Sector 14 - North",
+      "status": "OUT_FOR_DELIVERY",
+      "isExpress": false,
+      "totalPieces": 5,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Heavy Winter Blanket",
+          "service": "Dry Clean",
+          "rate": 299,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Trousers / Jeans",
+          "service": "Wash & Fold",
+          "rate": 45,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Kurta / Salwar Suit",
+          "service": "Wash & Fold",
+          "rate": 70,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 4,
+          "garmentName": "Men Shirt / T-Shirt",
+          "service": "Wash & Fold",
+          "rate": 35,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 5,
+          "garmentName": "Blazer / Coat",
+          "service": "Dry Clean",
+          "rate": 280,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 729,
+      "paymentStatus": "PENDING",
+      "paymentMode": "COD / UPI on Delivery",
+      "createdAt": "2026-11-17T22:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-21T17:48:25.532889+00:00",
+      "assignedRider": "Rajesh Kumar (Field Agent)",
+      "assignedWasher": null
+    },
+    {
+      "id": "ORD-1052",
+      "customerId": "CUST-0013",
+      "customerName": "Abhiram Devan",
+      "customerPhone": "+91 9396023933",
+      "customerAddress": "#884, Block D, Sushant Lok - South, Gurugram",
+      "zone": "Sushant Lok - South",
+      "status": "DELIVERED",
+      "isExpress": false,
+      "totalPieces": 3,
+      "items": [
+        {
+          "pieceNumber": 1,
+          "garmentName": "Kurta / Salwar Suit",
+          "service": "Wash & Fold",
+          "rate": 70,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 2,
+          "garmentName": "Heavy Winter Blanket",
+          "service": "Dry Clean",
+          "rate": 299,
+          "specialNote": "Standard care",
+          "hasStain": false
+        },
+        {
+          "pieceNumber": 3,
+          "garmentName": "Bedsheet / Quilt Cover",
+          "service": "Dry Clean",
+          "rate": 220,
+          "specialNote": "Standard care",
+          "hasStain": false
+        }
+      ],
+      "subtotal": 589,
+      "paymentStatus": "PAID",
+      "paymentMode": "UPI",
+      "createdAt": "2026-11-18T22:48:25.532889+00:00",
+      "promisedDelivery": "2026-11-21T17:48:25.532889+00:00",
+      "assignedRider": null,
+      "assignedWasher": null
+    }
+  ],
+  "leads": [
+    {
+      "id": "LEAD-101",
+      "customerName": "Meera Kapoor",
+      "phone": "+91 9811234567",
+      "channel": "WhatsApp Missed Call",
+      "message": "Missed voice call at 10:45 AM. Auto-reply sent.",
+      "zone": "Sector 15 - North",
+      "address": "#204, Block B, Sector 15, Gurugram",
+      "status": "PENDING_CALLBACK",
+      "createdAt": "2026-11-19T17:34:25.532889+00:00",
+      "slaMinutesRemaining": 16,
+      "priority": "URGENT"
+    },
+    {
+      "id": "LEAD-102",
+      "customerName": "Vikram Seth",
+      "phone": "+91 9822345678",
+      "channel": "WhatsApp Chat",
+      "message": "Hi, can you pick up 4 suits for dry cleaning today?",
+      "zone": "DLF Phase 2 - East",
+      "address": "#12, Silver Oaks, DLF Phase 2, Gurugram",
+      "status": "LOCATION_RECEIVED",
+      "createdAt": "2026-11-19T17:20:25.532889+00:00",
+      "slaMinutesRemaining": 2,
+      "priority": "HIGH"
+    },
+    {
+      "id": "LEAD-103",
+      "customerName": "Anita Roy",
+      "phone": "+91 9833456789",
+      "channel": "Direct Phone Call",
+      "message": "Inquired about blanket wash rate card.",
+      "zone": "Sushant Lok - South",
+      "address": "#88, Block C, Sushant Lok, Gurugram",
+      "status": "RESOLVED",
+      "createdAt": "2026-11-19T15:48:25.532889+00:00",
+      "slaMinutesRemaining": 0,
+      "priority": "NORMAL"
+    }
+  ],
+  "garmentsCatalog": [
+    {
+      "id": "g1",
+      "name": "Men Shirt / T-Shirt",
+      "category": "Daily Wear",
+      "rateWashIron": 35,
+      "rateDryClean": 90,
+      "rateIron": 15
+    },
+    {
+      "id": "g2",
+      "name": "Trousers / Jeans",
+      "category": "Daily Wear",
+      "rateWashIron": 45,
+      "rateDryClean": 110,
+      "rateIron": 20
+    },
+    {
+      "id": "g3",
+      "name": "Kurta / Salwar Suit",
+      "category": "Ethnic Wear",
+      "rateWashIron": 70,
+      "rateDryClean": 160,
+      "rateIron": 30
+    },
+    {
+      "id": "g4",
+      "name": "Blazer / Coat",
+      "category": "Formal / Heavy",
+      "rateWashIron": 0,
+      "rateDryClean": 280,
+      "rateIron": 70
+    },
+    {
+      "id": "g5",
+      "name": "Bedsheet / Quilt Cover",
+      "category": "Household",
+      "rateWashIron": 120,
+      "rateDryClean": 220,
+      "rateIron": 40
+    },
+    {
+      "id": "g6",
+      "name": "Heavy Winter Blanket",
+      "category": "Household",
+      "rateWashIron": 0,
+      "rateDryClean": 299,
+      "rateIron": 0
+    }
+  ],
+  "storeSettings": {
+    "storeName": "SuperDry Laundry & Dry Cleaners",
+    "phone": "+91 98765 43210",
+    "address": "Shop 4B, Main Market, Sector 15, Gurugram, Haryana",
+    "gstin": "06AAAAA0000A1Z5",
+    "expressSurchargePercent": 50,
+    "freePickupThreshold": 299
+  }
+}
