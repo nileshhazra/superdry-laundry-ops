@@ -252,11 +252,16 @@
       <!-- Master Orders Table with Filtering -->
       <div class="bg-white rounded-2xl border border-[#E2E2E2] overflow-hidden">
         <div class="p-4 sm:p-5 border-b border-[#E2E2E2] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h3 class="font-bold text-black text-base">Orders Ledger</h3>
-            <p class="text-xs text-[#545454]">Live order fulfillment and customer assignments</p>
+          <div class="flex items-center space-x-2 bg-[#EEEEEE] p-1 rounded-full">
+            <button onclick="setAdminTableTab('orders')" id="atab-orders" class="px-4 py-1.5 rounded-full text-xs font-bold bg-black text-white shadow-sm transition-all">
+              Orders Ledger
+            </button>
+            <button onclick="setAdminTableTab('pod')" id="atab-pod" class="px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-black transition-all">
+              Payment & POD Audit
+            </button>
           </div>
-          <div class="flex items-center space-x-2">
+
+          <div id="admin-orders-filter-container" class="flex items-center space-x-2">
             <select id="admin-filter-status" onchange="renderAdminOrders()" class="text-xs font-semibold bg-[#F6F6F6] border-none rounded-full px-3 py-1.5 text-black focus:outline-none focus:ring-2 focus:ring-black">
               <option value="">All Statuses</option>
               <option value="PICKUP_REQUESTED">Pickup Requested</option>
@@ -266,11 +271,13 @@
               <option value="IRONING">Ironing</option>
               <option value="PACKED">Packed</option>
               <option value="OUT_FOR_DELIVERY">Out for Delivery</option>
-              <option value="DELIVERED">Delivered</option>
+              <option value="DELIVERED">Delivered & Paid</option>
             </select>
           </div>
         </div>
-        <div class="overflow-x-auto">
+
+        <!-- VIEW 1: ORDERS LEDGER TABLE -->
+        <div id="admin-orders-view" class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-xs">
             <thead class="bg-[#F6F6F6] border-b border-[#E2E2E2] text-[#545454] font-semibold">
               <tr>
@@ -285,6 +292,27 @@
               </tr>
             </thead>
             <tbody id="admin-orders-table" class="divide-y divide-[#E2E2E2] text-black">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- VIEW 2: PROOF OF DELIVERY (POD) & PAYMENT AUDIT TABLE -->
+        <div id="admin-pod-view" class="overflow-x-auto hidden">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead class="bg-[#F6F6F6] border-b border-[#E2E2E2] text-[#545454] font-semibold">
+              <tr>
+                <th class="p-3.5">Order ID</th>
+                <th class="p-3.5">Customer</th>
+                <th class="p-3.5">Delivered By</th>
+                <th class="p-3.5">Payment Mode</th>
+                <th class="p-3.5">Amount</th>
+                <th class="p-3.5">Delivered Time</th>
+                <th class="p-3.5">Proof of Payment</th>
+                <th class="p-3.5 text-right">Audit Status</th>
+              </tr>
+            </thead>
+            <tbody id="admin-pod-table" class="divide-y divide-[#E2E2E2] text-black">
               <!-- Rendered via JS -->
             </tbody>
           </table>
@@ -373,6 +401,20 @@
           <i data-lucide="users" class="w-3.5 h-3.5"></i>
           <span>2,000 Customers</span>
         </button>
+      </div>
+
+      <!-- SMART DISPATCH & LOGISTIC ROUTE RECOMMENDATIONS (SAVE TURNS) -->
+      <div id="manager-dispatch-recommendations" class="bg-white rounded-2xl border border-[#E2E2E2] p-4 sm:p-5 space-y-3">
+        <div class="flex items-center justify-between border-b border-[#E2E2E2] pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-black"></span>
+            <h3 class="font-bold text-black text-sm">Smart Dispatch & Trip Combining Engine</h3>
+          </div>
+          <span class="text-[10px] bg-[#EEEEEE] text-black font-semibold px-2.5 py-0.5 rounded-full">Turn Reducer Active</span>
+        </div>
+        <div id="dispatch-recommendations-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <!-- Populated dynamically via JS -->
+        </div>
       </div>
 
       <!-- TAB 1: INBOUND LEADS & MISSED CALLS -->
@@ -485,6 +527,18 @@
           <span class="w-2 h-2 rounded-full bg-[#E11900] animate-pulse"></span>
           <span class="font-semibold text-black">Express Priority Queue Active</span>
         </div>
+      </div>
+
+      <!-- Worker Accountability & Active Shift Selector -->
+      <div class="bg-white p-3.5 rounded-2xl border border-[#E2E2E2] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-[#06C167]"></span>
+          <span class="font-semibold text-black">Active Shift Accountability:</span>
+          <span class="text-[#545454]">Washing: Ramesh • Dry Cleaning: Mahender • Steam Press: Suresh</span>
+        </div>
+        <span class="text-[11px] bg-[#F6F6F6] text-black font-semibold px-2.5 py-0.5 rounded-full w-fit">
+          Real-time Sync Active
+        </span>
       </div>
 
       <!-- Mobile Stage Switcher Pills -->
@@ -943,6 +997,252 @@
         <button onclick="closeExcelUploadModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Close</button>
         <button id="btn-submit-excel" onclick="uploadExcelFile()" disabled class="px-5 py-2 bg-black disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
           <span>Import Now</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: RIDER DOORSTEP PICKUP INTAKE -->
+  <div id="modal-rider-pickup" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E2E2]">
+      <div class="p-5 border-b border-[#E2E2E2] flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Doorstep Intake</span>
+          <h3 class="font-bold text-base text-black" id="modal-pickup-order-title">Order Pickup Details</h3>
+        </div>
+        <button onclick="closeRiderPickupModal()" class="text-[#545454] hover:text-black">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1 space-y-4 text-xs custom-scrollbar">
+        <!-- Customer Info Summary -->
+        <div class="bg-[#F6F6F6] p-3 rounded-2xl border border-[#EEEEEE] space-y-1">
+          <div class="font-bold text-black" id="modal-pickup-cust-name">Customer Name</div>
+          <div class="text-[#545454]" id="modal-pickup-cust-address">Address</div>
+          <div class="text-[11px] font-mono text-neutral-600" id="modal-pickup-cust-phone">Phone</div>
+        </div>
+
+        <!-- Intake Form Fields -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-black mb-1">Estimated Pieces *</label>
+            <input type="number" id="pickup-input-pieces" min="1" value="5" class="w-full bg-[#F6F6F6] rounded-xl p-2.5 font-bold text-black border border-transparent focus:border-black focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-black mb-1">Weight (in kg)</label>
+            <input type="number" id="pickup-input-weight" step="0.1" placeholder="e.g. 3.5" class="w-full bg-[#F6F6F6] rounded-xl p-2.5 font-bold text-black border border-transparent focus:border-black focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-black mb-1">Requested Service *</label>
+          <select id="pickup-input-service" class="w-full bg-[#F6F6F6] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none font-semibold">
+            <option value="Wash & Steam Iron" selected>Wash & Steam Iron (Standard)</option>
+            <option value="Dry Clean">Dry Clean Only</option>
+            <option value="Wash & Fold">Wash & Fold (By Weight)</option>
+            <option value="Steam Press Only">Steam Press Only</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-black mb-1">Customer Preferred Delivery Date & Slot *</label>
+          <select id="pickup-input-slot" class="w-full bg-[#F6F6F6] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none font-semibold">
+            <option value="Tomorrow Evening (5:00 PM - 8:00 PM)">Tomorrow Evening (5:00 PM - 8:00 PM)</option>
+            <option value="Tomorrow Morning (9:00 AM - 12:00 PM)">Tomorrow Morning (9:00 AM - 12:00 PM)</option>
+            <option value="Day after Tomorrow (Morning 10-1)">Day after Tomorrow (Morning 10-1)</option>
+            <option value="Day after Tomorrow (Evening 5-8)">Day after Tomorrow (Evening 5-8)</option>
+            <option value="Urgent Express (Within 24 Hours)">Urgent Express (Within 24 Hours)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-black mb-1">Personal Request / Stain Care Note</label>
+          <input type="text" id="pickup-input-notes" placeholder="e.g. Collar stain on white shirt, starch on kurtas" class="w-full bg-[#F6F6F6] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none">
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-[#E2E2E2] bg-white flex justify-end space-x-2">
+        <button onclick="closeRiderPickupModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Cancel</button>
+        <button onclick="submitRiderPickupIntake()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          <span>Confirm Pickup & Bring to Store</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 7: RIDER DELIVERY COMPLETION & PROOF OF DELIVERY (CAMERA) -->
+  <div id="modal-rider-delivery" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E2E2]">
+      <div class="p-5 border-b border-[#E2E2E2] flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Doorstep Delivery</span>
+          <h3 class="font-bold text-base text-black" id="modal-del-order-title">Complete Delivery</h3>
+        </div>
+        <button onclick="closeRiderDeliveryModal()" class="text-[#545454] hover:text-black">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1 space-y-4 text-xs custom-scrollbar">
+        <!-- Delivery Order Details Card -->
+        <div class="bg-[#F6F6F6] p-4 rounded-2xl border border-[#EEEEEE] space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="font-bold text-sm text-black" id="modal-del-cust-name">Customer Name</div>
+              <div class="text-[11px] text-neutral-600 font-mono" id="modal-del-cust-phone">+91 0000000000</div>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] uppercase font-bold text-neutral-500 block">Bill Amount</span>
+              <span class="text-base font-black text-black" id="modal-del-amount">₹0</span>
+            </div>
+          </div>
+          <div class="text-[11px] text-neutral-600 pt-1 border-t border-[#E2E2E2]" id="modal-del-address">Delivery Address</div>
+        </div>
+
+        <!-- Payment Mode Selector -->
+        <div>
+          <label class="block font-bold text-black mb-2">Payment Received Via *</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="payment-mode-label cursor-pointer">
+              <input type="radio" name="del-payment-mode" value="UPI / QR Code" checked class="peer hidden">
+              <div class="p-2.5 text-center rounded-2xl border border-[#E2E2E2] peer-checked:border-black peer-checked:bg-black peer-checked:text-white font-semibold transition-all">
+                UPI / QR
+              </div>
+            </label>
+            <label class="payment-mode-label cursor-pointer">
+              <input type="radio" name="del-payment-mode" value="Cash on Delivery" class="peer hidden">
+              <div class="p-2.5 text-center rounded-2xl border border-[#E2E2E2] peer-checked:border-black peer-checked:bg-black peer-checked:text-white font-semibold transition-all">
+                Cash
+              </div>
+            </label>
+            <label class="payment-mode-label cursor-pointer">
+              <input type="radio" name="del-payment-mode" value="Already Paid Online" class="peer hidden">
+              <div class="p-2.5 text-center rounded-2xl border border-[#E2E2E2] peer-checked:border-black peer-checked:bg-black peer-checked:text-white font-semibold transition-all">
+                Prepaid
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Photo / Screenshot Camera Upload (Proof of Delivery) -->
+        <div>
+          <label class="block font-bold text-black mb-1">Proof of Payment / Cash Photo *</label>
+          <p class="text-[11px] text-[#545454] mb-2">Upload or capture screenshot of UPI payment confirmation or cash receipt.</p>
+          
+          <input type="file" id="rider-pod-file-input" accept="image/*" capture="environment" class="hidden" onchange="handlePodFileSelect(event)">
+          
+          <div id="pod-upload-trigger" onclick="document.getElementById('rider-pod-file-input').click()" class="border-2 border-dashed border-[#CBCBCB] hover:border-black bg-[#F6F6F6] rounded-2xl p-5 text-center cursor-pointer transition-colors space-y-2">
+            <div class="w-10 h-10 rounded-full bg-white text-black mx-auto flex items-center justify-center shadow-sm">
+              <i data-lucide="camera" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <span class="font-bold text-black block">Tap to Open Camera or Choose Screenshot</span>
+              <span class="text-[10px] text-neutral-500">Supports Camera capture on mobile or file upload</span>
+            </div>
+          </div>
+
+          <!-- Preview Box -->
+          <div id="pod-image-preview-container" class="hidden mt-3 relative rounded-2xl overflow-hidden border border-[#E2E2E2] bg-black max-h-56 flex items-center justify-center">
+            <img id="pod-image-preview" src="" alt="Proof Preview" class="max-h-56 object-contain">
+            <button onclick="removePodImagePreview()" class="absolute top-2 right-2 p-1.5 bg-black/70 hover:bg-black text-white rounded-full">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-[#E2E2E2] bg-white flex justify-end space-x-2">
+        <button onclick="closeRiderDeliveryModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Cancel</button>
+        <button onclick="submitRiderDeliveryCompletion()" class="px-5 py-2 bg-[#06C167] hover:bg-emerald-600 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+          <span>Submit Delivery & Close Trip</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 8: ADMIN PROOF OF DELIVERY (POD) AUDIT VIEWER -->
+  <div id="modal-admin-pod-viewer" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E2E2]">
+      <div class="p-5 border-b border-[#E2E2E2] flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Owner Audit</span>
+          <h3 class="font-bold text-base text-black" id="admin-pod-title">Payment Verification</h3>
+        </div>
+        <button onclick="closeAdminPodModal()" class="text-[#545454] hover:text-black">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1 space-y-4 text-xs custom-scrollbar">
+        <div class="bg-[#F6F6F6] p-3 rounded-2xl border border-[#EEEEEE] space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-black" id="admin-pod-cust-name">Customer</span>
+            <span class="font-black text-sm text-black" id="admin-pod-amount">₹0</span>
+          </div>
+          <div class="text-[11px] text-neutral-600" id="admin-pod-rider-info">Delivered by Rajesh Kumar</div>
+          <div class="text-[10px] font-mono text-neutral-500" id="admin-pod-timestamp">Time</div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-black mb-1.5">Submitted Proof of Payment:</label>
+          <div id="admin-pod-image-wrapper" class="rounded-2xl overflow-hidden border border-[#E2E2E2] bg-neutral-900 flex items-center justify-center min-h-[220px]">
+            <img id="admin-pod-full-image" src="" alt="Proof of Payment" class="max-h-[380px] w-full object-contain">
+          </div>
+        </div>
+
+        <div id="admin-pod-status-banner" class="p-3 rounded-2xl text-xs font-semibold">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-[#E2E2E2] bg-white flex justify-end space-x-2">
+        <button onclick="closeAdminPodModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Close</button>
+        <button id="btn-admin-verify-pod" onclick="togglePodVerification()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
+          <span>Verify Payment Authentic</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 9: WHATSAPP "ORDER READY - AVAILABILITY CONFIRMATION" NOTIFIER -->
+  <div id="modal-whatsapp-ready" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full shadow-xl overflow-hidden border border-[#E2E2E2]">
+      <div class="p-5 border-b border-[#E2E2E2] flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#06C167]"></span>
+          <h3 class="font-bold text-base text-black">Notify Customer Order is Ready</h3>
+        </div>
+        <button onclick="closeWhatsAppReadyModal()" class="text-[#545454] hover:text-black">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <div class="bg-[#F6F6F6] p-3 rounded-2xl border border-[#EEEEEE] space-y-1">
+          <div class="font-bold text-black" id="wa-ready-cust-name">Customer Name</div>
+          <div class="text-[11px] font-mono text-neutral-600" id="wa-ready-cust-phone">+91 0000000000</div>
+          <div class="text-[11px] text-neutral-500" id="wa-ready-order-id">Order ORD-1040 (3 Pieces)</div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-black mb-1">WhatsApp Message Template:</label>
+          <textarea id="wa-ready-msg-text" rows="4" class="w-full bg-[#F6F6F6] rounded-xl p-3 text-xs text-black border border-transparent focus:border-black focus:outline-none leading-relaxed"></textarea>
+        </div>
+
+        <div class="p-3 bg-emerald-50 text-[#06C167] rounded-xl text-xs font-semibold">
+          Customer reply will sync availability directly into delivery route planner.
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-[#E2E2E2] bg-white flex justify-end space-x-2">
+        <button onclick="closeWhatsAppReadyModal()" class="px-4 py-2 bg-[#EEEEEE] hover:bg-[#E2E2E2] rounded-full text-xs font-semibold text-black">Dismiss</button>
+        <button onclick="sendWhatsAppReadyMessage()" class="px-5 py-2 bg-[#06C167] hover:bg-emerald-600 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Send via WhatsApp</span>
         </button>
       </div>
     </div>

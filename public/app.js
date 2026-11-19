@@ -16,6 +16,12 @@ let statsData = {};
 let selectedCustomer = null;
 let currentNewOrderItems = [];
 let isStaticMode = false;
+let currentAdminTableTab = 'orders';
+let activePickupOrderId = null;
+let activeDeliveryOrderId = null;
+let activePodImageData = null;
+let activeAdminPodOrderId = null;
+let activeReadyNotificationOrderId = null;
 
 // Mock database for GitHub Pages Standalone Demo
 let mockDb = {
@@ -43,6 +49,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await detectModeAndInit();
   await refreshAll();
+
+  // Multi-user Real-time Auto-Sync every 4 seconds
+  setInterval(async () => {
+    if (!document.hidden) {
+      await refreshAll();
+    }
+  }, 4000);
+
+  // Multi-tab sync for Standalone Demo Mode
+  window.addEventListener('storage', async (e) => {
+    if (e.key === 'superdry_demo_state') {
+      const saved = localStorage.getItem('superdry_demo_state');
+      if (saved) {
+        try {
+          mockDb = JSON.parse(saved);
+          await refreshAll();
+        } catch (err) {}
+      }
+    }
+  });
 
   lucide.createIcons();
 });
@@ -388,10 +414,15 @@ async function fetchLeads() {
 
 function renderActiveScreen() {
   if (currentPersona === 'admin') {
-    renderAdminOrders();
+    if (currentAdminTableTab === 'pod') {
+      renderAdminPodTable();
+    } else {
+      renderAdminOrders();
+    }
   } else if (currentPersona === 'manager') {
     renderManagerLeads();
     renderManagerTagging();
+    renderDispatchRecommendations();
   } else if (currentPersona === 'washer') {
     renderWasherKanban();
   } else if (currentPersona === 'rider') {
@@ -487,6 +518,155 @@ function renderAdminOrders() {
     `;
   }).join('');
   lucide.createIcons();
+}
+
+function setAdminTableTab(tab) {
+  currentAdminTableTab = tab;
+  const ordersBtn = document.getElementById('atab-orders');
+  const podBtn = document.getElementById('atab-pod');
+  const ordersView = document.getElementById('admin-orders-view');
+  const podView = document.getElementById('admin-pod-view');
+  const filterContainer = document.getElementById('admin-orders-filter-container');
+
+  if (tab === 'orders') {
+    if (ordersBtn) ordersBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-black text-white shadow-sm transition-all';
+    if (podBtn) podBtn.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-black transition-all';
+    if (ordersView) ordersView.classList.remove('hidden');
+    if (podView) podView.classList.add('hidden');
+    if (filterContainer) filterContainer.classList.remove('hidden');
+    renderAdminOrders();
+  } else {
+    if (podBtn) podBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-black text-white shadow-sm transition-all';
+    if (ordersBtn) ordersBtn.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-black transition-all';
+    if (podView) podView.classList.remove('hidden');
+    if (ordersView) ordersView.classList.add('hidden');
+    if (filterContainer) filterContainer.classList.add('hidden');
+    renderAdminPodTable();
+  }
+  lucide.createIcons();
+}
+
+function renderAdminPodTable() {
+  const tbody = document.getElementById('admin-pod-table');
+  if (!tbody) return;
+
+  const delivered = allOrders.filter(o => o.status === 'DELIVERED' || o.podImage);
+  if (delivered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-[#898989]">No delivered orders logged yet. Once a rider completes delivery, photos appear here for audit.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = delivered.map(o => {
+    const isVerified = Boolean(o.podVerified);
+    return `
+      <tr class="hover:bg-[#F6F6F6] transition-colors border-b border-[#EEEEEE]">
+        <td class="p-3.5 font-mono font-bold text-black">${o.id}</td>
+        <td class="p-3.5">
+          <div class="font-bold text-black">${o.customerName}</div>
+          <div class="text-[#545454] font-mono text-[11px]">${o.customerPhone}</div>
+        </td>
+        <td class="p-3.5 font-medium text-black">${o.assignedRider || 'Rajesh Kumar'}</td>
+        <td class="p-3.5"><span class="bg-[#EEEEEE] text-black px-2 py-0.5 rounded-full font-medium text-[11px]">${o.paymentMode || 'UPI / QR'}</span></td>
+        <td class="p-3.5 font-bold text-black">₹${o.subtotal}</td>
+        <td class="p-3.5 text-[#545454]">${o.deliveredAt ? new Date(o.deliveredAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' }) : 'Today'}</td>
+        <td class="p-3.5">
+          ${o.podImage ? `
+            <button onclick="openAdminPodModal('${o.id}')" class="flex items-center space-x-1.5 px-3 py-1 bg-black text-white hover:bg-neutral-800 rounded-full font-bold text-[11px] transition">
+              <i data-lucide="image" class="w-3.5 h-3.5"></i>
+              <span>View Photo</span>
+            </button>
+          ` : `<span class="text-[#898989] text-[11px]">No Photo Attached</span>`}
+        </td>
+        <td class="p-3.5 text-right">
+          ${isVerified ? `
+            <span class="bg-emerald-50 text-[#06C167] font-bold text-[10px] px-2.5 py-1 rounded-full border border-emerald-200">
+              Verified Authentic
+            </span>
+          ` : `
+            <button onclick="openAdminPodModal('${o.id}')" class="bg-red-50 text-[#E11900] hover:bg-red-100 font-bold text-[10px] px-2.5 py-1 rounded-full border border-red-200 transition">
+              Audit Pending
+            </button>
+          `}
+        </td>
+      </tr>
+    `;
+  }).join('');
+  lucide.createIcons();
+}
+
+function openAdminPodModal(orderId) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+
+  activeAdminPodOrderId = orderId;
+  document.getElementById('admin-pod-title').innerText = `Payment Proof: ${order.id}`;
+  document.getElementById('admin-pod-cust-name').innerText = order.customerName;
+  document.getElementById('admin-pod-amount').innerText = `₹${order.subtotal}`;
+  document.getElementById('admin-pod-rider-info').innerText = `Delivered by: ${order.assignedRider || 'Rajesh Kumar'} • Mode: ${order.paymentMode || 'UPI / QR Code'}`;
+  document.getElementById('admin-pod-timestamp').innerText = order.deliveredAt ? `Delivered: ${new Date(order.deliveredAt).toLocaleString('en-IN')}` : 'Delivered Today';
+
+  const fullImg = document.getElementById('admin-pod-full-image');
+  const imgWrapper = document.getElementById('admin-pod-image-wrapper');
+  if (order.podImage) {
+    fullImg.src = order.podImage;
+    fullImg.classList.remove('hidden');
+    imgWrapper.classList.remove('p-8');
+  } else {
+    fullImg.src = '';
+    fullImg.classList.add('hidden');
+    imgWrapper.innerHTML = '<span class="text-neutral-400 text-xs p-8">No photo/screenshot submitted for this order.</span>';
+  }
+
+  const statusBanner = document.getElementById('admin-pod-status-banner');
+  const verifyBtn = document.getElementById('btn-admin-verify-pod');
+
+  if (order.podVerified) {
+    statusBanner.className = 'p-3 rounded-2xl text-xs font-semibold bg-emerald-50 text-[#06C167] border border-emerald-200';
+    statusBanner.innerHTML = 'Payment verified and approved by Admin. No fraud detected.';
+    verifyBtn.innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i><span>Flag Discrepancy</span>';
+  } else {
+    statusBanner.className = 'p-3 rounded-2xl text-xs font-semibold bg-red-50 text-[#E11900] border border-red-200';
+    statusBanner.innerHTML = 'Awaiting Admin audit. Check UPI reference ID and timestamp on screenshot.';
+    verifyBtn.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i><span>Verify Payment Authentic</span>';
+  }
+
+  document.getElementById('modal-admin-pod-viewer').classList.remove('hidden');
+  lucide.createIcons();
+}
+
+function closeAdminPodModal() {
+  document.getElementById('modal-admin-pod-viewer').classList.add('hidden');
+  activeAdminPodOrderId = null;
+}
+
+async function togglePodVerification() {
+  if (!activeAdminPodOrderId) return;
+  const order = allOrders.find(o => o.id === activeAdminPodOrderId);
+  if (!order) return;
+
+  const newStatus = !order.podVerified;
+
+  if (isStaticMode) {
+    order.podVerified = newStatus;
+    saveDemoState();
+    openAdminPodModal(activeAdminPodOrderId);
+    renderAdminPodTable();
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/orders/${activeAdminPodOrderId}/verify-pod`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ verified: newStatus })
+    });
+    const data = await res.json();
+    order.podVerified = data.order.podVerified;
+    openAdminPodModal(activeAdminPodOrderId);
+    renderAdminPodTable();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 // -----------------------------------------------------------------
@@ -747,6 +927,128 @@ function renderManagerTagging() {
   lucide.createIcons();
 }
 
+function renderDispatchRecommendations() {
+  const container = document.getElementById('dispatch-recommendations-list');
+  if (!container) return;
+
+  const readyOrders = allOrders.filter(o => ['PACKED', 'OUT_FOR_DELIVERY'].includes(o.status));
+  const pendingPickups = allOrders.filter(o => o.status === 'PICKUP_REQUESTED');
+
+  const recs = [];
+
+  // 1. Same Zone Combining (Pickup + Delivery)
+  const pickupZones = [...new Set(pendingPickups.map(p => p.zone))];
+  pickupZones.forEach(zone => {
+    const pInZone = pendingPickups.filter(p => p.zone === zone);
+    const dInZone = readyOrders.filter(d => d.zone === zone);
+    if (dInZone.length > 0) {
+      recs.push({
+        type: 'COMBINE',
+        zone,
+        title: `Combine Pickup & Delivery in ${zone}`,
+        badge: `${pInZone.length} Pickups • ${dInZone.length} Deliveries`,
+        badgeColor: 'bg-emerald-50 text-[#06C167] border-emerald-200',
+        description: `Rider going to ${zone} for pickup (${pInZone[0].customerName}). ${dInZone.length} order(s) are ready for delivery in the same area. Dispatched together to avoid duplicate round-trips.`,
+        actionLabel: `Assign Combined Run`,
+        actionFn: `combineZoneTrip('${zone}', 'Rajesh Kumar')`
+      });
+    }
+  });
+
+  // 2. Early Delivery Opportunity (Due tomorrow, packed today)
+  const tomorrowStr = new Date(Date.now() + 24 * 3600 * 1000).toISOString().split('T')[0];
+  const earlyOrders = readyOrders.filter(o => o.promisedDelivery && o.promisedDelivery.startsWith(tomorrowStr));
+  if (earlyOrders.length > 0) {
+    const o = earlyOrders[0];
+    recs.push({
+      type: 'EARLY',
+      zone: o.zone,
+      title: `Early Delivery Candidate (${o.customerName})`,
+      badge: `Due Tomorrow • Packed Today`,
+      badgeColor: 'bg-blue-50 text-[#276EF1] border-blue-200',
+      description: `Order #${o.id} in ${o.zone} is finished ahead of SLA. Call customer now to deliver early alongside today's trips and save tomorrow's vehicle fuel.`,
+      actionLabel: `Call Customer`,
+      actionFn: `window.open('tel:${o.customerPhone}')`
+    });
+  }
+
+  // 3. Rider Proximity
+  const availableRiders = (allRiders || []).filter(r => r.status === 'IDLE_AT_STORE');
+  if (availableRiders.length > 0 && pendingPickups.length > 0) {
+    recs.push({
+      type: 'DISPATCH',
+      zone: pendingPickups[0].zone,
+      title: `Rider Available at Store: ${availableRiders[0].name}`,
+      badge: `Standby at Counter`,
+      badgeColor: 'bg-[#EEEEEE] text-black border-[#E2E2E2]',
+      description: `${availableRiders[0].name} is idle at store counter. Nearest pending pickup is ${pendingPickups[0].customerName} in ${pendingPickups[0].zone}.`,
+      actionLabel: `Dispatch ${availableRiders[0].name}`,
+      actionFn: `assignOrderRider('${pendingPickups[0].id}', '${availableRiders[0].name}')`
+    });
+  }
+
+  if (recs.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full p-4 rounded-xl bg-[#F6F6F6] text-neutral-500 text-center">
+        All logistics routes currently balanced. No duplicate turns detected.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = recs.map(r => `
+    <div class="p-3.5 rounded-xl border border-[#E2E2E2] bg-[#F6F6F6] space-y-2">
+      <div class="flex items-start justify-between">
+        <div>
+          <span class="font-bold text-black text-xs">${r.title}</span>
+          <div class="text-[11px] text-[#545454] mt-0.5 leading-relaxed">${r.description}</div>
+        </div>
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${r.badgeColor} shrink-0 ml-2">${r.badge}</span>
+      </div>
+      <div class="pt-1 flex justify-end">
+        <button onclick="${r.actionFn}" class="px-3.5 py-1 bg-black hover:bg-neutral-800 text-white rounded-full font-bold text-[11px] transition">
+          ${r.actionLabel}
+        </button>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+}
+
+async function combineZoneTrip(zone, riderName) {
+  const readyOrders = allOrders.filter(o => ['PACKED', 'OUT_FOR_DELIVERY'].includes(o.status) && o.zone === zone);
+  const pendingPickups = allOrders.filter(o => o.status === 'PICKUP_REQUESTED' && o.zone === zone);
+
+  for (const o of readyOrders) {
+    await updateOrderStatus(o.id, 'OUT_FOR_DELIVERY');
+  }
+  for (const p of pendingPickups) {
+    p.assignedRider = riderName;
+  }
+  if (isStaticMode) saveDemoState();
+  alert(`Combined run generated for ${riderName} in ${zone}! Loaded ${readyOrders.length} deliveries + ${pendingPickups.length} pickups.`);
+  await refreshAll();
+}
+
+async function assignOrderRider(orderId, riderName) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+  order.assignedRider = riderName;
+  if (isStaticMode) {
+    saveDemoState();
+  } else {
+    try {
+      await fetch(`/api/orders/${orderId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ assignedRider: riderName })
+      });
+    } catch (e) {}
+  }
+  alert(`Order ${orderId} assigned to ${riderName}!`);
+  await refreshAll();
+}
+
 let customerSearchTimer = null;
 function searchCustomers(query) {
   clearTimeout(customerSearchTimer);
@@ -926,16 +1228,25 @@ function renderKanbanColumn(ordersList, nextStatus, nextBtnLabel, isFinal = fals
         </div>
 
         <div class="flex items-center justify-between pt-2 border-t border-[#EEEEEE] text-xs">
-          <span class="text-neutral-500 text-[10px]">Due ${new Date(o.promisedDelivery).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+          <div>
+            <span class="text-neutral-500 text-[10px] block">Due ${new Date(o.promisedDelivery).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+            <span class="text-[10px] text-neutral-400 font-medium">${o.assignedWasher || 'Staff: Suresh & Ramesh'}</span>
+          </div>
           ${!isFinal ? `
             <button onclick="updateOrderStatus('${o.id}', '${nextStatus}')" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white text-xs font-semibold rounded-full transition-transform active:scale-95">
               ${nextBtnLabel}
             </button>
           ` : `
-            <span class="text-[#06C167] font-semibold text-xs flex items-center space-x-1">
-              <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
-              <span>Packed</span>
-            </span>
+            <div class="flex items-center space-x-1.5">
+              <button onclick="openWhatsAppReadyModal('${o.id}')" class="px-2.5 py-1 bg-[#06C167] hover:bg-emerald-600 text-white rounded-full text-[10px] font-bold flex items-center space-x-1 shadow-sm transition">
+                <i data-lucide="send" class="w-2.5 h-2.5"></i>
+                <span>Notify</span>
+              </button>
+              <span class="text-[#06C167] font-semibold text-xs flex items-center space-x-1">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                <span>Packed</span>
+              </span>
+            </div>
           `}
         </div>
       </div>
@@ -1085,41 +1396,228 @@ async function renderRiderDeliveries() {
   lucide.createIcons();
 }
 
-async function promptRiderPickupIntake(orderId) {
-  const pieces = prompt('Enter estimated number of pieces collected in laundry bag:', '5');
-  if (pieces === null) return;
-  await updateOrderStatus(orderId, 'PICKED_UP');
-  alert(`Order ${orderId} marked Picked Up! Please hand over clothes at store counter for tagging.`);
+function promptRiderPickupIntake(orderId) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+
+  activePickupOrderId = orderId;
+  document.getElementById('modal-pickup-order-title').innerText = `Pickup: ${order.id}`;
+  document.getElementById('modal-pickup-cust-name').innerText = order.customerName;
+  document.getElementById('modal-pickup-cust-address').innerText = order.customerAddress;
+  document.getElementById('modal-pickup-cust-phone').innerText = order.customerPhone;
+
+  document.getElementById('pickup-input-pieces').value = order.totalPieces > 0 ? order.totalPieces : '5';
+  document.getElementById('pickup-input-weight').value = order.weightKg || '';
+  document.getElementById('pickup-input-notes').value = order.notes || '';
+
+  document.getElementById('modal-rider-pickup').classList.remove('hidden');
+  lucide.createIcons();
 }
 
-async function completeRiderDelivery(orderId, amount) {
-  const confirmed = confirm(`Confirm delivery for ${orderId}!\nCustomer payment of ₹${amount} received via Cash or UPI?`);
-  if (!confirmed) return;
+function closeRiderPickupModal() {
+  document.getElementById('modal-rider-pickup').classList.add('hidden');
+  activePickupOrderId = null;
+}
+
+async function submitRiderPickupIntake() {
+  if (!activePickupOrderId) return;
+
+  const pieces = parseInt(document.getElementById('pickup-input-pieces').value, 10) || 1;
+  const weightKg = parseFloat(document.getElementById('pickup-input-weight').value) || null;
+  const serviceType = document.getElementById('pickup-input-service').value;
+  const preferredDeliverySlot = document.getElementById('pickup-input-slot').value;
+  const notes = document.getElementById('pickup-input-notes').value.trim();
+
+  const order = allOrders.find(o => o.id === activePickupOrderId);
+  if (!order) return;
 
   if (isStaticMode) {
-    const order = mockDb.orders.find(o => o.id === orderId);
-    if (order) {
-      order.status = 'DELIVERED';
-      order.paymentStatus = 'PAID';
-      order.paymentMode = 'Cash / UPI Received at Doorstep';
-    }
+    order.status = 'PICKED_UP';
+    order.totalPieces = pieces;
+    order.weightKg = weightKg;
+    order.serviceType = serviceType;
+    order.preferredDeliverySlot = preferredDeliverySlot;
+    order.notes = notes;
+    order.pickedUpAt = new Date().toISOString();
     saveDemoState();
+    closeRiderPickupModal();
     await refreshAll();
-    alert(`Delivery completed successfully for ${orderId}!`);
+    alert(`Order ${order.id} marked Picked Up with preferred delivery slot saved! Hand over at store counter.`);
     return;
   }
 
-  await fetch(`/api/orders/${orderId}/status`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      status: 'DELIVERED',
-      paymentStatus: 'PAID',
-      paymentMode: 'Cash / UPI Received at Doorstep'
-    })
-  });
-  await refreshAll();
-  alert(`Delivery completed successfully for ${orderId}!`);
+  try {
+    const res = await fetch(`/api/orders/${activePickupOrderId}/pickup-intake`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pieces, weightKg, serviceType, preferredDeliverySlot, notes })
+    });
+    if (res.ok) {
+      closeRiderPickupModal();
+      await refreshAll();
+      alert(`Order ${order.id} marked Picked Up! Preferred delivery time: ${preferredDeliverySlot}.`);
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Failed to submit pickup intake.');
+  }
+}
+
+function completeRiderDelivery(orderId, amount) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+
+  activeDeliveryOrderId = orderId;
+  activePodImageData = null;
+
+  document.getElementById('modal-del-order-title').innerText = `Deliver: ${order.id}`;
+  document.getElementById('modal-del-cust-name').innerText = order.customerName;
+  document.getElementById('modal-del-cust-phone').innerText = order.customerPhone;
+  document.getElementById('modal-del-address').innerText = order.customerAddress;
+  document.getElementById('modal-del-amount').innerText = `₹${amount || order.subtotal}`;
+
+  removePodImagePreview();
+  const fileInput = document.getElementById('rider-pod-file-input');
+  if (fileInput) fileInput.value = '';
+
+  document.getElementById('modal-rider-delivery').classList.remove('hidden');
+  lucide.createIcons();
+}
+
+function closeRiderDeliveryModal() {
+  document.getElementById('modal-rider-delivery').classList.add('hidden');
+  activeDeliveryOrderId = null;
+  activePodImageData = null;
+}
+
+function handlePodFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    activePodImageData = e.target.result;
+    const previewImg = document.getElementById('pod-image-preview');
+    const previewContainer = document.getElementById('pod-image-preview-container');
+    const triggerBox = document.getElementById('pod-upload-trigger');
+
+    previewImg.src = activePodImageData;
+    previewContainer.classList.remove('hidden');
+    triggerBox.classList.add('hidden');
+    lucide.createIcons();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePodImagePreview() {
+  activePodImageData = null;
+  const previewContainer = document.getElementById('pod-image-preview-container');
+  const triggerBox = document.getElementById('pod-upload-trigger');
+  const fileInput = document.getElementById('rider-pod-file-input');
+  const previewImg = document.getElementById('pod-image-preview');
+
+  if (previewImg) previewImg.src = '';
+  if (previewContainer) previewContainer.classList.add('hidden');
+  if (triggerBox) triggerBox.classList.remove('hidden');
+  if (fileInput) fileInput.value = '';
+}
+
+async function submitRiderDeliveryCompletion() {
+  if (!activeDeliveryOrderId) return;
+
+  const modeEl = document.querySelector('input[name="del-payment-mode"]:checked');
+  const paymentMode = modeEl ? modeEl.value : 'UPI / QR Code';
+
+  const order = allOrders.find(o => o.id === activeDeliveryOrderId);
+  if (!order) return;
+
+  if (isStaticMode) {
+    order.status = 'DELIVERED';
+    order.paymentStatus = 'PAID';
+    order.paymentMode = paymentMode;
+    order.podImage = activePodImageData;
+    order.podVerified = false;
+    order.deliveredAt = new Date().toISOString();
+    saveDemoState();
+    closeRiderDeliveryModal();
+    await refreshAll();
+    alert(`Delivery confirmed for ${order.id}! Payment proof recorded for Admin audit.`);
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/orders/${activeDeliveryOrderId}/complete-delivery`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        paymentMode,
+        podImage: activePodImageData,
+        amountCollected: order.subtotal
+      })
+    });
+    if (res.ok) {
+      closeRiderDeliveryModal();
+      await refreshAll();
+      alert(`Delivery confirmed for ${order.id}! Payment proof recorded for Admin audit.`);
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Failed to submit delivery completion.');
+  }
+}
+
+function openWhatsAppReadyModal(orderId) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+
+  activeReadyNotificationOrderId = orderId;
+  document.getElementById('wa-ready-cust-name').innerText = order.customerName;
+  document.getElementById('wa-ready-cust-phone').innerText = order.customerPhone;
+  document.getElementById('wa-ready-order-id').innerText = `Order #${order.id} • ${order.totalPieces} Pieces (${order.zone})`;
+
+  const msg = `Hello ${order.customerName}! Your SuperDry laundry order #${order.id} (${order.totalPieces} pieces) is packed and ready. Please reply with your availability today or tomorrow (e.g. Morning 10-12 or Evening 5-7) so our rider can deliver smoothly!`;
+  document.getElementById('wa-ready-msg-text').value = msg;
+
+  document.getElementById('modal-whatsapp-ready').classList.remove('hidden');
+  lucide.createIcons();
+}
+
+function closeWhatsAppReadyModal() {
+  document.getElementById('modal-whatsapp-ready').classList.add('hidden');
+  activeReadyNotificationOrderId = null;
+}
+
+async function sendWhatsAppReadyMessage() {
+  if (!activeReadyNotificationOrderId) return;
+  const order = allOrders.find(o => o.id === activeReadyNotificationOrderId);
+  if (!order) return;
+
+  const msg = document.getElementById('wa-ready-msg-text').value;
+  const cleanPhone = order.customerPhone.replace(/\D/g, '');
+
+  if (isStaticMode) {
+    order.readyNotificationSent = true;
+    order.readyNotificationSentAt = new Date().toISOString();
+    saveDemoState();
+    closeWhatsAppReadyModal();
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    alert(`WhatsApp notification dispatched to ${order.customerName}! Availability response will update delivery queue.`);
+    return;
+  }
+
+  try {
+    await fetch(`/api/orders/${order.id}/notify-ready`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
+    });
+    closeWhatsAppReadyModal();
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    alert(`WhatsApp notification dispatched to ${order.customerName}! Availability response will update delivery queue.`);
+    await refreshAll();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 // -----------------------------------------------------------------
@@ -1653,6 +2151,9 @@ async function updateOrderStatus(orderId, newStatus) {
     if (order) order.status = newStatus;
     saveDemoState();
     await refreshAll();
+    if (newStatus === 'PACKED') {
+      openWhatsAppReadyModal(orderId);
+    }
     return;
   }
   try {
@@ -1662,6 +2163,9 @@ async function updateOrderStatus(orderId, newStatus) {
       body: JSON.stringify({ status: newStatus })
     });
     await refreshAll();
+    if (newStatus === 'PACKED') {
+      openWhatsAppReadyModal(orderId);
+    }
   } catch (err) {
     console.error(err);
   }

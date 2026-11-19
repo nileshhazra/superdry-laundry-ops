@@ -11,7 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // In-Memory Database initialized from data/
@@ -349,6 +350,140 @@ app.patch('/api/orders/:id/status', (req, res) => {
   if (assignedWasher !== undefined) order.assignedWasher = assignedWasher;
 
   res.json(order);
+});
+
+// Pickup Intake from Doorstep by Delivery Rider
+app.post('/api/orders/:id/pickup-intake', (req, res) => {
+  const { id } = req.params;
+  const { pieces, weightKg, serviceType, notes, preferredDeliverySlot } = req.body;
+
+  const order = orders.find(o => o.id === id);
+  if (!order) return res.status(404).json({ error: 'Order not found' });
+
+  order.status = 'PICKED_UP';
+  if (pieces !== undefined) order.totalPieces = parseInt(pieces, 10) || order.totalPieces;
+  if (weightKg !== undefined) order.weightKg = parseFloat(weightKg) || null;
+  if (serviceType) order.serviceType = serviceType;
+  if (notes) order.notes = notes;
+  if (preferredDeliverySlot) order.preferredDeliverySlot = preferredDeliverySlot;
+  order.pickedUpAt = new Date().toISOString();
+
+  res.json({ success: true, order });
+});
+
+// Delivery Completion with Proof-of-Delivery (POD) / Payment Photo
+app.post('/api/orders/:id/complete-delivery', (req, res) => {
+  const { id } = req.params;
+  const { paymentMode, podImage, amountCollected, notes } = req.body;
+
+  const order = orders.find(o => o.id === id);
+  if (!order) return res.status(404).json({ error: 'Order not found' });
+
+  order.status = 'DELIVERED';
+  order.paymentStatus = 'PAID';
+  order.paymentMode = paymentMode || 'UPI';
+  order.podImage = podImage || null; // base64 data URL or uploaded photo
+  order.podVerified = false; // pending Admin audit
+  order.deliveredAt = new Date().toISOString();
+  if (amountCollected !== undefined) order.subtotal = amountCollected;
+  if (notes) order.deliveryNotes = notes;
+
+  res.json({ success: true, order });
+});
+
+// Admin POD Verification
+app.patch('/api/orders/:id/verify-pod', (req, res) => {
+  const { id } = req.params;
+  const { verified } = req.body;
+  const order = orders.find(o => o.id === id);
+  if (!order) return res.status(404).json({ error: 'Order not found' });
+
+  order.podVerified = Boolean(verified);
+  order.podVerifiedAt = new Date().toISOString();
+  res.json({ success: true, order });
+});
+
+// Workshop Worker Assignment & Accountability
+app.patch('/api/orders/:id/assign-worker', (req, res) => {
+  const { id } = req.params;
+  const { workerType, workerName } = req.body; // workerType: 'washer' | 'ironer' | 'dryclean'
+
+  const order = orders.find(o => o.id === id);
+  if (!order) return res.status(404).json({ error: 'Order not found' });
+
+  if (!order.assignedWorkers) order.assignedWorkers = {};
+  if (workerType && workerName) {
+    order.assignedWorkers[workerType] = workerName;
+  }
+  order.assignedWasher = workerName; // fallback compatibility
+
+  res.json({ success: true, order });
+});
+
+// WhatsApp "Order Ready - Confirm Availability" Trigger
+app.post('/api/orders/:id/notify-ready', (req, res) => {
+  const { id } = req.params;
+  const order = orders.find(o => o.id === id);
+  if (!order) return res.status(404).json({ error: 'Order not found' });
+
+  const msg = `Hello ${order.customerName}! Your SuperDry laundry order #${order.id} (${order.totalPieces} pieces) is packed and ready. Please reply with your availability today or tomorrow (e.g., Morning 10-12 or Evening 5-7) so our rider can deliver smoothly!`;
+
+  order.readyNotificationSent = true;
+  order.readyNotificationSentAt = new Date().toISOString();
+  order.readyNotificationMessage = msg;
+
+  res.json({
+    success: true,
+    sentTo: order.customerPhone,
+    customerName: order.customerName,
+    message: msg
+  });
+});
+
+// Logistics & Dispatch Route Recommendations
+app.get('/api/logistics/recommendations', (req, res) => {
+  const readyOrders = orders.filter(o => ['PACKED', 'OUT_FOR_DELIVERY'].includes(o.status));
+  const pendingPickups = orders.filter(o => o.status === 'PICKUP_REQUESTED');
+
+  // 1. Combine Pickup with Ready Deliveries in same zone
+  const combineRecommendations = [];
+  const zonesWithPickups = [...new Set(pendingPickups.map(p => p.zone))];
+
+  zonesWithPickups.forEach(zone => {
+    const pickupsInZone = pendingPickups.filter(p => p.zone === zone);
+    const deliveriesInZone = readyOrders.filter(d => d.zone === zone);
+    if (deliveriesInZone.length > 0) {
+      combineRecommendations.push({
+        zone,
+        pickupCount: pickupsInZone.length,
+        deliveryCount: deliveriesInZone.length,
+        pickups: pickupsInZone.map(p => ({ id: p.id, name: p.customerName, phone: p.customerPhone })),
+        deliveries: deliveriesInZone.map(d => ({ id: d.id, name: d.customerName, phone: d.customerPhone, amount: d.subtotal })),
+        savingNote: `Dispatched rider can fulfill ${deliveriesInZone.length} drop(s) while executing ${pickupsInZone.length} pickup(s) in ${zone}. Saves 1 trip (~6-8 km).`
+      });
+    }
+  });
+
+  // 2. Early Delivery Opportunities (orders packed today whose promised delivery is tomorrow)
+  const tomorrowStr = new Date(Date.now() + 24 * 3600 * 1000).toISOString().split('T')[0];
+  const earlyDeliveryOpportunities = readyOrders.filter(o => {
+    return o.promisedDelivery && o.promisedDelivery.startsWith(tomorrowStr);
+  }).map(o => ({
+    id: o.id,
+    customerName: o.customerName,
+    phone: o.customerPhone,
+    zone: o.zone,
+    address: o.customerAddress,
+    amount: o.subtotal,
+    promisedDelivery: o.promisedDelivery,
+    suggestion: `Ready today ahead of SLA! Call customer to deliver alongside today's ${o.zone} cluster to eliminate tomorrow's run.`
+  }));
+
+  res.json({
+    combineRecommendations,
+    earlyDeliveryOpportunities,
+    idleRiders: riders.filter(r => r.status === 'IDLE_AT_STORE')
+  });
 });
 
 // Thermal Tag Layout generator for Printer
