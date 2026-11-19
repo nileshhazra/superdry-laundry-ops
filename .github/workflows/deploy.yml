@@ -1,8 +1,8 @@
-name: Deploy SuperDry PRO to GitHub Pages
+name: Deploy Bumbledry PRO to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "uber-design" ]
   workflow_dispatch:
 
 permissions:
