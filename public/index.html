@@ -26,7 +26,7 @@
             tumble: {
               lime: '#A6CE39',       // Tumbledry Signature Lime Green (Atlantis)
               limeHover: '#92BA2B',  // Richer lime for active hover
-              dark: '#231F20',       // Tumbledry Charcoal / Thunder text
+              dark: '#1E3304',       // Tumbledry Charcoal / Thunder text
               textGreen: '#5A7812',  // Accessible deep green text
               lightGreen: '#F3F9E4', // Soft lime surface tint
               borderGreen: '#D8ECAB',// Subtle lime border
@@ -81,7 +81,7 @@
     }
   </style>
 </head>
-<body class="bg-[#F8FAF3] text-[#231F20] font-sans antialiased min-h-screen flex flex-col overflow-x-hidden w-full selection:bg-[#A6CE39] selection:text-[#231F20]">
+<body class="bg-[#F8FAF3] text-[#1E3304] font-sans antialiased min-h-screen flex flex-col overflow-x-hidden w-full selection:bg-[#A6CE39] selection:text-[#1E3304]">
 
   <!-- ============================================================== -->
   <!-- TUMBLEDRY-THEMED APP HEADER                                    -->
@@ -92,25 +92,25 @@
         
         <!-- Brand: Tumbledry Signature Typography -->
         <div class="flex items-center space-x-2 shrink-0">
-          <span class="text-xl sm:text-2xl font-black tracking-tight text-[#231F20]">Tumble<span class="text-[#8FB828]">dry</span></span>
-          <span class="bg-[#A6CE39] text-[#231F20] text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">OPERATIONS</span>
+          <span class="text-xl sm:text-2xl font-black tracking-tight text-[#1E3304]">Tumble<span class="text-[#8FB828]">dry</span></span>
+          <span class="bg-[#A6CE39] text-[#1E3304] text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">OPERATIONS</span>
         </div>
 
         <!-- Desktop Persona Segmented Control (Tumbledry Active State) -->
         <div class="hidden lg:flex items-center bg-[#F0F4E8] p-1 rounded-full border border-[#E2E8D5]">
-          <button onclick="setPersona('admin')" id="btn-persona-admin" class="persona-tab px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center space-x-1.5 text-[#231F20] bg-[#A6CE39] shadow-sm">
+          <button onclick="setPersona('admin')" id="btn-persona-admin" class="persona-tab px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center space-x-1.5 text-[#1E3304] bg-[#A6CE39] shadow-sm">
             <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
             <span>Admin</span>
           </button>
-          <button onclick="setPersona('manager')" id="btn-persona-manager" class="persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-[#231F20]">
+          <button onclick="setPersona('manager')" id="btn-persona-manager" class="persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-[#1E3304]">
             <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
             <span>Front Desk</span>
           </button>
-          <button onclick="setPersona('washer')" id="btn-persona-washer" class="persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-[#231F20]">
+          <button onclick="setPersona('washer')" id="btn-persona-washer" class="persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-[#1E3304]">
             <i data-lucide="shirt" class="w-3.5 h-3.5"></i>
             <span>Washer</span>
           </button>
-          <button onclick="setPersona('rider')" id="btn-persona-rider" class="persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-[#231F20]">
+          <button onclick="setPersona('rider')" id="btn-persona-rider" class="persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-[#1E3304]">
             <i data-lucide="bike" class="w-3.5 h-3.5"></i>
             <span>Field Agent</span>
           </button>
@@ -120,7 +120,7 @@
         <div class="flex items-center space-x-2">
           <!-- Mobile Role Selector Dropdown -->
           <div class="flex lg:hidden">
-            <select id="mobile-persona-select" onchange="setPersona(this.value)" class="text-xs font-semibold bg-[#EEF4E3] border-none rounded-full px-3 py-1.5 text-black focus:outline-none focus:ring-2 focus:ring-black">
+            <select id="mobile-persona-select" onchange="setPersona(this.value)" class="text-xs font-semibold bg-[#EEF4E3] border-none rounded-full px-3 py-1.5 text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-[#A6CE39]">
               <option value="admin">Admin</option>
               <option value="manager">Desk</option>
               <option value="washer">Washer</option>
@@ -129,7 +129,7 @@
           </div>
 
           <!-- WhatsApp Simulator Trigger Button -->
-          <button onclick="openWhatsAppModal()" class="shrink-0 px-3.5 py-1.5 rounded-full bg-black hover:bg-neutral-800 text-white text-xs font-semibold transition-all flex items-center space-x-1.5 shadow-sm">
+          <button onclick="openWhatsAppModal()" class="shrink-0 px-3.5 py-1.5 rounded-full bg-[#2D5A1E] hover:bg-[#234717] text-white text-xs font-semibold transition-all flex items-center space-x-1.5 shadow-sm">
             <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
             <span class="hidden sm:inline">Simulate WhatsApp</span>
             <span class="inline sm:hidden">WA Sim</span>
@@ -139,7 +139,7 @@
 
       <!-- Mobile Touch Persona Bar (Scrollable clean pill tabs for iPhone) -->
       <div class="flex lg:hidden overflow-x-auto no-scrollbar py-2 border-t border-[#E2E8D5] gap-1.5">
-        <button onclick="setPersona('admin')" id="mbtn-persona-admin" class="mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1 bg-black text-white shadow-sm">
+        <button onclick="setPersona('admin')" id="mbtn-persona-admin" class="mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1 bg-[#A6CE39] text-[#1E3304] shadow-sm font-bold">
           <span>Admin</span>
         </button>
         <button onclick="setPersona('manager')" id="mbtn-persona-manager" class="mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 bg-[#EEF4E3] text-[#545454]">
@@ -160,7 +160,7 @@
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center space-x-2 truncate">
         <span class="w-2 h-2 rounded-full bg-[#A6CE39] shrink-0"></span>
-        <span id="role-context-label" class="font-medium text-black truncate">Active: Super Admin</span>
+        <span id="role-context-label" class="font-medium text-[#1E293B] truncate">Active: Super Admin</span>
         <span class="text-[#CBCBCB]">|</span>
         <span class="truncate">2,000 Customers connected</span>
       </div>
@@ -182,19 +182,19 @@
       <!-- Screen Header with Minimalist Actions -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 class="text-2xl sm:text-3xl font-black text-black tracking-tight">Overview</h1>
+          <h1 class="text-2xl sm:text-3xl font-black text-[#1E293B] tracking-tight">Overview</h1>
           <p class="text-xs text-[#545454] mt-0.5">Live revenue, orders velocity, and fleet status</p>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="openExcelUploadModal()" class="px-3.5 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-black rounded-full text-xs font-semibold transition-all flex items-center space-x-1.5">
+          <button onclick="openExcelUploadModal()" class="px-3.5 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold transition-all flex items-center space-x-1.5">
             <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
             <span>Import CSV</span>
           </button>
-          <button onclick="refreshAll()" class="px-3.5 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-black rounded-full text-xs font-semibold transition-all flex items-center space-x-1.5">
+          <button onclick="refreshAll()" class="px-3.5 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold transition-all flex items-center space-x-1.5">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
             <span>Sync</span>
           </button>
-          <button onclick="setPersona('manager'); openNewOrderModal();" class="px-4 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#231F20] rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5 transition-all">
+          <button onclick="setPersona('manager'); openNewOrderModal();" class="px-4 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5 transition-all">
             <i data-lucide="plus" class="w-3.5 h-3.5"></i>
             <span>New Order</span>
           </button>
@@ -206,7 +206,7 @@
         <div class="bg-white p-5 rounded-2xl border border-[#E2E8D5]">
           <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">Collected Revenue</span>
           <div class="mt-2 flex items-baseline justify-between">
-            <span id="stat-revenue" class="text-3xl font-black text-black tracking-tight">₹0</span>
+            <span id="stat-revenue" class="text-3xl font-black text-[#1E293B] tracking-tight">₹0</span>
             <span class="text-[11px] font-bold text-[#A6CE39] bg-emerald-50 px-2 py-0.5 rounded-full">+₹<span id="stat-pending-revenue">0</span> pending</span>
           </div>
         </div>
@@ -214,7 +214,7 @@
         <div class="bg-white p-5 rounded-2xl border border-[#E2E8D5]">
           <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">In-Process Orders</span>
           <div class="mt-2 flex items-baseline justify-between">
-            <span id="stat-active-orders" class="text-3xl font-black text-black tracking-tight">0</span>
+            <span id="stat-active-orders" class="text-3xl font-black text-[#1E293B] tracking-tight">0</span>
             <span class="text-[11px] font-semibold text-[#545454]"><span id="stat-completed-orders">0</span> delivered today</span>
           </div>
         </div>
@@ -222,7 +222,7 @@
         <div class="bg-white p-5 rounded-2xl border border-[#E2E8D5]">
           <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">Pending Leads</span>
           <div class="mt-2 flex items-baseline justify-between">
-            <span id="stat-pending-leads" class="text-3xl font-black text-black tracking-tight">0</span>
+            <span id="stat-pending-leads" class="text-3xl font-black text-[#1E293B] tracking-tight">0</span>
             <span class="text-[11px] font-bold text-[#E11900] bg-red-50 px-2 py-0.5 rounded-full">Requires Callback</span>
           </div>
         </div>
@@ -230,7 +230,7 @@
         <div class="bg-white p-5 rounded-2xl border border-[#E2E8D5]">
           <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">Connected Customers</span>
           <div class="mt-2 flex items-baseline justify-between">
-            <span id="stat-total-customers" class="text-3xl font-black text-black tracking-tight">2,000</span>
+            <span id="stat-total-customers" class="text-3xl font-black text-[#1E293B] tracking-tight">2,000</span>
             <span class="text-[11px] font-medium text-[#545454]">Gurugram</span>
           </div>
         </div>
@@ -239,7 +239,7 @@
       <!-- Live Laundry Pipeline Velocity -->
       <div class="bg-white p-5 rounded-2xl border border-[#E2E8D5]">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-black">Pipeline Velocity</h3>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E293B]">Pipeline Velocity</h3>
           <span class="text-[11px] text-[#545454]">8 Operational Stages</span>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5" id="admin-pipeline-breakdown">
@@ -251,16 +251,16 @@
       <div class="bg-white rounded-2xl border border-[#E2E8D5] overflow-hidden">
         <div class="p-4 sm:p-5 border-b border-[#E2E8D5] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div class="flex items-center space-x-2 bg-[#EEF4E3] p-1 rounded-full">
-            <button onclick="setAdminTableTab('orders')" id="atab-orders" class="px-4 py-1.5 rounded-full text-xs font-bold bg-[#231F20] text-[#A6CE39] shadow-sm transition-all">
+            <button onclick="setAdminTableTab('orders')" id="atab-orders" class="px-4 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm transition-all">
               Orders Ledger
             </button>
-            <button onclick="setAdminTableTab('pod')" id="atab-pod" class="px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-black transition-all">
+            <button onclick="setAdminTableTab('pod')" id="atab-pod" class="px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all">
               Payment & POD Audit
             </button>
           </div>
 
           <div id="admin-orders-filter-container" class="flex items-center space-x-2">
-            <select id="admin-filter-status" onchange="renderAdminOrders()" class="text-xs font-semibold bg-[#F8FAF3] border-none rounded-full px-3 py-1.5 text-black focus:outline-none focus:ring-2 focus:ring-black">
+            <select id="admin-filter-status" onchange="renderAdminOrders()" class="text-xs font-semibold bg-[#F8FAF3] border-none rounded-full px-3 py-1.5 text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-[#A6CE39]">
               <option value="">All Statuses</option>
               <option value="PICKUP_REQUESTED">Pickup Requested</option>
               <option value="RECEIVED_IN_STORE">Received in Store</option>
@@ -289,7 +289,7 @@
                 <th class="p-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody id="admin-orders-table" class="divide-y divide-[#E2E8D5] text-black">
+            <tbody id="admin-orders-table" class="divide-y divide-[#E2E8D5] text-[#1E293B]">
               <!-- Rendered via JS -->
             </tbody>
           </table>
@@ -310,7 +310,7 @@
                 <th class="p-3.5 text-right">Audit Status</th>
               </tr>
             </thead>
-            <tbody id="admin-pod-table" class="divide-y divide-[#E2E8D5] text-black">
+            <tbody id="admin-pod-table" class="divide-y divide-[#E2E8D5] text-[#1E293B]">
               <!-- Rendered via JS -->
             </tbody>
           </table>
@@ -323,11 +323,11 @@
           <div>
             <div class="flex items-center space-x-2">
               <span class="w-2.5 h-2.5 rounded-full bg-[#A6CE39] animate-pulse"></span>
-              <h3 class="font-bold text-black text-base">Fleet Radar & Transit Gap Tracker</h3>
+              <h3 class="font-bold text-[#1E293B] text-base">Fleet Radar & Transit Gap Tracker</h3>
             </div>
             <p class="text-xs text-[#545454] mt-0.5">Round-trip SLA telemetry and anti-moonlighting audit</p>
           </div>
-          <span class="text-xs font-semibold bg-[#F8FAF3] text-black px-3 py-1 rounded-full w-fit">
+          <span class="text-xs font-semibold bg-[#F8FAF3] text-[#1E293B] px-3 py-1 rounded-full w-fit">
             150m Store Geofence
           </span>
         </div>
@@ -339,7 +339,7 @@
 
         <!-- Transit Gap & Integrity Audit Table -->
         <div class="mt-4 pt-4 border-t border-[#E2E8D5] space-y-2">
-          <div class="flex items-center justify-between text-xs font-bold text-black">
+          <div class="flex items-center justify-between text-xs font-bold text-[#1E293B]">
             <span class="uppercase tracking-wider text-[11px] text-[#545454]">Rider Transit Gap Audit</span>
             <span class="text-[#545454] font-normal">Auto-updated</span>
           </div>
@@ -355,7 +355,7 @@
                   <th class="p-2.5 text-right">Score</th>
                 </tr>
               </thead>
-              <tbody id="fleet-audit-table" class="divide-y divide-[#E2E8D5] text-black">
+              <tbody id="fleet-audit-table" class="divide-y divide-[#E2E8D5] text-[#1E293B]">
                 <!-- Rendered dynamically -->
               </tbody>
             </table>
@@ -371,14 +371,14 @@
       <!-- Header Banner with Fast Action -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 class="text-2xl sm:text-3xl font-black text-black tracking-tight">Front Desk</h1>
+          <h1 class="text-2xl sm:text-3xl font-black text-[#1E293B] tracking-tight">Front Desk</h1>
           <p class="text-xs text-[#545454] mt-0.5">Inbound inquiries, garment intake, and billing counter</p>
         </div>
         <div class="flex items-center space-x-2 shrink-0">
-          <button onclick="openNewCustomerModal()" class="px-3.5 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-black rounded-full text-xs font-semibold transition-all">
+          <button onclick="openNewCustomerModal()" class="px-3.5 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold transition-all">
             + New Customer
           </button>
-          <button onclick="openNewOrderModal()" class="px-4 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#231F20] rounded-full text-xs font-bold shadow-sm transition-all">
+          <button onclick="openNewOrderModal()" class="px-4 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-bold shadow-sm transition-all">
             + New Order POS
           </button>
         </div>
@@ -386,16 +386,16 @@
 
       <!-- Manager Sub-Tabs (Uber Pill Segmented Control) -->
       <div class="flex bg-[#EEF4E3] p-1 rounded-full gap-1 overflow-x-auto no-scrollbar w-fit">
-        <button onclick="setManagerTab('leads')" id="mtab-leads" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#231F20] text-[#A6CE39] shadow-sm flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all">
+        <button onclick="setManagerTab('leads')" id="mtab-leads" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all">
           <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
           <span>Inbound Leads</span>
           <span id="badge-leads-count" class="bg-white/20 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-1">0</span>
         </button>
-        <button onclick="setManagerTab('tagging')" id="mtab-tagging" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-black flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all">
+        <button onclick="setManagerTab('tagging')" id="mtab-tagging" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all">
           <i data-lucide="tag" class="w-3.5 h-3.5"></i>
           <span>Tagging & Intake</span>
         </button>
-        <button onclick="setManagerTab('customers')" id="mtab-customers" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-black flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all">
+        <button onclick="setManagerTab('customers')" id="mtab-customers" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all">
           <i data-lucide="users" class="w-3.5 h-3.5"></i>
           <span>2,000 Customers</span>
         </button>
@@ -405,10 +405,10 @@
       <div id="manager-dispatch-recommendations" class="bg-white rounded-2xl border border-[#E2E8D5] p-4 sm:p-5 space-y-3">
         <div class="flex items-center justify-between border-b border-[#E2E8D5] pb-3">
           <div class="flex items-center space-x-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-black"></span>
-            <h3 class="font-bold text-black text-sm">Smart Dispatch & Trip Combining Engine</h3>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#A6CE39]"></span>
+            <h3 class="font-bold text-[#1E293B] text-sm">Smart Dispatch & Trip Combining Engine</h3>
           </div>
-          <span class="text-[10px] bg-[#EEF4E3] text-black font-semibold px-2.5 py-0.5 rounded-full">Turn Reducer Active</span>
+          <span class="text-[10px] bg-[#EEF4E3] text-[#1E293B] font-semibold px-2.5 py-0.5 rounded-full">Turn Reducer Active</span>
         </div>
         <div id="dispatch-recommendations-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <!-- Populated dynamically via JS -->
@@ -422,30 +422,30 @@
             <span class="w-2 h-2 rounded-full bg-[#276EF1] shrink-0"></span>
             <span><strong>Anti-Loss Lead Tracker:</strong> Inbound calls and WhatsApp messages are logged automatically with SLA countdowns.</span>
           </div>
-          <button onclick="openWhatsAppModal('MISSED_CALL')" class="underline font-bold text-black hover:opacity-75 shrink-0">Test Call Event</button>
+          <button onclick="openWhatsAppModal('MISSED_CALL')" class="underline font-bold text-[#1E293B] hover:opacity-75 shrink-0">Test Call Event</button>
         </div>
 
         <!-- Filter & Inbox Cleanup Toolbar -->
         <div class="bg-white p-3 rounded-2xl border border-[#E2E8D5] flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs w-full max-w-full">
           <!-- Filter Tabs -->
           <div class="flex items-center bg-[#F8FAF3] p-1 rounded-full overflow-x-auto no-scrollbar flex-nowrap">
-            <button onclick="setLeadsFilter('active')" id="lfilter-active" class="px-3 py-1 rounded-full font-bold text-black bg-white shadow-sm transition-all shrink-0 whitespace-nowrap">
+            <button onclick="setLeadsFilter('active')" id="lfilter-active" class="px-3 py-1 rounded-full font-bold text-[#1E293B] bg-white shadow-sm transition-all shrink-0 whitespace-nowrap">
               Active (<span id="lcount-active">0</span>)
             </button>
-            <button onclick="setLeadsFilter('all')" id="lfilter-all" class="px-3 py-1 rounded-full font-medium text-[#545454] hover:text-black transition-all shrink-0 whitespace-nowrap">
+            <button onclick="setLeadsFilter('all')" id="lfilter-all" class="px-3 py-1 rounded-full font-medium text-[#545454] hover:text-[#1E293B] transition-all shrink-0 whitespace-nowrap">
               All (<span id="lcount-all">0</span>)
             </button>
-            <button onclick="setLeadsFilter('resolved')" id="lfilter-resolved" class="px-3 py-1 rounded-full font-medium text-[#545454] hover:text-black transition-all shrink-0 whitespace-nowrap">
+            <button onclick="setLeadsFilter('resolved')" id="lfilter-resolved" class="px-3 py-1 rounded-full font-medium text-[#545454] hover:text-[#1E293B] transition-all shrink-0 whitespace-nowrap">
               Resolved (<span id="lcount-resolved">0</span>)
             </button>
-            <button onclick="setLeadsFilter('archived')" id="lfilter-archived" class="px-3 py-1 rounded-full font-medium text-[#545454] hover:text-black transition-all shrink-0 whitespace-nowrap">
+            <button onclick="setLeadsFilter('archived')" id="lfilter-archived" class="px-3 py-1 rounded-full font-medium text-[#545454] hover:text-[#1E293B] transition-all shrink-0 whitespace-nowrap">
               Archived (<span id="lcount-archived">0</span>)
             </button>
           </div>
 
           <!-- Cleanup Actions -->
           <div class="flex items-center space-x-2 shrink-0">
-            <button onclick="clearResolvedLeads('archive')" class="px-3 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-black rounded-full font-semibold text-xs transition-all">
+            <button onclick="clearResolvedLeads('archive')" class="px-3 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full font-semibold text-xs transition-all">
               Archive Resolved
             </button>
             <button onclick="clearResolvedLeads('delete')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-[#E11900] rounded-full font-semibold text-xs transition-all">
@@ -462,7 +462,7 @@
       <!-- TAB 2: TAGGING & INTAKE COUNTER -->
       <div id="manager-view-tagging" class="space-y-4 hidden">
         <div class="bg-white p-5 rounded-2xl border border-[#E2E8D5]">
-          <h3 class="font-bold text-black text-base">Orders Awaiting Garment Tagging</h3>
+          <h3 class="font-bold text-[#1E293B] text-base">Orders Awaiting Garment Tagging</h3>
           <p class="text-xs text-[#545454] mt-0.5">Inspect clothes from pickup, verify pieces, and print thermal barcode tags.</p>
           
           <div class="mt-4 divide-y divide-[#E2E8D5]" id="tagging-orders-list">
@@ -477,9 +477,9 @@
           <div class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
               <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-[#898989]"></i>
-              <input type="text" id="cust-search-input" onkeyup="searchCustomers(this.value)" placeholder="Search 2,000 customers by name, phone, or zone..." class="w-full pl-10 pr-4 py-2.5 bg-[#F8FAF3] focus:bg-white border border-transparent focus:border-black rounded-xl text-xs focus:outline-none transition-all">
+              <input type="text" id="cust-search-input" onkeyup="searchCustomers(this.value)" placeholder="Search 2,000 customers by name, phone, or zone..." class="w-full pl-10 pr-4 py-2.5 bg-[#F8FAF3] focus:bg-white border border-transparent focus:border-[#A6CE39] rounded-xl text-xs focus:outline-none transition-all">
             </div>
-            <button onclick="openExcelUploadModal()" class="px-4 py-2.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-black rounded-full text-xs font-semibold flex items-center justify-center space-x-1.5 shrink-0 transition-all">
+            <button onclick="openExcelUploadModal()" class="px-4 py-2.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold flex items-center justify-center space-x-1.5 shrink-0 transition-all">
               <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
               <span>Import Excel</span>
             </button>
@@ -503,7 +503,7 @@
                   <th class="p-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody id="customers-table-body" class="divide-y divide-[#E2E8D5] text-black">
+              <tbody id="customers-table-body" class="divide-y divide-[#E2E8D5] text-[#1E293B]">
                 <!-- Rendered dynamically -->
               </tbody>
             </table>
@@ -518,12 +518,12 @@
     <div id="screen-washer" class="persona-screen space-y-6 hidden">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 class="text-2xl sm:text-3xl font-black text-black tracking-tight">Wash Plant Kanban</h1>
+          <h1 class="text-2xl sm:text-3xl font-black text-[#1E293B] tracking-tight">Wash Plant Kanban</h1>
           <p class="text-xs text-[#545454] mt-0.5">Floor operator processing queue with Express priority</p>
         </div>
         <div class="flex items-center space-x-2 text-xs bg-white border border-[#E2E8D5] px-3 py-1.5 rounded-full w-fit">
           <span class="w-2 h-2 rounded-full bg-[#E11900] animate-pulse"></span>
-          <span class="font-semibold text-black">Express Priority Queue Active</span>
+          <span class="font-semibold text-[#1E293B]">Express Priority Queue Active</span>
         </div>
       </div>
 
@@ -531,17 +531,17 @@
       <div class="bg-white p-3.5 rounded-2xl border border-[#E2E8D5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div class="flex items-center space-x-2">
           <span class="w-2 h-2 rounded-full bg-[#A6CE39]"></span>
-          <span class="font-semibold text-black">Active Shift Accountability:</span>
+          <span class="font-semibold text-[#1E293B]">Active Shift Accountability:</span>
           <span class="text-[#545454]">Washing: Ramesh • Dry Cleaning: Mahender • Steam Press: Suresh</span>
         </div>
-        <span class="text-[11px] bg-[#F8FAF3] text-black font-semibold px-2.5 py-0.5 rounded-full w-fit">
+        <span class="text-[11px] bg-[#F8FAF3] text-[#1E293B] font-semibold px-2.5 py-0.5 rounded-full w-fit">
           Real-time Sync Active
         </span>
       </div>
 
       <!-- Mobile Stage Switcher Pills -->
       <div class="flex lg:hidden overflow-x-auto gap-1.5 pb-1 no-scrollbar">
-        <button onclick="filterWasherMobileCol('all')" id="wstage-all" class="washer-stage-pill px-3 py-1.5 rounded-full text-xs font-bold bg-black text-white shadow-sm shrink-0">
+        <button onclick="filterWasherMobileCol('all')" id="wstage-all" class="washer-stage-pill px-3 py-1.5 rounded-full text-xs font-bold bg-[#A6CE39] text-[#1E3304] shadow-sm font-bold shrink-0">
           All Stages
         </button>
         <button onclick="filterWasherMobileCol('intake')" id="wstage-intake" class="washer-stage-pill px-3 py-1.5 rounded-full text-xs font-medium bg-[#EEF4E3] text-[#545454] shrink-0">
@@ -563,8 +563,8 @@
         <!-- Col 1: Ready to Wash -->
         <div id="washer-card-col-intake" class="washer-column bg-white rounded-2xl p-4 flex flex-col h-[550px] sm:h-[700px] border border-[#E2E8D5]">
           <div class="flex items-center justify-between pb-3 border-b border-[#E2E8D5] mb-3">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-black">1. Intake / To Wash</h3>
-            <span id="washer-count-intake" class="text-xs font-bold bg-[#F8FAF3] px-2 py-0.5 rounded-full text-black">0</span>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-[#1E293B]">1. Intake / To Wash</h3>
+            <span id="washer-count-intake" class="text-xs font-bold bg-[#F8FAF3] px-2 py-0.5 rounded-full text-[#1E293B]">0</span>
           </div>
           <div id="washer-col-intake" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1"></div>
         </div>
@@ -572,8 +572,8 @@
         <!-- Col 2: In Washing -->
         <div id="washer-card-col-washing" class="washer-column bg-white rounded-2xl p-4 flex flex-col h-[550px] sm:h-[700px] border border-[#E2E8D5]">
           <div class="flex items-center justify-between pb-3 border-b border-[#E2E8D5] mb-3">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-black">2. In Washers</h3>
-            <span id="washer-count-washing" class="text-xs font-bold bg-[#F8FAF3] px-2 py-0.5 rounded-full text-black">0</span>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-[#1E293B]">2. In Washers</h3>
+            <span id="washer-count-washing" class="text-xs font-bold bg-[#F8FAF3] px-2 py-0.5 rounded-full text-[#1E293B]">0</span>
           </div>
           <div id="washer-col-washing" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1"></div>
         </div>
@@ -581,8 +581,8 @@
         <!-- Col 3: In Drying & Ironing -->
         <div id="washer-card-col-ironing" class="washer-column bg-white rounded-2xl p-4 flex flex-col h-[550px] sm:h-[700px] border border-[#E2E8D5]">
           <div class="flex items-center justify-between pb-3 border-b border-[#E2E8D5] mb-3">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-black">3. Steam Press</h3>
-            <span id="washer-count-ironing" class="text-xs font-bold bg-[#F8FAF3] px-2 py-0.5 rounded-full text-black">0</span>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-[#1E293B]">3. Steam Press</h3>
+            <span id="washer-count-ironing" class="text-xs font-bold bg-[#F8FAF3] px-2 py-0.5 rounded-full text-[#1E293B]">0</span>
           </div>
           <div id="washer-col-ironing" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1"></div>
         </div>
@@ -590,8 +590,8 @@
         <!-- Col 4: Quality Check & Packed -->
         <div id="washer-card-col-packed" class="washer-column bg-white rounded-2xl p-4 flex flex-col h-[550px] sm:h-[700px] border border-[#E2E8D5]">
           <div class="flex items-center justify-between pb-3 border-b border-[#E2E8D5] mb-3">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-black">4. Packed & Ready</h3>
-            <span id="washer-count-packed" class="text-xs font-bold bg-[#F8FAF3] px-2 py-0.5 rounded-full text-black">0</span>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-[#1E293B]">4. Packed & Ready</h3>
+            <span id="washer-count-packed" class="text-xs font-bold bg-[#F8FAF3] px-2 py-0.5 rounded-full text-[#1E293B]">0</span>
           </div>
           <div id="washer-col-packed" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-1"></div>
         </div>
@@ -606,10 +606,10 @@
       <div class="w-full max-w-md mx-auto bg-white rounded-3xl border border-[#E2E8D5] shadow-sm sm:shadow-lg overflow-hidden min-h-[600px] flex flex-col">
         
         <!-- Driver Top Header (Pure Uber Driver Look) -->
-        <div class="bg-black text-white p-5">
+        <div class="bg-[#1E3A2F] text-white p-5">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-black text-sm">
+              <div class="w-10 h-10 rounded-full bg-white text-[#1E293B] flex items-center justify-center font-black text-sm">
                 RK
               </div>
               <div>
@@ -620,12 +620,12 @@
                 </div>
               </div>
             </div>
-            <span class="text-xs font-mono bg-neutral-800 px-2.5 py-1 rounded-full text-white">HR26-BW-4821</span>
+            <span class="text-xs font-mono bg-[#2C4F40] px-2.5 py-1 rounded-full text-white">HR26-BW-4821</span>
           </div>
 
           <!-- Pickup vs Delivery Toggle (Uber Driver Segmented Switcher) -->
-          <div class="grid grid-cols-2 gap-1.5 mt-4 bg-neutral-900 p-1 rounded-full text-xs font-semibold">
-            <button onclick="setRiderMode('pickup')" id="rider-tab-pickup" class="py-2 rounded-full bg-[#A6CE39] text-[#231F20] shadow transition-all flex items-center justify-center space-x-1.5 font-bold">
+          <div class="grid grid-cols-2 gap-1.5 mt-4 bg-[#152B23] p-1 rounded-full text-xs font-semibold">
+            <button onclick="setRiderMode('pickup')" id="rider-tab-pickup" class="py-2 rounded-full bg-[#A6CE39] text-[#1E3304] shadow transition-all flex items-center justify-center space-x-1.5 font-bold">
               <span>Pickups (<span id="rider-badge-pickups">0</span>)</span>
             </button>
             <button onclick="setRiderMode('delivery')" id="rider-tab-delivery" class="py-2 rounded-full text-neutral-400 hover:text-white transition-all flex items-center justify-center space-x-1.5">
@@ -647,22 +647,22 @@
         <div class="p-4 flex-1 overflow-y-auto space-y-4 custom-scrollbar bg-[#F8FAF3]">
 
           <!-- ACTIVE RETURN-TO-STORE BANNER -->
-          <div id="rider-return-loop-banner" class="bg-black p-4 rounded-2xl text-white space-y-3">
+          <div id="rider-return-loop-banner" class="bg-[#1E3A2F] p-4 rounded-2xl text-white space-y-3">
             <div class="flex items-start justify-between">
               <div>
                 <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Return to Store</span>
                 <h4 class="font-bold text-sm mt-0.5">Heading to Sector 15 Counter</h4>
                 <p class="text-[11px] text-neutral-400">Deliveries completed. Return for next batch.</p>
               </div>
-              <span id="rider-return-eta-badge" class="bg-[#FFC043] text-black text-xs font-black px-2 py-0.5 rounded-full">12m Due</span>
+              <span id="rider-return-eta-badge" class="bg-[#FFC043] text-[#1E293B] text-xs font-black px-2 py-0.5 rounded-full">12m Due</span>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-xs pt-1">
-              <a href="https://maps.google.com/?q=Sector+15+Main+Market+Gurugram" target="_blank" class="py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-full font-semibold flex items-center justify-center space-x-1 transition-all">
+              <a href="https://maps.google.com/?q=Sector+15+Main+Market+Gurugram" target="_blank" class="py-2 bg-[#2C4F40] hover:bg-[#233F33] text-white rounded-full font-semibold flex items-center justify-center space-x-1 transition-all">
                 <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
                 <span>Navigate</span>
               </a>
-              <button onclick="checkInAtStoreCounter('RIDER-01')" class="py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#231F20] rounded-full font-bold flex items-center justify-center space-x-1 transition-all">
+              <button onclick="checkInAtStoreCounter('RIDER-01')" class="py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full font-bold flex items-center justify-center space-x-1 transition-all">
                 <i data-lucide="check" class="w-3.5 h-3.5"></i>
                 <span>At Store</span>
               </button>
@@ -682,7 +682,7 @@
 
           <!-- RIDER DELIVERY QUEUE -->
           <div id="rider-view-delivery" class="space-y-4 hidden">
-            <div class="bg-white border border-[#E2E8D5] rounded-2xl p-3 text-xs text-black">
+            <div class="bg-white border border-[#E2E8D5] rounded-2xl p-3 text-xs text-[#1E293B]">
               <span class="font-bold block">Zonal Cluster Route Active</span>
               <p class="text-[11px] text-[#545454] mt-0.5">Orders grouped by sector for minimal transit time.</p>
             </div>
@@ -704,14 +704,14 @@
   <!-- ============================================================== -->
 
   <!-- MODAL 1: THERMAL GARMENT TAG PRINTER -->
-  <div id="modal-thermal-tags" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-thermal-tags" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E8D5]">
       <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between">
         <div>
-          <h3 class="font-bold text-base text-black">Thermal Garment Tags</h3>
+          <h3 class="font-bold text-base text-[#1E293B]">Thermal Garment Tags</h3>
           <p class="text-xs text-[#545454]">ESC/POS 58mm & 80mm Tag Format</p>
         </div>
-        <button onclick="closeThermalModal()" class="text-[#545454] hover:text-black">
+        <button onclick="closeThermalModal()" class="text-[#545454] hover:text-[#1E293B]">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -723,8 +723,8 @@
       <div class="p-4 border-t border-[#E2E8D5] bg-white flex items-center justify-between">
         <span class="text-xs text-[#545454]">Thermal roll ready</span>
         <div class="flex space-x-2">
-          <button onclick="closeThermalModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-black">Close</button>
-          <button onclick="window.print()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+          <button onclick="closeThermalModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-[#1E293B]">Close</button>
+          <button onclick="window.print()" class="px-5 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
             <i data-lucide="printer" class="w-3.5 h-3.5"></i>
             <span>Print All Tags</span>
           </button>
@@ -734,22 +734,22 @@
   </div>
 
   <!-- MODAL 2: WHATSAPP WEBHOOK SIMULATOR -->
-  <div id="modal-whatsapp-sim" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-whatsapp-sim" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-md w-full shadow-xl overflow-hidden border border-[#E2E8D5]">
       <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between">
         <div class="flex items-center space-x-2.5">
           <span class="w-2.5 h-2.5 rounded-full bg-[#A6CE39]"></span>
-          <h3 class="font-bold text-base text-black">Inbound WhatsApp Simulator</h3>
+          <h3 class="font-bold text-base text-[#1E293B]">Inbound WhatsApp Simulator</h3>
         </div>
-        <button onclick="closeWhatsAppModal()" class="text-[#545454] hover:text-black">
+        <button onclick="closeWhatsAppModal()" class="text-[#545454] hover:text-[#1E293B]">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
       <div class="p-5 space-y-4 text-xs">
         <div>
-          <label class="block font-bold text-black mb-1">Event Type:</label>
-          <select id="sim-event-type" onchange="updateSimForm()" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 font-medium text-black focus:outline-none focus:ring-2 focus:ring-black">
+          <label class="block font-bold text-[#1E293B] mb-1">Event Type:</label>
+          <select id="sim-event-type" onchange="updateSimForm()" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 font-medium text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-[#A6CE39]">
             <option value="MISSED_CALL">1. Customer Missed Call (Auto Callback SLA)</option>
             <option value="LOCATION_PIN">2. Customer Shares Live Location</option>
             <option value="CHAT_INQUIRY">3. WhatsApp Chat Inquiry</option>
@@ -757,47 +757,47 @@
         </div>
 
         <div>
-          <label class="block font-bold text-black mb-1">Phone Number:</label>
-          <input type="text" id="sim-phone" value="+91 9811223344" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 font-mono text-black focus:outline-none focus:ring-2 focus:ring-black">
+          <label class="block font-bold text-[#1E293B] mb-1">Phone Number:</label>
+          <input type="text" id="sim-phone" value="+91 9811223344" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 font-mono text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-[#A6CE39]">
         </div>
 
         <div>
-          <label class="block font-bold text-black mb-1">Customer Name:</label>
-          <input type="text" id="sim-name" value="Sunita Mehta" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 text-black focus:outline-none focus:ring-2 focus:ring-black">
+          <label class="block font-bold text-[#1E293B] mb-1">Customer Name:</label>
+          <input type="text" id="sim-name" value="Sunita Mehta" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-[#A6CE39]">
         </div>
 
         <div id="sim-field-message">
-          <label class="block font-bold text-black mb-1">Message:</label>
-          <textarea id="sim-message" rows="2" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 text-black focus:outline-none focus:ring-2 focus:ring-black">Missed voice call at 11:30 AM</textarea>
+          <label class="block font-bold text-[#1E293B] mb-1">Message:</label>
+          <textarea id="sim-message" rows="2" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-[#A6CE39]">Missed voice call at 11:30 AM</textarea>
         </div>
 
         <div id="sim-field-address" class="hidden">
-          <label class="block font-bold text-black mb-1">Address from Pin:</label>
-          <input type="text" id="sim-address" value="#501, Tower 4, DLF Phase 2, Gurugram" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 text-black focus:outline-none focus:ring-2 focus:ring-black">
+          <label class="block font-bold text-[#1E293B] mb-1">Address from Pin:</label>
+          <input type="text" id="sim-address" value="#501, Tower 4, DLF Phase 2, Gurugram" class="w-full bg-[#F8FAF3] border-none rounded-xl p-2.5 text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-[#A6CE39]">
         </div>
 
         <div id="sim-result-box" class="p-3 bg-[#F3F9E4] text-[#5A7812] rounded-xl text-xs font-semibold hidden">
           <span>Webhook processed successfully.</span>
-          <p id="sim-result-text" class="text-[11px] text-black font-normal mt-0.5"></p>
+          <p id="sim-result-text" class="text-[11px] text-[#1E293B] font-normal mt-0.5"></p>
         </div>
       </div>
 
       <div class="p-4 border-t border-[#E2E8D5] bg-white flex justify-end space-x-2">
-        <button onclick="closeWhatsAppModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-black">Cancel</button>
-        <button onclick="submitWhatsAppSim()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm">Send Webhook</button>
+        <button onclick="closeWhatsAppModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-[#1E293B]">Cancel</button>
+        <button onclick="submitWhatsAppSim()" class="px-5 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold shadow-sm">Send Webhook</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL 3: NEW ORDER POS MODAL -->
-  <div id="modal-new-order" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-new-order" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E8D5]">
       <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between">
         <div>
-          <h3 class="font-bold text-base text-black">New Order & Billing POS</h3>
+          <h3 class="font-bold text-base text-[#1E293B]">New Order & Billing POS</h3>
           <p class="text-xs text-[#545454]">Select customer, add garments, calculate bill</p>
         </div>
-        <button onclick="closeNewOrderModal()" class="text-[#545454] hover:text-black">
+        <button onclick="closeNewOrderModal()" class="text-[#545454] hover:text-[#1E293B]">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -805,19 +805,19 @@
       <div class="p-6 overflow-y-auto flex-1 space-y-5 text-xs custom-scrollbar">
         <!-- Customer Selection -->
         <div>
-          <label class="block font-bold text-black mb-1">Select Customer:</label>
+          <label class="block font-bold text-[#1E293B] mb-1">Select Customer:</label>
           <div class="relative">
-            <input type="text" id="order-cust-search" onkeyup="searchOrderCustomer(this.value)" placeholder="Search by name or phone (+91...)" class="w-full bg-[#F8FAF3] focus:bg-white border border-transparent focus:border-black rounded-xl p-3 text-xs focus:outline-none transition-all">
+            <input type="text" id="order-cust-search" onkeyup="searchOrderCustomer(this.value)" placeholder="Search by name or phone (+91...)" class="w-full bg-[#F8FAF3] focus:bg-white border border-transparent focus:border-[#A6CE39] rounded-xl p-3 text-xs focus:outline-none transition-all">
             <div id="order-cust-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E2E8D5] rounded-2xl shadow-xl z-20 max-h-48 overflow-y-auto hidden divide-y divide-[#E2E8D5]"></div>
           </div>
           <div id="selected-cust-card" class="mt-2 p-3 bg-[#F8FAF3] rounded-xl border border-[#E2E8D5] hidden">
             <div class="flex items-center justify-between">
               <div>
-                <strong id="sel-cust-name" class="text-black block text-sm font-bold"></strong>
+                <strong id="sel-cust-name" class="text-[#1E293B] block text-sm font-bold"></strong>
                 <span id="sel-cust-phone" class="text-[#545454] font-mono text-xs"></span>
                 <span id="sel-cust-address" class="text-[#898989] block text-[11px]"></span>
               </div>
-              <span id="sel-cust-zone" class="bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-full"></span>
+              <span id="sel-cust-zone" class="bg-[#EEF4E3] text-[#3D5A06] border border-[#D5E5B5] text-[10px] font-bold px-2 py-0.5 rounded-full"></span>
             </div>
           </div>
         </div>
@@ -825,20 +825,20 @@
         <!-- Garments Breakdown -->
         <div>
           <div class="flex items-center justify-between mb-2">
-            <label class="font-bold text-black">Garment Breakdown:</label>
-            <span class="text-[#545454]">Total: <strong id="order-items-count" class="text-black">0</strong> pcs</span>
+            <label class="font-bold text-[#1E293B]">Garment Breakdown:</label>
+            <span class="text-[#545454]">Total: <strong id="order-items-count" class="text-[#1E293B]">0</strong> pcs</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 bg-[#F8FAF3] p-3 rounded-2xl border border-[#E2E8D5]">
-            <select id="quick-garment-select" class="text-xs border border-[#E2E8D5] rounded-xl p-2 bg-white text-black"></select>
-            <select id="quick-service-select" class="text-xs border border-[#E2E8D5] rounded-xl p-2 bg-white text-black">
+            <select id="quick-garment-select" class="text-xs border border-[#E2E8D5] rounded-xl p-2 bg-white text-[#1E293B]"></select>
+            <select id="quick-service-select" class="text-xs border border-[#E2E8D5] rounded-xl p-2 bg-white text-[#1E293B]">
               <option value="Wash & Steam Iron">Wash & Steam Iron</option>
               <option value="Dry Clean">Dry Clean</option>
               <option value="Wash & Fold">Wash & Fold</option>
               <option value="Steam Iron Only">Steam Iron Only</option>
             </select>
-            <input type="text" id="quick-stain-note" placeholder="Care note (e.g. collar stain)" class="text-xs border border-[#E2E8D5] rounded-xl p-2 bg-white text-black">
-            <button onclick="addGarmentItem()" class="bg-black hover:bg-neutral-800 text-white rounded-xl font-bold text-xs py-2 flex items-center justify-center space-x-1">
+            <input type="text" id="quick-stain-note" placeholder="Care note (e.g. collar stain)" class="text-xs border border-[#E2E8D5] rounded-xl p-2 bg-white text-[#1E293B]">
+            <button onclick="addGarmentItem()" class="bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-xl font-bold text-xs py-2 flex items-center justify-center space-x-1">
               <span>+ Add Item</span>
             </button>
           </div>
@@ -855,7 +855,7 @@
                   <th class="p-2.5 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody id="order-items-table" class="divide-y divide-[#E2E8D5] text-black">
+              <tbody id="order-items-table" class="divide-y divide-[#E2E8D5] text-[#1E293B]">
                 <tr>
                   <td colspan="6" class="p-4 text-center text-[#898989]">No garments added yet.</td>
                 </tr>
@@ -867,50 +867,50 @@
         <!-- Express Option & Total -->
         <div class="bg-[#F8FAF3] p-4 rounded-2xl border border-[#E2E8D5] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div class="flex items-center space-x-2">
-            <input type="checkbox" id="order-express-check" onchange="recalculateOrderTotal()" class="w-4 h-4 text-black rounded accent-black">
-            <label for="order-express-check" class="font-bold text-black cursor-pointer">
+            <input type="checkbox" id="order-express-check" onchange="recalculateOrderTotal()" class="w-4 h-4 text-[#1E293B] rounded accent-black">
+            <label for="order-express-check" class="font-bold text-[#1E293B] cursor-pointer">
               Express Delivery (24-Hour Turnaround +50%)
             </label>
           </div>
           <div class="text-right">
             <span class="text-xs text-[#545454] block">Total Amount:</span>
-            <span id="order-total-amount" class="text-2xl font-black text-black">₹0</span>
+            <span id="order-total-amount" class="text-2xl font-black text-[#1E293B]">₹0</span>
           </div>
         </div>
       </div>
 
       <div class="p-4 border-t border-[#E2E8D5] bg-white flex justify-end space-x-2">
-        <button onclick="closeNewOrderModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-black">Cancel</button>
-        <button onclick="submitNewOrder()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm">Save & Print Thermal Tags</button>
+        <button onclick="closeNewOrderModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-[#1E293B]">Cancel</button>
+        <button onclick="submitNewOrder()" class="px-5 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold shadow-sm">Save & Print Thermal Tags</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL 4: NEW CUSTOMER MODAL -->
-  <div id="modal-new-customer" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-new-customer" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-md w-full shadow-xl overflow-hidden border border-[#E2E8D5]">
       <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between">
-        <h3 class="font-bold text-base text-black">Register Customer</h3>
-        <button onclick="closeNewCustomerModal()" class="text-[#545454] hover:text-black">
+        <h3 class="font-bold text-base text-[#1E293B]">Register Customer</h3>
+        <button onclick="closeNewCustomerModal()" class="text-[#545454] hover:text-[#1E293B]">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
       <div class="p-5 space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-black mb-1">Full Name *</label>
-          <input type="text" id="new-cust-name" placeholder="e.g. Ankit Verma" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none">
+          <label class="block font-bold text-[#1E293B] mb-1">Full Name *</label>
+          <input type="text" id="new-cust-name" placeholder="e.g. Ankit Verma" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none">
         </div>
         <div>
-          <label class="block font-bold text-black mb-1">Phone Number *</label>
-          <input type="text" id="new-cust-phone" placeholder="+91 9876543210" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 font-mono text-black border border-transparent focus:border-black focus:outline-none">
+          <label class="block font-bold text-[#1E293B] mb-1">Phone Number *</label>
+          <input type="text" id="new-cust-phone" placeholder="+91 9876543210" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 font-mono text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none">
         </div>
         <div>
-          <label class="block font-bold text-black mb-1">Address *</label>
-          <textarea id="new-cust-address" rows="2" placeholder="House/Flat number, Street, Landmark" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none"></textarea>
+          <label class="block font-bold text-[#1E293B] mb-1">Address *</label>
+          <textarea id="new-cust-address" rows="2" placeholder="House/Flat number, Street, Landmark" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none"></textarea>
         </div>
         <div>
-          <label class="block font-bold text-black mb-1">Delivery Zone *</label>
-          <select id="new-cust-zone" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none font-medium">
+          <label class="block font-bold text-[#1E293B] mb-1">Delivery Zone *</label>
+          <select id="new-cust-zone" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none font-medium">
             <option value="Sector 14 - North">Sector 14 - North</option>
             <option value="Sector 15 - North" selected>Sector 15 - North</option>
             <option value="Sector 22 - Central">Sector 22 - Central</option>
@@ -923,21 +923,21 @@
         </div>
       </div>
       <div class="p-4 border-t border-[#E2E8D5] bg-white flex justify-end space-x-2">
-        <button onclick="closeNewCustomerModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-black">Cancel</button>
-        <button onclick="submitNewCustomer()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm">Save</button>
+        <button onclick="closeNewCustomerModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-[#1E293B]">Cancel</button>
+        <button onclick="submitNewCustomer()" class="px-5 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold shadow-sm">Save</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL 5: BULK CUSTOMER EXCEL UPLOAD MODAL -->
-  <div id="modal-excel-upload" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-excel-upload" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-xl w-full shadow-xl overflow-hidden border border-[#E2E8D5]">
       <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between">
         <div>
-          <h3 class="font-bold text-base text-black">Bulk Customer Import</h3>
+          <h3 class="font-bold text-base text-[#1E293B]">Bulk Customer Import</h3>
           <p class="text-xs text-[#545454]">Import or update your customer base via Excel / CSV</p>
         </div>
-        <button onclick="closeExcelUploadModal()" class="text-[#545454] hover:text-black">
+        <button onclick="closeExcelUploadModal()" class="text-[#545454] hover:text-[#1E293B]">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -946,26 +946,26 @@
         <!-- Sample Templates -->
         <div class="bg-[#F8FAF3] rounded-2xl p-4 flex items-center justify-between border border-[#E2E8D5]">
           <div>
-            <strong class="text-black block text-xs">Download Format Template</strong>
+            <strong class="text-[#1E293B] block text-xs">Download Format Template</strong>
             <span class="text-[#545454] text-[11px]">Ready-made format: Name, Phone, Address, Zone.</span>
           </div>
           <div class="flex space-x-2 shrink-0">
-            <a href="./sample_customers_template.xlsx" download class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full text-[11px] font-semibold">.XLSX</a>
-            <a href="./sample_customers_template.csv" download class="px-3.5 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-black rounded-full text-[11px] font-semibold">.CSV</a>
+            <a href="./sample_customers_template.xlsx" download class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-[11px] font-semibold">.XLSX</a>
+            <a href="./sample_customers_template.csv" download class="px-3.5 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-[11px] font-semibold">.CSV</a>
           </div>
         </div>
 
         <!-- File Upload Drag & Drop Area -->
-        <div id="excel-drop-zone" onclick="document.getElementById('excel-file-input').click()" class="border-2 border-dashed border-[#CBCBCB] hover:border-black bg-[#F8FAF3] rounded-2xl p-6 text-center cursor-pointer transition-colors space-y-2">
+        <div id="excel-drop-zone" onclick="document.getElementById('excel-file-input').click()" class="border-2 border-dashed border-[#CBCBCB] hover:border-[#A6CE39] bg-[#F8FAF3] rounded-2xl p-6 text-center cursor-pointer transition-colors space-y-2">
           <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" class="hidden" onchange="handleExcelFileSelected(event)">
-          <div class="w-10 h-10 rounded-full bg-white text-black mx-auto flex items-center justify-center shadow-sm">
+          <div class="w-10 h-10 rounded-full bg-white text-[#1E293B] mx-auto flex items-center justify-center shadow-sm">
             <i data-lucide="upload-cloud" class="w-5 h-5"></i>
           </div>
           <div>
-            <span class="font-bold text-black text-sm block">Select or drop Excel sheet</span>
+            <span class="font-bold text-[#1E293B] text-sm block">Select or drop Excel sheet</span>
             <span class="text-[#545454] text-[11px]">Supports .xlsx and .csv files</span>
           </div>
-          <div id="excel-selected-filename" class="text-xs font-bold text-black hidden font-mono bg-white py-1 px-3 rounded-full inline-block border border-[#E2E8D5]"></div>
+          <div id="excel-selected-filename" class="text-xs font-bold text-[#1E293B] hidden font-mono bg-white py-1 px-3 rounded-full inline-block border border-[#E2E8D5]"></div>
         </div>
 
         <!-- Upload Status / Result Box -->
@@ -977,23 +977,23 @@
           <div class="grid grid-cols-3 gap-2 text-center pt-1">
             <div class="bg-white p-2 rounded-xl border border-[#D8ECAB]">
               <span class="text-[10px] text-[#545454] block">New Added</span>
-              <strong id="excel-stat-new" class="text-black text-sm">0</strong>
+              <strong id="excel-stat-new" class="text-[#1E293B] text-sm">0</strong>
             </div>
             <div class="bg-white p-2 rounded-xl border border-[#D8ECAB]">
               <span class="text-[10px] text-[#545454] block">Updated</span>
-              <strong id="excel-stat-updated" class="text-black text-sm">0</strong>
+              <strong id="excel-stat-updated" class="text-[#1E293B] text-sm">0</strong>
             </div>
             <div class="bg-white p-2 rounded-xl border border-[#D8ECAB]">
               <span class="text-[10px] text-[#545454] block">Total Database</span>
-              <strong id="excel-stat-total" class="text-black text-sm">0</strong>
+              <strong id="excel-stat-total" class="text-[#1E293B] text-sm">0</strong>
             </div>
           </div>
         </div>
       </div>
 
       <div class="p-4 border-t border-[#E2E8D5] bg-white flex justify-end space-x-2">
-        <button onclick="closeExcelUploadModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-black">Close</button>
-        <button id="btn-submit-excel" onclick="uploadExcelFile()" disabled class="px-5 py-2 bg-black disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+        <button onclick="closeExcelUploadModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-[#1E293B]">Close</button>
+        <button id="btn-submit-excel" onclick="uploadExcelFile()" disabled class="px-5 py-2 bg-[#A6CE39] disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#2C4F40] text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
           <span>Import Now</span>
         </button>
       </div>
@@ -1001,14 +1001,14 @@
   </div>
 
   <!-- MODAL 6: RIDER DOORSTEP PICKUP INTAKE -->
-  <div id="modal-rider-pickup" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-rider-pickup" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E8D5]">
       <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between">
         <div>
           <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Doorstep Intake</span>
-          <h3 class="font-bold text-base text-black" id="modal-pickup-order-title">Order Pickup Details</h3>
+          <h3 class="font-bold text-base text-[#1E293B]" id="modal-pickup-order-title">Order Pickup Details</h3>
         </div>
-        <button onclick="closeRiderPickupModal()" class="text-[#545454] hover:text-black">
+        <button onclick="closeRiderPickupModal()" class="text-[#545454] hover:text-[#1E293B]">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1016,7 +1016,7 @@
       <div class="p-6 overflow-y-auto flex-1 space-y-4 text-xs custom-scrollbar">
         <!-- Customer Info Summary -->
         <div class="bg-[#F8FAF3] p-3 rounded-2xl border border-[#EEF4E3] space-y-1">
-          <div class="font-bold text-black" id="modal-pickup-cust-name">Customer Name</div>
+          <div class="font-bold text-[#1E293B]" id="modal-pickup-cust-name">Customer Name</div>
           <div class="text-[#545454]" id="modal-pickup-cust-address">Address</div>
           <div class="text-[11px] font-mono text-neutral-600" id="modal-pickup-cust-phone">Phone</div>
         </div>
@@ -1024,18 +1024,18 @@
         <!-- Intake Form Fields -->
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-black mb-1">Estimated Pieces *</label>
-            <input type="number" id="pickup-input-pieces" min="1" value="5" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 font-bold text-black border border-transparent focus:border-black focus:outline-none">
+            <label class="block font-bold text-[#1E293B] mb-1">Estimated Pieces *</label>
+            <input type="number" id="pickup-input-pieces" min="1" value="5" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 font-bold text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none">
           </div>
           <div>
-            <label class="block font-bold text-black mb-1">Weight (in kg)</label>
-            <input type="number" id="pickup-input-weight" step="0.1" placeholder="e.g. 3.5" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 font-bold text-black border border-transparent focus:border-black focus:outline-none">
+            <label class="block font-bold text-[#1E293B] mb-1">Weight (in kg)</label>
+            <input type="number" id="pickup-input-weight" step="0.1" placeholder="e.g. 3.5" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 font-bold text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none">
           </div>
         </div>
 
         <div>
-          <label class="block font-bold text-black mb-1">Requested Service *</label>
-          <select id="pickup-input-service" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none font-semibold">
+          <label class="block font-bold text-[#1E293B] mb-1">Requested Service *</label>
+          <select id="pickup-input-service" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none font-semibold">
             <option value="Wash & Steam Iron" selected>Wash & Steam Iron (Standard)</option>
             <option value="Dry Clean">Dry Clean Only</option>
             <option value="Wash & Fold">Wash & Fold (By Weight)</option>
@@ -1044,8 +1044,8 @@
         </div>
 
         <div>
-          <label class="block font-bold text-black mb-1">Customer Preferred Delivery Date & Slot *</label>
-          <select id="pickup-input-slot" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none font-semibold">
+          <label class="block font-bold text-[#1E293B] mb-1">Customer Preferred Delivery Date & Slot *</label>
+          <select id="pickup-input-slot" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none font-semibold">
             <option value="Tomorrow Evening (5:00 PM - 8:00 PM)">Tomorrow Evening (5:00 PM - 8:00 PM)</option>
             <option value="Tomorrow Morning (9:00 AM - 12:00 PM)">Tomorrow Morning (9:00 AM - 12:00 PM)</option>
             <option value="Day after Tomorrow (Morning 10-1)">Day after Tomorrow (Morning 10-1)</option>
@@ -1055,14 +1055,14 @@
         </div>
 
         <div>
-          <label class="block font-bold text-black mb-1">Personal Request / Stain Care Note</label>
-          <input type="text" id="pickup-input-notes" placeholder="e.g. Collar stain on white shirt, starch on kurtas" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-black border border-transparent focus:border-black focus:outline-none">
+          <label class="block font-bold text-[#1E293B] mb-1">Personal Request / Stain Care Note</label>
+          <input type="text" id="pickup-input-notes" placeholder="e.g. Collar stain on white shirt, starch on kurtas" class="w-full bg-[#F8FAF3] rounded-xl p-2.5 text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none">
         </div>
       </div>
 
       <div class="p-4 border-t border-[#E2E8D5] bg-white flex justify-end space-x-2">
-        <button onclick="closeRiderPickupModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-black">Cancel</button>
-        <button onclick="submitRiderPickupIntake()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+        <button onclick="closeRiderPickupModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-[#1E293B]">Cancel</button>
+        <button onclick="submitRiderPickupIntake()" class="px-5 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
           <i data-lucide="check" class="w-4 h-4"></i>
           <span>Confirm Pickup & Bring to Store</span>
         </button>
@@ -1071,14 +1071,14 @@
   </div>
 
   <!-- MODAL 7: RIDER DELIVERY COMPLETION & PROOF OF DELIVERY (CAMERA) -->
-  <div id="modal-rider-delivery" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-rider-delivery" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E8D5]">
       <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between">
         <div>
           <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Doorstep Delivery</span>
-          <h3 class="font-bold text-base text-black" id="modal-del-order-title">Complete Delivery</h3>
+          <h3 class="font-bold text-base text-[#1E293B]" id="modal-del-order-title">Complete Delivery</h3>
         </div>
-        <button onclick="closeRiderDeliveryModal()" class="text-[#545454] hover:text-black">
+        <button onclick="closeRiderDeliveryModal()" class="text-[#545454] hover:text-[#1E293B]">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1088,12 +1088,12 @@
         <div class="bg-[#F8FAF3] p-4 rounded-2xl border border-[#EEF4E3] space-y-2">
           <div class="flex items-start justify-between">
             <div>
-              <div class="font-bold text-sm text-black" id="modal-del-cust-name">Customer Name</div>
+              <div class="font-bold text-sm text-[#1E293B]" id="modal-del-cust-name">Customer Name</div>
               <div class="text-[11px] text-neutral-600 font-mono" id="modal-del-cust-phone">+91 0000000000</div>
             </div>
             <div class="text-right">
               <span class="text-[10px] uppercase font-bold text-neutral-500 block">Bill Amount</span>
-              <span class="text-base font-black text-black" id="modal-del-amount">₹0</span>
+              <span class="text-base font-black text-[#1E293B]" id="modal-del-amount">₹0</span>
             </div>
           </div>
           <div class="text-[11px] text-neutral-600 pt-1 border-t border-[#E2E8D5]" id="modal-del-address">Delivery Address</div>
@@ -1101,23 +1101,23 @@
 
         <!-- Payment Mode Selector -->
         <div>
-          <label class="block font-bold text-black mb-2">Payment Received Via *</label>
+          <label class="block font-bold text-[#1E293B] mb-2">Payment Received Via *</label>
           <div class="grid grid-cols-3 gap-2">
             <label class="payment-mode-label cursor-pointer">
               <input type="radio" name="del-payment-mode" value="UPI / QR Code" checked class="peer hidden">
-              <div class="p-2.5 text-center rounded-2xl border border-[#E2E8D5] peer-checked:border-black peer-checked:bg-black peer-checked:text-white font-semibold transition-all">
+              <div class="p-2.5 text-center rounded-2xl border border-[#E2E8D5] peer-checked:border-[#2D5A1E] peer-checked:bg-[#2D5A1E] peer-checked:text-white font-semibold transition-all">
                 UPI / QR
               </div>
             </label>
             <label class="payment-mode-label cursor-pointer">
               <input type="radio" name="del-payment-mode" value="Cash on Delivery" class="peer hidden">
-              <div class="p-2.5 text-center rounded-2xl border border-[#E2E8D5] peer-checked:border-black peer-checked:bg-black peer-checked:text-white font-semibold transition-all">
+              <div class="p-2.5 text-center rounded-2xl border border-[#E2E8D5] peer-checked:border-[#2D5A1E] peer-checked:bg-[#2D5A1E] peer-checked:text-white font-semibold transition-all">
                 Cash
               </div>
             </label>
             <label class="payment-mode-label cursor-pointer">
               <input type="radio" name="del-payment-mode" value="Already Paid Online" class="peer hidden">
-              <div class="p-2.5 text-center rounded-2xl border border-[#E2E8D5] peer-checked:border-black peer-checked:bg-black peer-checked:text-white font-semibold transition-all">
+              <div class="p-2.5 text-center rounded-2xl border border-[#E2E8D5] peer-checked:border-[#2D5A1E] peer-checked:bg-[#2D5A1E] peer-checked:text-white font-semibold transition-all">
                 Prepaid
               </div>
             </label>
@@ -1126,25 +1126,25 @@
 
         <!-- Photo / Screenshot Camera Upload (Proof of Delivery) -->
         <div>
-          <label class="block font-bold text-black mb-1">Proof of Payment / Cash Photo *</label>
+          <label class="block font-bold text-[#1E293B] mb-1">Proof of Payment / Cash Photo *</label>
           <p class="text-[11px] text-[#545454] mb-2">Upload or capture screenshot of UPI payment confirmation or cash receipt.</p>
           
           <input type="file" id="rider-pod-file-input" accept="image/*" capture="environment" class="hidden" onchange="handlePodFileSelect(event)">
           
-          <div id="pod-upload-trigger" onclick="document.getElementById('rider-pod-file-input').click()" class="border-2 border-dashed border-[#CBCBCB] hover:border-black bg-[#F8FAF3] rounded-2xl p-5 text-center cursor-pointer transition-colors space-y-2">
-            <div class="w-10 h-10 rounded-full bg-white text-black mx-auto flex items-center justify-center shadow-sm">
+          <div id="pod-upload-trigger" onclick="document.getElementById('rider-pod-file-input').click()" class="border-2 border-dashed border-[#CBCBCB] hover:border-[#A6CE39] bg-[#F8FAF3] rounded-2xl p-5 text-center cursor-pointer transition-colors space-y-2">
+            <div class="w-10 h-10 rounded-full bg-white text-[#1E293B] mx-auto flex items-center justify-center shadow-sm">
               <i data-lucide="camera" class="w-5 h-5"></i>
             </div>
             <div>
-              <span class="font-bold text-black block">Tap to Open Camera or Choose Screenshot</span>
+              <span class="font-bold text-[#1E293B] block">Tap to Open Camera or Choose Screenshot</span>
               <span class="text-[10px] text-neutral-500">Supports Camera capture on mobile or file upload</span>
             </div>
           </div>
 
           <!-- Preview Box -->
-          <div id="pod-image-preview-container" class="hidden mt-3 relative rounded-2xl overflow-hidden border border-[#E2E8D5] bg-black max-h-56 flex items-center justify-center">
+          <div id="pod-image-preview-container" class="hidden mt-3 relative rounded-2xl overflow-hidden border border-[#E2E8D5] bg-slate-800 max-h-56 flex items-center justify-center">
             <img id="pod-image-preview" src="" alt="Proof Preview" class="max-h-56 object-contain">
-            <button onclick="removePodImagePreview()" class="absolute top-2 right-2 p-1.5 bg-black/70 hover:bg-black text-white rounded-full">
+            <button onclick="removePodImagePreview()" class="absolute top-2 right-2 p-1.5 bg-slate-900/70 hover:bg-slate-900 text-white rounded-full">
               <i data-lucide="x" class="w-4 h-4"></i>
             </button>
           </div>
@@ -1152,8 +1152,8 @@
       </div>
 
       <div class="p-4 border-t border-[#E2E8D5] bg-white flex justify-end space-x-2">
-        <button onclick="closeRiderDeliveryModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-black">Cancel</button>
-        <button onclick="submitRiderDeliveryCompletion()" class="px-5 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#231F20] rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+        <button onclick="closeRiderDeliveryModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-[#1E293B]">Cancel</button>
+        <button onclick="submitRiderDeliveryCompletion()" class="px-5 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
           <i data-lucide="check-circle" class="w-4 h-4"></i>
           <span>Submit Delivery & Close Trip</span>
         </button>
@@ -1162,14 +1162,14 @@
   </div>
 
   <!-- MODAL 8: ADMIN PROOF OF DELIVERY (POD) AUDIT VIEWER -->
-  <div id="modal-admin-pod-viewer" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-admin-pod-viewer" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-xl overflow-hidden border border-[#E2E8D5]">
       <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between">
         <div>
           <span class="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Owner Audit</span>
-          <h3 class="font-bold text-base text-black" id="admin-pod-title">Payment Verification</h3>
+          <h3 class="font-bold text-base text-[#1E293B]" id="admin-pod-title">Payment Verification</h3>
         </div>
-        <button onclick="closeAdminPodModal()" class="text-[#545454] hover:text-black">
+        <button onclick="closeAdminPodModal()" class="text-[#545454] hover:text-[#1E293B]">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -1177,16 +1177,16 @@
       <div class="p-6 overflow-y-auto flex-1 space-y-4 text-xs custom-scrollbar">
         <div class="bg-[#F8FAF3] p-3 rounded-2xl border border-[#EEF4E3] space-y-1">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-black" id="admin-pod-cust-name">Customer</span>
-            <span class="font-black text-sm text-black" id="admin-pod-amount">₹0</span>
+            <span class="font-bold text-[#1E293B]" id="admin-pod-cust-name">Customer</span>
+            <span class="font-black text-sm text-[#1E293B]" id="admin-pod-amount">₹0</span>
           </div>
           <div class="text-[11px] text-neutral-600" id="admin-pod-rider-info">Delivered by Rajesh Kumar</div>
           <div class="text-[10px] font-mono text-neutral-500" id="admin-pod-timestamp">Time</div>
         </div>
 
         <div>
-          <label class="block font-bold text-black mb-1.5">Submitted Proof of Payment:</label>
-          <div id="admin-pod-image-wrapper" class="rounded-2xl overflow-hidden border border-[#E2E8D5] bg-neutral-900 flex items-center justify-center min-h-[220px]">
+          <label class="block font-bold text-[#1E293B] mb-1.5">Submitted Proof of Payment:</label>
+          <div id="admin-pod-image-wrapper" class="rounded-2xl overflow-hidden border border-[#E2E8D5] bg-[#152B23] flex items-center justify-center min-h-[220px]">
             <img id="admin-pod-full-image" src="" alt="Proof of Payment" class="max-h-[380px] w-full object-contain">
           </div>
         </div>
@@ -1197,8 +1197,8 @@
       </div>
 
       <div class="p-4 border-t border-[#E2E8D5] bg-white flex justify-end space-x-2">
-        <button onclick="closeAdminPodModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-black">Close</button>
-        <button id="btn-admin-verify-pod" onclick="togglePodVerification()" class="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+        <button onclick="closeAdminPodModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-[#1E293B]">Close</button>
+        <button id="btn-admin-verify-pod" onclick="togglePodVerification()" class="px-5 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
           <i data-lucide="shield-check" class="w-4 h-4"></i>
           <span>Verify Payment Authentic</span>
         </button>
@@ -1207,28 +1207,28 @@
   </div>
 
   <!-- MODAL 9: WHATSAPP "ORDER READY - AVAILABILITY CONFIRMATION" NOTIFIER -->
-  <div id="modal-whatsapp-ready" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+  <div id="modal-whatsapp-ready" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-md w-full shadow-xl overflow-hidden border border-[#E2E8D5]">
       <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between">
         <div class="flex items-center space-x-2">
           <span class="w-2.5 h-2.5 rounded-full bg-[#A6CE39]"></span>
-          <h3 class="font-bold text-base text-black">Notify Customer Order is Ready</h3>
+          <h3 class="font-bold text-base text-[#1E293B]">Notify Customer Order is Ready</h3>
         </div>
-        <button onclick="closeWhatsAppReadyModal()" class="text-[#545454] hover:text-black">
+        <button onclick="closeWhatsAppReadyModal()" class="text-[#545454] hover:text-[#1E293B]">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
       <div class="p-6 space-y-4 text-xs">
         <div class="bg-[#F8FAF3] p-3 rounded-2xl border border-[#EEF4E3] space-y-1">
-          <div class="font-bold text-black" id="wa-ready-cust-name">Customer Name</div>
+          <div class="font-bold text-[#1E293B]" id="wa-ready-cust-name">Customer Name</div>
           <div class="text-[11px] font-mono text-neutral-600" id="wa-ready-cust-phone">+91 0000000000</div>
           <div class="text-[11px] text-neutral-500" id="wa-ready-order-id">Order ORD-1040 (3 Pieces)</div>
         </div>
 
         <div>
-          <label class="block font-bold text-black mb-1">WhatsApp Message Template:</label>
-          <textarea id="wa-ready-msg-text" rows="4" class="w-full bg-[#F8FAF3] rounded-xl p-3 text-xs text-black border border-transparent focus:border-black focus:outline-none leading-relaxed"></textarea>
+          <label class="block font-bold text-[#1E293B] mb-1">WhatsApp Message Template:</label>
+          <textarea id="wa-ready-msg-text" rows="4" class="w-full bg-[#F8FAF3] rounded-xl p-3 text-xs text-[#1E293B] border border-transparent focus:border-[#A6CE39] focus:outline-none leading-relaxed"></textarea>
         </div>
 
         <div class="p-3 bg-[#F3F9E4] text-[#5A7812] rounded-xl text-xs font-semibold">
@@ -1237,8 +1237,8 @@
       </div>
 
       <div class="p-4 border-t border-[#E2E8D5] bg-white flex justify-end space-x-2">
-        <button onclick="closeWhatsAppReadyModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-black">Dismiss</button>
-        <button onclick="sendWhatsAppReadyMessage()" class="px-5 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#231F20] rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
+        <button onclick="closeWhatsAppReadyModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full text-xs font-semibold text-[#1E293B]">Dismiss</button>
+        <button onclick="sendWhatsAppReadyMessage()" class="px-5 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
           <i data-lucide="send" class="w-4 h-4"></i>
           <span>Send via WhatsApp</span>
         </button>

@@ -219,12 +219,12 @@ function setPersona(persona) {
 
   // Toggle active tab buttons
   document.querySelectorAll('.persona-tab').forEach(tab => {
-    tab.className = 'persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-black';
+    tab.className = 'persona-tab px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center space-x-1.5 text-[#545454] hover:text-[#1E293B]';
   });
 
   const activeBtn = document.getElementById(`btn-persona-${persona}`);
   if (activeBtn) {
-    activeBtn.className = 'persona-tab px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center space-x-1.5 text-[#231F20] bg-[#A6CE39] shadow-sm';
+    activeBtn.className = 'persona-tab px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center space-x-1.5 text-[#1E3304] bg-[#A6CE39] shadow-sm';
   }
 
   // Sync mobile dropdown
@@ -237,7 +237,7 @@ function setPersona(persona) {
   });
   const activeMobilePill = document.getElementById(`mbtn-persona-${persona}`);
   if (activeMobilePill) {
-    activeMobilePill.className = 'mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-bold flex items-center space-x-1 bg-[#A6CE39] text-[#231F20] shadow-sm';
+    activeMobilePill.className = 'mobile-persona-pill shrink-0 px-3 py-1 rounded-full text-xs font-bold flex items-center space-x-1 bg-[#A6CE39] text-[#1E3304] shadow-sm';
   }
 
   // Toggle screens
@@ -258,7 +258,7 @@ function setPersona(persona) {
   if (roleEl) {
     roleEl.innerText = `Active: ${labelMap[persona]}`;
     if (isStaticMode) {
-      roleEl.innerHTML = `${roleEl.innerText} <span class="bg-[#EEF4E3] text-black text-[10px] px-2 py-0.5 rounded-full font-bold ml-1">Demo Mode</span>`;
+      roleEl.innerHTML = `${roleEl.innerText} <span class="bg-[#EEF4E3] text-[#1E293B] text-[10px] px-2 py-0.5 rounded-full font-bold ml-1">Demo Mode</span>`;
     }
   }
 
@@ -273,10 +273,10 @@ function setManagerTab(tab) {
     const view = document.getElementById(`manager-view-${t}`);
     if (!btn || !view) return;
     if (t === tab) {
-      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#231F20] text-[#A6CE39] shadow-sm flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
+      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
       view.classList.remove('hidden');
     } else {
-      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-black flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
+      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-medium text-[#545454] hover:text-[#1E293B] flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
       view.classList.add('hidden');
     }
   });
@@ -300,12 +300,12 @@ function setRiderMode(mode) {
   const dView = document.getElementById('rider-view-delivery');
 
   if (mode === 'pickup') {
-    pBtn.className = 'py-2 rounded-full bg-[#A6CE39] text-[#231F20] shadow transition-all flex items-center justify-center space-x-1.5 font-bold';
+    pBtn.className = 'py-2 rounded-full bg-[#A6CE39] text-[#1E3304] shadow transition-all flex items-center justify-center space-x-1.5 font-bold';
     dBtn.className = 'py-2 rounded-full text-neutral-400 hover:text-white transition-all flex items-center justify-center space-x-1.5 font-medium';
     pView.classList.remove('hidden');
     dView.classList.add('hidden');
   } else {
-    dBtn.className = 'py-2 rounded-full bg-[#A6CE39] text-[#231F20] shadow transition-all flex items-center justify-center space-x-1.5 font-bold';
+    dBtn.className = 'py-2 rounded-full bg-[#A6CE39] text-[#1E3304] shadow transition-all flex items-center justify-center space-x-1.5 font-bold';
     pBtn.className = 'py-2 rounded-full text-neutral-400 hover:text-white transition-all flex items-center justify-center space-x-1.5 font-medium';
     dView.classList.remove('hidden');
     pView.classList.add('hidden');
@@ -458,7 +458,7 @@ function renderStats() {
   pipelineContainer.innerHTML = stages.map(s => `
     <div class="bg-[#F8FAF3] rounded-xl p-2.5 sm:p-3 flex flex-col justify-between border border-[#E2E8D5] min-w-0">
       <span class="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider block text-[#545454] truncate">${s.label}</span>
-      <span class="text-xl sm:text-2xl font-black text-black mt-1">${statsData.stageCounts[s.key] || 0}</span>
+      <span class="text-xl sm:text-2xl font-black text-[#1E293B] mt-1">${statsData.stageCounts[s.key] || 0}</span>
     </div>
   `).join('');
 }
@@ -478,39 +478,39 @@ function renderAdminOrders() {
   }
 
   tbody.innerHTML = list.map(o => {
-    const isExpress = o.isExpress ? `<span class="bg-[#231F20] text-[#A6CE39] text-[9px] font-bold px-2 py-0.5 rounded-full ml-1 border border-[#A6CE39]">EXPRESS</span>` : '';
+    const isExpress = o.isExpress ? `<span class="bg-[#1E3304] text-[#A6CE39] text-[9px] font-bold px-2 py-0.5 rounded-full ml-1 border border-[#A6CE39]">EXPRESS</span>` : '';
     const statusBadges = {
-      PICKUP_REQUESTED: 'bg-[#F8FAF3] text-[#231F20] border border-[#E2E8D5]',
-      PICKED_UP: 'bg-[#F8FAF3] text-[#231F20] border border-[#E2E8D5]',
-      RECEIVED_IN_STORE: 'bg-[#F8FAF3] text-[#231F20] border border-[#E2E8D5]',
+      PICKUP_REQUESTED: 'bg-[#F8FAF3] text-[#1E3304] border border-[#E2E8D5]',
+      PICKED_UP: 'bg-[#F8FAF3] text-[#1E3304] border border-[#E2E8D5]',
+      RECEIVED_IN_STORE: 'bg-[#F8FAF3] text-[#1E3304] border border-[#E2E8D5]',
       WASHING: 'bg-amber-50 text-amber-900 border border-amber-200',
-      DRYING: 'bg-[#F8FAF3] text-[#231F20] border border-[#E2E8D5]',
-      IRONING: 'bg-[#F8FAF3] text-[#231F20] border border-[#E2E8D5]',
+      DRYING: 'bg-[#F8FAF3] text-[#1E3304] border border-[#E2E8D5]',
+      IRONING: 'bg-[#F8FAF3] text-[#1E3304] border border-[#E2E8D5]',
       PACKED: 'bg-[#F3F9E4] text-[#5A7812] border border-[#D8ECAB]',
       OUT_FOR_DELIVERY: 'bg-blue-50 text-blue-900 border border-blue-200',
-      DELIVERED: 'bg-[#231F20] text-[#A6CE39] font-bold border border-[#A6CE39]'
+      DELIVERED: 'bg-[#1E3304] text-[#A6CE39] font-bold border border-[#A6CE39]'
     };
 
     return `
       <tr class="hover:bg-[#F8FAF3] transition-colors">
-        <td class="p-3.5 font-mono font-bold text-black">${o.id} ${isExpress}</td>
+        <td class="p-3.5 font-mono font-bold text-[#1E293B]">${o.id} ${isExpress}</td>
         <td class="p-3.5">
-          <div class="font-bold text-black">${o.customerName}</div>
+          <div class="font-bold text-[#1E293B]">${o.customerName}</div>
           <div class="text-[#545454] font-mono text-[11px]">${o.customerPhone}</div>
         </td>
-        <td class="p-3.5"><span class="bg-[#EEF4E3] text-black px-2 py-0.5 rounded-full font-medium text-[11px]">${o.zone}</span></td>
+        <td class="p-3.5"><span class="bg-[#EEF4E3] text-[#1E293B] px-2 py-0.5 rounded-full font-medium text-[11px]">${o.zone}</span></td>
         <td class="p-3.5">
-          <span class="font-bold text-black">${o.totalPieces} Pieces</span>
+          <span class="font-bold text-[#1E293B]">${o.totalPieces} Pieces</span>
           <div class="text-[#898989] text-[10px] truncate max-w-[150px]">${(o.items || []).map(i => i.garmentName).slice(0, 2).join(', ')}...</div>
         </td>
-        <td class="p-3.5 font-bold text-black">
+        <td class="p-3.5 font-bold text-[#1E293B]">
           ₹${o.subtotal}
           <div class="text-[10px] ${o.paymentStatus === 'PAID' ? 'text-[#5A7812] font-bold' : 'text-[#FFC043]'}">${o.paymentStatus}</div>
         </td>
-        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusBadges[o.status] || 'bg-[#F8FAF3] text-black'}">${o.status.replace(/_/g, ' ')}</span></td>
+        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusBadges[o.status] || 'bg-[#F8FAF3] text-[#1E293B]'}">${o.status.replace(/_/g, ' ')}</span></td>
         <td class="p-3.5 text-[#545454]">${new Date(o.promisedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</td>
         <td class="p-3.5 text-right space-x-1">
-          <button onclick="previewThermalTags('${o.id}')" title="Print Garment Tags" class="p-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-black rounded-full">
+          <button onclick="previewThermalTags('${o.id}')" title="Print Garment Tags" class="p-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full">
             <i data-lucide="printer" class="w-3.5 h-3.5 inline"></i>
           </button>
         </td>
@@ -529,15 +529,15 @@ function setAdminTableTab(tab) {
   const filterContainer = document.getElementById('admin-orders-filter-container');
 
   if (tab === 'orders') {
-    if (ordersBtn) ordersBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-[#231F20] text-[#A6CE39] shadow-sm transition-all';
-    if (podBtn) podBtn.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-black transition-all';
+    if (ordersBtn) ordersBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm transition-all';
+    if (podBtn) podBtn.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all';
     if (ordersView) ordersView.classList.remove('hidden');
     if (podView) podView.classList.add('hidden');
     if (filterContainer) filterContainer.classList.remove('hidden');
     renderAdminOrders();
   } else {
-    if (podBtn) podBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-[#231F20] text-[#A6CE39] shadow-sm transition-all';
-    if (ordersBtn) ordersBtn.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-black transition-all';
+    if (podBtn) podBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm transition-all';
+    if (ordersBtn) ordersBtn.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all';
     if (podView) podView.classList.remove('hidden');
     if (ordersView) ordersView.classList.add('hidden');
     if (filterContainer) filterContainer.classList.add('hidden');
@@ -560,18 +560,18 @@ function renderAdminPodTable() {
     const isVerified = Boolean(o.podVerified);
     return `
       <tr class="hover:bg-[#F8FAF3] transition-colors border-b border-[#EEF4E3]">
-        <td class="p-3.5 font-mono font-bold text-black">${o.id}</td>
+        <td class="p-3.5 font-mono font-bold text-[#1E293B]">${o.id}</td>
         <td class="p-3.5">
-          <div class="font-bold text-black">${o.customerName}</div>
+          <div class="font-bold text-[#1E293B]">${o.customerName}</div>
           <div class="text-[#545454] font-mono text-[11px]">${o.customerPhone}</div>
         </td>
-        <td class="p-3.5 font-medium text-black">${o.assignedRider || 'Rajesh Kumar'}</td>
-        <td class="p-3.5"><span class="bg-[#EEF4E3] text-black px-2 py-0.5 rounded-full font-medium text-[11px]">${o.paymentMode || 'UPI / QR'}</span></td>
-        <td class="p-3.5 font-bold text-black">₹${o.subtotal}</td>
+        <td class="p-3.5 font-medium text-[#1E293B]">${o.assignedRider || 'Rajesh Kumar'}</td>
+        <td class="p-3.5"><span class="bg-[#EEF4E3] text-[#1E293B] px-2 py-0.5 rounded-full font-medium text-[11px]">${o.paymentMode || 'UPI / QR'}</span></td>
+        <td class="p-3.5 font-bold text-[#1E293B]">₹${o.subtotal}</td>
         <td class="p-3.5 text-[#545454]">${o.deliveredAt ? new Date(o.deliveredAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' }) : 'Today'}</td>
         <td class="p-3.5">
           ${o.podImage ? `
-            <button onclick="openAdminPodModal('${o.id}')" class="flex items-center space-x-1.5 px-3 py-1 bg-black text-white hover:bg-neutral-800 rounded-full font-bold text-[11px] transition">
+            <button onclick="openAdminPodModal('${o.id}')" class="flex items-center space-x-1.5 px-3 py-1 bg-[#2D5A1E] text-white hover:bg-neutral-800 rounded-full font-bold text-[11px] transition">
               <i data-lucide="image" class="w-3.5 h-3.5"></i>
               <span>View Photo</span>
             </button>
@@ -678,9 +678,9 @@ function setLeadsFilter(filter) {
     const btn = document.getElementById(`lfilter-${f}`);
     if (!btn) return;
     if (f === filter) {
-      btn.className = 'px-3 py-1 rounded-full font-bold text-black bg-white shadow-sm transition-all shrink-0 whitespace-nowrap';
+      btn.className = 'px-3 py-1 rounded-full font-bold text-[#1E293B] bg-white shadow-sm transition-all shrink-0 whitespace-nowrap';
     } else {
-      btn.className = 'px-3 py-1 rounded-full font-medium text-[#545454] hover:text-black transition-all shrink-0 whitespace-nowrap';
+      btn.className = 'px-3 py-1 rounded-full font-medium text-[#545454] hover:text-[#1E293B] transition-all shrink-0 whitespace-nowrap';
     }
   });
   renderManagerLeads();
@@ -738,8 +738,8 @@ function renderManagerLeads() {
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-1.5 flex-wrap">
-              <span class="font-bold text-black text-sm">${lead.customerName}</span>
-              ${attempts > 1 ? `<span class="bg-[#FFC043]/20 text-black text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#FFC043]">Called ${attempts}x</span>` : ''}
+              <span class="font-bold text-[#1E293B] text-sm">${lead.customerName}</span>
+              ${attempts > 1 ? `<span class="bg-[#FFC043]/20 text-[#1E293B] text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#FFC043]">Called ${attempts}x</span>` : ''}
               ${isUrgent && !isResolved && !isArchived ? '<span class="bg-red-50 text-[#E11900] text-[9px] font-bold px-1.5 py-0.5 rounded-full">SLA URGENT</span>' : ''}
             </div>
             <span class="text-xs font-mono text-[#545454]">${lead.phone}</span>
@@ -755,31 +755,31 @@ function renderManagerLeads() {
           </div>
         </div>
 
-        <div class="p-3 bg-[#F8FAF3] rounded-xl text-xs text-black border border-[#E2E8D5]">
+        <div class="p-3 bg-[#F8FAF3] rounded-xl text-xs text-[#1E293B] border border-[#E2E8D5]">
           <div class="flex items-center space-x-1.5 font-bold text-[#545454] text-[10px] uppercase mb-1">
             <span class="w-1.5 h-1.5 rounded-full bg-[#A6CE39]"></span>
             <span>${lead.channel}</span>
           </div>
           <p class="leading-relaxed">${lead.message}</p>
-          ${lead.address ? `<div class="mt-2 text-[11px] text-black font-medium">${lead.address} (${lead.zone})</div>` : ''}
+          ${lead.address ? `<div class="mt-2 text-[11px] text-[#1E293B] font-medium">${lead.address} (${lead.zone})</div>` : ''}
         </div>
 
         <div class="flex items-center justify-between text-xs text-[#545454] pt-2 border-t border-[#E2E8D5]">
           <span>
-            ${!isResolved && !isArchived ? `Callback SLA: <strong class="${lead.slaMinutesRemaining < 10 ? 'text-[#E11900]' : 'text-black'}">${lead.slaMinutesRemaining}m left</strong>` : `<span class="text-[#898989]">Closed</span>`}
+            ${!isResolved && !isArchived ? `Callback SLA: <strong class="${lead.slaMinutesRemaining < 10 ? 'text-[#E11900]' : 'text-[#1E293B]'}">${lead.slaMinutesRemaining}m left</strong>` : `<span class="text-[#898989]">Closed</span>`}
           </span>
 
           <div class="flex items-center space-x-1.5">
             ${!isResolved && !isArchived ? `
-              <button onclick="markLeadResolved('${lead.id}')" class="px-3 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-black rounded-full font-semibold text-xs transition-all">
+              <button onclick="markLeadResolved('${lead.id}')" class="px-3 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full font-semibold text-xs transition-all">
                 Mark Called
               </button>
-              <button onclick="convertLeadToOrder('${lead.id}')" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full font-bold text-xs flex items-center space-x-1 shadow-sm transition-all">
+              <button onclick="convertLeadToOrder('${lead.id}')" class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full font-bold text-xs flex items-center space-x-1 shadow-sm transition-all">
                 <i data-lucide="plus" class="w-3 h-3"></i>
                 <span>Book Order</span>
               </button>
             ` : `
-              <button onclick="archiveLead('${lead.id}')" class="px-3 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-black rounded-full font-semibold text-xs flex items-center space-x-1 transition-all">
+              <button onclick="archiveLead('${lead.id}')" class="px-3 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full font-semibold text-xs flex items-center space-x-1 transition-all">
                 <i data-lucide="archive" class="w-3 h-3"></i>
                 <span>${isArchived ? 'Archived' : 'Archive'}</span>
               </button>
@@ -896,15 +896,15 @@ function renderManagerTagging() {
     <div class="py-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div>
         <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-          <span class="font-mono font-bold text-black shrink-0 whitespace-nowrap">${o.id}</span>
-          <span class="text-xs font-bold text-black">${o.customerName}</span>
-          <span class="bg-[#EEF4E3] text-black text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">${o.status.replace(/_/g, ' ')}</span>
-          ${o.isExpress ? '<span class="bg-black text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#E11900] shrink-0 whitespace-nowrap">EXPRESS</span>' : ''}
+          <span class="font-mono font-bold text-[#1E293B] shrink-0 whitespace-nowrap">${o.id}</span>
+          <span class="text-xs font-bold text-[#1E293B]">${o.customerName}</span>
+          <span class="bg-[#EEF4E3] text-[#1E293B] text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">${o.status.replace(/_/g, ' ')}</span>
+          ${o.isExpress ? '<span class="bg-[#2D5A1E] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#E11900] shrink-0 whitespace-nowrap">EXPRESS</span>' : ''}
         </div>
         <p class="text-xs text-[#545454] mt-1">${o.totalPieces} Pieces Counted • Zone: ${o.zone} • ${o.customerPhone}</p>
         <div class="flex flex-wrap gap-1.5 mt-2">
           ${(o.items || []).map(item => `
-            <span class="bg-[#F8FAF3] border border-[#E2E8D5] text-black text-[10px] px-2.5 py-0.5 rounded-full font-medium">
+            <span class="bg-[#F8FAF3] border border-[#E2E8D5] text-[#1E293B] text-[10px] px-2.5 py-0.5 rounded-full font-medium">
               #${item.pieceNumber} ${item.garmentName} (${item.service})
               ${item.hasStain ? '<strong class="text-[#E11900]">Stain Care</strong>' : ''}
             </span>
@@ -912,12 +912,12 @@ function renderManagerTagging() {
         </div>
       </div>
       <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 shrink-0 mt-2 md:mt-0">
-        <button onclick="previewThermalTags('${o.id}')" class="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5 transition-all">
+        <button onclick="previewThermalTags('${o.id}')" class="px-4 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5 transition-all">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i>
           <span>Print Tags</span>
         </button>
         ${o.status === 'RECEIVED_IN_STORE' ? `
-          <button onclick="updateOrderStatus('${o.id}', 'WASHING')" class="px-4 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#231F20] rounded-full text-xs font-bold flex items-center space-x-1 shadow-sm transition-all">
+          <button onclick="updateOrderStatus('${o.id}', 'WASHING')" class="px-4 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-bold flex items-center space-x-1 shadow-sm transition-all">
             <span>Send to Washers →</span>
           </button>
         ` : ''}
@@ -980,7 +980,7 @@ function renderDispatchRecommendations() {
       zone: pendingPickups[0].zone,
       title: `Rider Available at Store: ${availableRiders[0].name}`,
       badge: `Standby at Counter`,
-      badgeColor: 'bg-[#EEF4E3] text-black border-[#E2E8D5]',
+      badgeColor: 'bg-[#EEF4E3] text-[#1E293B] border-[#E2E8D5]',
       description: `${availableRiders[0].name} is idle at store counter. Nearest pending pickup is ${pendingPickups[0].customerName} in ${pendingPickups[0].zone}.`,
       actionLabel: `Dispatch ${availableRiders[0].name}`,
       actionFn: `assignOrderRider('${pendingPickups[0].id}', '${availableRiders[0].name}')`
@@ -1000,13 +1000,13 @@ function renderDispatchRecommendations() {
     <div class="p-3.5 rounded-xl border border-[#E2E8D5] bg-[#F8FAF3] space-y-2">
       <div class="flex items-start justify-between">
         <div>
-          <span class="font-bold text-black text-xs">${r.title}</span>
+          <span class="font-bold text-[#1E293B] text-xs">${r.title}</span>
           <div class="text-[11px] text-[#545454] mt-0.5 leading-relaxed">${r.description}</div>
         </div>
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${r.badgeColor} shrink-0 ml-2">${r.badge}</span>
       </div>
       <div class="pt-1 flex justify-end">
-        <button onclick="${r.actionFn}" class="px-3.5 py-1 bg-black hover:bg-neutral-800 text-white rounded-full font-bold text-[11px] transition">
+        <button onclick="${r.actionFn}" class="px-3.5 py-1 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full font-bold text-[11px] transition">
           ${r.actionLabel}
         </button>
       </div>
@@ -1088,16 +1088,16 @@ function searchCustomers(query) {
     if (tbody) {
       tbody.innerHTML = list.map(c => `
         <tr class="hover:bg-[#F8FAF3] transition-colors">
-          <td class="p-3 font-mono font-bold text-black">${c.id}</td>
-          <td class="p-3 font-bold text-black">${c.name}</td>
+          <td class="p-3 font-mono font-bold text-[#1E293B]">${c.id}</td>
+          <td class="p-3 font-bold text-[#1E293B]">${c.name}</td>
           <td class="p-3 font-mono text-[#545454]">${c.phone}</td>
           <td class="p-3 text-[#545454]">
             <div>${c.address}</div>
-            <span class="text-[10px] bg-[#EEF4E3] text-black px-2 py-0.5 rounded-full font-medium">${c.zone}</span>
+            <span class="text-[10px] bg-[#EEF4E3] text-[#1E293B] px-2 py-0.5 rounded-full font-medium">${c.zone}</span>
           </td>
-          <td class="p-3 font-bold text-black">${c.totalOrders} Orders</td>
+          <td class="p-3 font-bold text-[#1E293B]">${c.totalOrders} Orders</td>
           <td class="p-3 text-right">
-            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full font-bold text-xs shadow-sm transition-all">
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full font-bold text-xs shadow-sm transition-all">
               + New Order
             </button>
           </td>
@@ -1110,18 +1110,18 @@ function searchCustomers(query) {
         <div class="p-3.5 bg-white border border-[#E2E8D5] rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-1.5">
-              <span class="font-mono text-[10px] font-bold text-black bg-[#EEF4E3] px-2 py-0.5 rounded-full">${c.id}</span>
-              <span class="font-bold text-black text-xs">${c.name}</span>
+              <span class="font-mono text-[10px] font-bold text-[#1E293B] bg-[#EEF4E3] px-2 py-0.5 rounded-full">${c.id}</span>
+              <span class="font-bold text-[#1E293B] text-xs">${c.name}</span>
             </div>
-            <span class="text-[10px] bg-[#EEF4E3] text-black px-2 py-0.5 rounded-full font-semibold shrink-0">${c.zone}</span>
+            <span class="text-[10px] bg-[#EEF4E3] text-[#1E293B] px-2 py-0.5 rounded-full font-semibold shrink-0">${c.zone}</span>
           </div>
           <div class="text-xs text-[#545454]">
-            <div class="font-mono text-[11px] text-black">${c.phone}</div>
+            <div class="font-mono text-[11px] text-[#1E293B]">${c.phone}</div>
             <div class="text-[11px] text-[#898989] truncate">${c.address}</div>
           </div>
           <div class="flex items-center justify-between pt-2 border-t border-[#E2E8D5] text-xs">
             <span class="font-medium text-[#545454]">${c.totalOrders} Orders</span>
-            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full font-bold text-xs shadow-sm transition-all">
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full font-bold text-xs shadow-sm transition-all">
               + New Order
             </button>
           </div>
@@ -1205,16 +1205,16 @@ function renderKanbanColumn(ordersList, nextStatus, nextBtnLabel, isFinal = fals
   return sorted.map(o => {
     const isExpress = o.isExpress;
     return `
-      <div class="bg-white p-4 rounded-2xl border ${isExpress ? 'border-black ring-1 ring-black' : 'border-[#E2E8D5]'} shadow-sm space-y-3">
+      <div class="bg-white p-4 rounded-2xl border ${isExpress ? 'border-[#A6CE39] ring-1 ring-[#A6CE39]' : 'border-[#E2E8D5]'} shadow-sm space-y-3">
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-1.5">
-              <span class="font-mono font-bold text-black text-sm">${o.id}</span>
-              ${isExpress ? '<span class="bg-[#231F20] text-[#A6CE39] text-[9px] font-bold px-2 py-0.5 rounded-full border border-[#A6CE39]">EXPRESS 24H</span>' : ''}
+              <span class="font-mono font-bold text-[#1E293B] text-sm">${o.id}</span>
+              ${isExpress ? '<span class="bg-[#1E3304] text-[#A6CE39] text-[9px] font-bold px-2 py-0.5 rounded-full border border-[#A6CE39]">EXPRESS 24H</span>' : ''}
             </div>
             <span class="text-xs font-semibold text-neutral-700">${o.customerName}</span>
           </div>
-          <span class="text-xs font-semibold bg-[#F8FAF3] text-black px-2.5 py-0.5 rounded-full">${o.totalPieces} Pcs</span>
+          <span class="text-xs font-semibold bg-[#F8FAF3] text-[#1E293B] px-2.5 py-0.5 rounded-full">${o.totalPieces} Pcs</span>
         </div>
 
         <div class="space-y-1 bg-[#F8FAF3] p-3 rounded-xl border border-[#EEF4E3] text-xs">
@@ -1233,12 +1233,12 @@ function renderKanbanColumn(ordersList, nextStatus, nextBtnLabel, isFinal = fals
             <span class="text-[10px] text-neutral-400 font-medium">${o.assignedWasher || 'Staff: Suresh & Ramesh'}</span>
           </div>
           ${!isFinal ? `
-            <button onclick="updateOrderStatus('${o.id}', '${nextStatus}')" class="px-3.5 py-1.5 bg-[#231F20] hover:bg-black text-[#A6CE39] text-xs font-bold rounded-full transition-transform active:scale-95">
+            <button onclick="updateOrderStatus('${o.id}', '${nextStatus}')" class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-[#A6CE39] text-xs font-bold rounded-full transition-transform active:scale-95">
               ${nextBtnLabel}
             </button>
           ` : `
             <div class="flex items-center space-x-1.5">
-              <button onclick="openWhatsAppReadyModal('${o.id}')" class="px-2.5 py-1 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#231F20] rounded-full text-[10px] font-bold flex items-center space-x-1 shadow-sm transition">
+              <button onclick="openWhatsAppReadyModal('${o.id}')" class="px-2.5 py-1 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-[10px] font-bold flex items-center space-x-1 shadow-sm transition">
                 <i data-lucide="send" class="w-2.5 h-2.5"></i>
                 <span>Notify</span>
               </button>
@@ -1288,10 +1288,10 @@ function renderRiderPickups(pickups) {
       <div class="flex items-start justify-between">
         <div>
           <span class="font-mono text-neutral-500 font-semibold text-xs">${p.id}</span>
-          <h4 class="font-bold text-black text-sm">${p.customerName}</h4>
+          <h4 class="font-bold text-[#1E293B] text-sm">${p.customerName}</h4>
           <span class="text-xs text-neutral-500 font-mono">${p.customerPhone}</span>
         </div>
-        <span class="text-[10px] bg-[#EEF4E3] text-black font-semibold px-2.5 py-0.5 rounded-full">${p.zone}</span>
+        <span class="text-[10px] bg-[#EEF4E3] text-[#1E293B] font-semibold px-2.5 py-0.5 rounded-full">${p.zone}</span>
       </div>
 
       <div class="text-xs text-neutral-700 bg-[#F8FAF3] p-3 rounded-xl border border-[#EEF4E3]">
@@ -1299,17 +1299,17 @@ function renderRiderPickups(pickups) {
       </div>
 
       <div class="grid grid-cols-2 gap-2 text-xs">
-        <a href="tel:${p.customerPhone}" class="py-2.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full font-semibold text-black flex items-center justify-center space-x-1.5 transition">
+        <a href="tel:${p.customerPhone}" class="py-2.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full font-semibold text-[#1E293B] flex items-center justify-center space-x-1.5 transition">
           <i data-lucide="phone" class="w-3.5 h-3.5"></i>
           <span>Call</span>
         </a>
-        <a href="https://maps.google.com/?q=${encodeURIComponent(p.customerAddress)}" target="_blank" class="py-2.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full font-semibold text-black flex items-center justify-center space-x-1.5 transition">
+        <a href="https://maps.google.com/?q=${encodeURIComponent(p.customerAddress)}" target="_blank" class="py-2.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] rounded-full font-semibold text-[#1E293B] flex items-center justify-center space-x-1.5 transition">
           <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
           <span>Directions</span>
         </a>
       </div>
 
-      <button onclick="promptRiderPickupIntake('${p.id}')" class="w-full py-3 bg-[#231F20] hover:bg-black text-[#A6CE39] rounded-full font-bold text-xs transition flex items-center justify-center space-x-1.5 active:scale-98">
+      <button onclick="promptRiderPickupIntake('${p.id}')" class="w-full py-3 bg-[#2D5A1E] hover:bg-[#234717] text-[#A6CE39] rounded-full font-bold text-xs transition flex items-center justify-center space-x-1.5 active:scale-98">
         <i data-lucide="check" class="w-4 h-4"></i>
         <span>Confirm Pickup</span>
       </button>
@@ -1354,10 +1354,10 @@ async function renderRiderDeliveries() {
       <div class="bg-[#F8FAF3] p-4 flex items-center justify-between border-b border-[#E2E8D5]">
         <div>
           <span class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">Cluster</span>
-          <h4 class="font-bold text-black text-sm">${cluster.zoneName}</h4>
+          <h4 class="font-bold text-[#1E293B] text-sm">${cluster.zoneName}</h4>
         </div>
         <div class="text-right">
-          <span class="bg-black text-white text-xs font-bold px-2.5 py-0.5 rounded-full">${cluster.orders.length} Orders</span>
+          <span class="bg-[#2D5A1E] text-white text-xs font-bold px-2.5 py-0.5 rounded-full">${cluster.orders.length} Orders</span>
           <div class="text-[10px] text-neutral-600 font-semibold mt-0.5">Collect ₹${cluster.totalAmountToCollect}</div>
         </div>
       </div>
@@ -1367,22 +1367,22 @@ async function renderRiderDeliveries() {
           <div class="pt-3 first:pt-0 space-y-2 text-xs">
             <div class="flex items-start justify-between">
               <div>
-                <div class="font-bold text-black">${o.customerName}</div>
+                <div class="font-bold text-[#1E293B]">${o.customerName}</div>
                 <div class="text-neutral-500 font-mono text-[11px]">${o.customerPhone}</div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-black">₹${o.subtotal}</div>
+                <div class="font-bold text-[#1E293B]">₹${o.subtotal}</div>
                 <span class="text-[10px] font-bold ${o.paymentStatus === 'PAID' ? 'text-[#5A7812]' : 'text-[#FFC043]'}">${o.paymentStatus}</span>
               </div>
             </div>
             <div class="text-neutral-600 text-[11px]">${o.customerAddress}</div>
             <div class="flex space-x-2 pt-1">
               ${o.status === 'PACKED' ? `
-                <button onclick="updateOrderStatus('${o.id}', 'OUT_FOR_DELIVERY')" class="flex-1 py-2 bg-[#231F20] hover:bg-black text-[#A6CE39] rounded-full font-bold text-xs transition">
+                <button onclick="updateOrderStatus('${o.id}', 'OUT_FOR_DELIVERY')" class="flex-1 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-[#A6CE39] rounded-full font-bold text-xs transition">
                   Start Trip
                 </button>
               ` : `
-                <button onclick="completeRiderDelivery('${o.id}', ${o.subtotal})" class="flex-1 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#231F20] rounded-full font-bold text-xs flex items-center justify-center space-x-1 transition">
+                <button onclick="completeRiderDelivery('${o.id}', ${o.subtotal})" class="flex-1 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full font-bold text-xs flex items-center justify-center space-x-1 transition">
                   <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
                   <span>Mark Delivered & Paid</span>
                 </button>
@@ -1656,8 +1656,8 @@ async function previewThermalTags(orderId) {
 
     const container = document.getElementById('print-thermal-container');
     container.innerHTML = tags.map(tag => `
-      <div class="bg-white p-4 border-2 border-dashed border-slate-400 w-[72mm] shadow-md text-black font-mono text-[11px] leading-tight space-y-2">
-        <div class="text-center border-b border-black pb-1.5">
+      <div class="bg-white p-4 border-2 border-dashed border-slate-400 w-[72mm] shadow-md text-[#1E293B] font-mono text-[11px] leading-tight space-y-2">
+        <div class="text-center border-b border-[#A6CE39] pb-1.5">
           <div class="font-extrabold text-sm uppercase">${storeSettings.storeName}</div>
           <div class="text-[9px]">${storeSettings.phone} • ${storeSettings.address}</div>
         </div>
@@ -1673,11 +1673,11 @@ async function previewThermalTags(orderId) {
           <div><strong>Promised:</strong> ${new Date(tag.promisedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
         </div>
 
-        <div class="border-t border-b border-black py-1">
+        <div class="border-t border-b border-[#A6CE39] py-1">
           <div class="font-black text-xs">${tag.garmentName}</div>
           <div class="font-bold">${tag.service}</div>
-          ${tag.hasStain ? `<div class="bg-black text-white px-1 text-[10px] font-bold mt-1">CARE: ${tag.specialNote || 'STAIN REMOVAL'}</div>` : ''}
-          ${tag.isExpress ? `<div class="bg-black text-white px-1 text-[10px] font-black mt-1">24H EXPRESS PRIORITY</div>` : ''}
+          ${tag.hasStain ? `<div class="bg-[#2D5A1E] text-white px-1 text-[10px] font-bold mt-1">CARE: ${tag.specialNote || 'STAIN REMOVAL'}</div>` : ''}
+          ${tag.isExpress ? `<div class="bg-[#2D5A1E] text-white px-1 text-[10px] font-black mt-1">24H EXPRESS PRIORITY</div>` : ''}
         </div>
 
         <div class="text-center pt-1">
@@ -1990,12 +1990,12 @@ function renderOrderItemsTable() {
   tbody.innerHTML = currentNewOrderItems.map((item, idx) => `
     <tr>
       <td class="p-2.5 font-bold font-mono">${idx + 1}</td>
-      <td class="p-2.5 font-semibold text-black">${item.garmentName}</td>
+      <td class="p-2.5 font-semibold text-[#1E293B]">${item.garmentName}</td>
       <td class="p-2.5">${item.service}</td>
       <td class="p-2.5">${item.hasStain ? `<span class="text-[#E11900] font-semibold">${item.specialNote}</span>` : '—'}</td>
       <td class="p-2.5 text-right font-bold font-mono">₹${item.rate}</td>
       <td class="p-2.5 text-right">
-        <button onclick="removeGarmentItem(${idx})" class="text-neutral-500 hover:text-black font-semibold text-xs">Remove</button>
+        <button onclick="removeGarmentItem(${idx})" class="text-neutral-500 hover:text-[#1E293B] font-semibold text-xs">Remove</button>
       </td>
     </tr>
   `).join('');
@@ -2228,7 +2228,7 @@ function setupExcelDropZone() {
     dropZone.addEventListener(eventName, (e) => {
       e.preventDefault();
       e.stopPropagation();
-      dropZone.classList.add('border-black', 'bg-[#EEF4E3]');
+      dropZone.classList.add('border-[#A6CE39]', 'bg-[#EEF4E3]');
     }, false);
   });
 
@@ -2236,7 +2236,7 @@ function setupExcelDropZone() {
     dropZone.addEventListener(eventName, (e) => {
       e.preventDefault();
       e.stopPropagation();
-      dropZone.classList.remove('border-black', 'bg-[#EEF4E3]');
+      dropZone.classList.remove('border-[#A6CE39]', 'bg-[#EEF4E3]');
     }, false);
   });
 
@@ -2399,7 +2399,7 @@ function renderFleetCards(riders) {
     if (isOverdue) {
       statusBadge = `<span class="bg-red-50 text-[#E11900] border border-red-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Delayed (+${r.currentRun ? r.currentRun.unaccountedGapMinutes : 12}m)</span>`;
     } else if (isReturning) {
-      statusBadge = `<span class="bg-[#EEF4E3] text-black text-[10px] font-semibold px-2.5 py-0.5 rounded-full">En Route</span>`;
+      statusBadge = `<span class="bg-[#EEF4E3] text-[#1E293B] text-[10px] font-semibold px-2.5 py-0.5 rounded-full">En Route</span>`;
     } else if (isIdle) {
       statusBadge = `<span class="bg-[#F3F9E4] text-[#5A7812] text-[10px] font-semibold px-2.5 py-0.5 rounded-full">Available</span>`;
     } else {
@@ -2410,12 +2410,12 @@ function renderFleetCards(riders) {
       <div class="bg-white p-4 rounded-2xl border ${isOverdue ? 'border-red-300 ring-1 ring-red-200' : 'border-[#E2E8D5]'} shadow-sm space-y-3">
         <div class="flex items-start justify-between">
           <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-full ${isOverdue ? 'bg-[#E11900] text-white' : isIdle ? 'bg-[#A6CE39] text-[#231F20]' : 'bg-[#231F20] text-[#A6CE39]'} flex items-center justify-center font-bold text-xs">
+            <div class="w-9 h-9 rounded-full ${isOverdue ? 'bg-[#E11900] text-white' : isIdle ? 'bg-[#A6CE39] text-[#1E3304]' : 'bg-[#1E3304] text-[#A6CE39]'} flex items-center justify-center font-bold text-xs">
               ${r.name.split(' ').map(n => n[0]).join('')}
             </div>
             <div>
               <div class="flex items-center space-x-1.5">
-                <h4 class="font-bold text-black text-sm">${r.name}</h4>
+                <h4 class="font-bold text-[#1E293B] text-sm">${r.name}</h4>
                 <span class="text-[10px] text-neutral-500 font-mono">(${r.vehicle})</span>
               </div>
               <div class="text-[11px] text-neutral-500">${r.phone}</div>
@@ -2433,7 +2433,7 @@ function renderFleetCards(riders) {
           ${r.currentRun ? `
             <div class="pt-1.5 border-t border-[#E2E8D5] flex items-center justify-between text-[11px] text-neutral-600">
               <span>Run: <strong>${r.currentRun.zone}</strong> (${r.currentRun.totalOrders} orders)</span>
-              <span>Due: <strong class="${isOverdue ? 'text-[#E11900] font-bold' : 'text-black'}">${new Date(r.currentRun.expectedReturnAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</strong></span>
+              <span>Due: <strong class="${isOverdue ? 'text-[#E11900] font-bold' : 'text-[#1E293B]'}">${new Date(r.currentRun.expectedReturnAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</strong></span>
             </div>
             ${isOverdue ? `
               <div class="p-2 bg-red-50 text-[#E11900] text-[11px] rounded-lg font-semibold border border-red-100">
@@ -2446,7 +2446,7 @@ function renderFleetCards(riders) {
         </div>
 
         <div class="flex items-center justify-between pt-1">
-          <span class="text-[10px] text-neutral-500">Punctuality: <strong class="text-black font-semibold">${r.todayStats.integrityScore}%</strong></span>
+          <span class="text-[10px] text-neutral-500">Punctuality: <strong class="text-[#1E293B] font-semibold">${r.todayStats.integrityScore}%</strong></span>
           <div class="flex space-x-2">
             ${isOverdue ? `
               <button onclick="sendRiderWarning('${r.id}')" class="px-3.5 py-1.5 bg-[#E11900] hover:bg-red-700 text-white rounded-full text-xs font-semibold flex items-center space-x-1 transition">
@@ -2455,7 +2455,7 @@ function renderFleetCards(riders) {
               </button>
             ` : ''}
             ${!isIdle ? `
-              <button onclick="checkInAtStoreCounter('${r.id}')" class="px-3.5 py-1.5 bg-[#231F20] hover:bg-black text-[#A6CE39] rounded-full text-xs font-bold flex items-center space-x-1 transition">
+              <button onclick="checkInAtStoreCounter('${r.id}')" class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-[#A6CE39] rounded-full text-xs font-bold flex items-center space-x-1 transition">
                 <i data-lucide="check" class="w-3.5 h-3.5"></i>
                 <span>Check In</span>
               </button>
@@ -2476,9 +2476,9 @@ function renderFleetAuditTable(riders) {
     const isGood = r.todayStats.integrityScore >= 90;
     return `
       <tr class="hover:bg-[#F8FAF3] transition-colors border-b border-[#EEF4E3]">
-        <td class="p-3 font-semibold text-black">${r.name}</td>
+        <td class="p-3 font-semibold text-[#1E293B]">${r.name}</td>
         <td class="p-3 text-neutral-500 font-mono text-[11px]">${r.vehicle}</td>
-        <td class="p-3 font-semibold text-black">${r.todayStats.completedRuns} Trips</td>
+        <td class="p-3 font-semibold text-[#1E293B]">${r.todayStats.completedRuns} Trips</td>
         <td class="p-3">
           <span class="font-semibold ${r.todayStats.delayedReturns > 0 ? 'text-[#FFC043]' : 'text-[#A6CE39]'}">
             ${Math.round((r.todayStats.onTimeRuns / Math.max(1, r.todayStats.completedRuns)) * 100)}%
