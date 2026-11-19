@@ -350,19 +350,19 @@
     <!-- ============================================================== -->
     <!-- PERSONA 2: FRONT DESK / STORE MANAGER SCREEN                  -->
     <!-- ============================================================== -->
-    <div id="screen-manager" class="persona-screen space-y-6 hidden">
+    <div id="screen-manager" class="persona-screen space-y-6 hidden w-full max-w-full overflow-x-hidden">
       <!-- Header Banner with Fast Action -->
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h2 class="text-2xl font-extrabold text-slate-900">Front Desk & Operations Counter</h2>
-          <p class="text-sm text-slate-500">Capture inquiries, fast billing, count & print garment thermal tags, assign dispatches.</p>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Front Desk & Operations Counter</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Capture inquiries, fast billing, count & print garment thermal tags, assign dispatches.</p>
         </div>
-        <div class="flex items-center space-x-3">
-          <button onclick="openNewCustomerModal()" class="px-3.5 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-sm flex items-center space-x-1.5">
+        <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
+          <button onclick="openNewCustomerModal()" class="flex-1 sm:flex-initial px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-sm flex items-center justify-center space-x-1.5">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
             <span>New Customer</span>
           </button>
-          <button onclick="openNewOrderModal()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center space-x-1.5">
+          <button onclick="openNewOrderModal()" class="flex-1 sm:flex-initial px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center justify-center space-x-1.5">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             <span>New Order POS</span>
           </button>
@@ -370,18 +370,18 @@
       </div>
 
       <!-- Manager Tabs -->
-      <div class="flex border-b border-slate-200 space-x-6 text-sm font-semibold">
-        <button onclick="setManagerTab('leads')" id="mtab-leads" class="pb-3 border-b-2 border-teal-600 text-teal-700 flex items-center space-x-2">
-          <i data-lucide="phone-call" class="w-4 h-4"></i>
+      <div class="flex border-b border-slate-200 overflow-x-auto no-scrollbar flex-nowrap space-x-2 sm:space-x-6 text-xs sm:text-sm font-semibold w-full pb-0.5">
+        <button onclick="setManagerTab('leads')" id="mtab-leads" class="pb-2.5 sm:pb-3 border-b-2 border-teal-600 text-teal-700 flex items-center space-x-1.5 sm:space-x-2 shrink-0 whitespace-nowrap">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           <span>Inbound Leads & Missed Calls</span>
-          <span id="badge-leads-count" class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+          <span id="badge-leads-count" class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">0</span>
         </button>
-        <button onclick="setManagerTab('tagging')" id="mtab-tagging" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-2">
-          <i data-lucide="tag" class="w-4 h-4"></i>
+        <button onclick="setManagerTab('tagging')" id="mtab-tagging" class="pb-2.5 sm:pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-1.5 sm:space-x-2 shrink-0 whitespace-nowrap">
+          <i data-lucide="tag" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           <span>Tagging & Intake Counter</span>
         </button>
-        <button onclick="setManagerTab('customers')" id="mtab-customers" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-2">
-          <i data-lucide="contact" class="w-4 h-4"></i>
+        <button onclick="setManagerTab('customers')" id="mtab-customers" class="pb-2.5 sm:pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-1.5 sm:space-x-2 shrink-0 whitespace-nowrap">
+          <i data-lucide="contact" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           <span>Search 2,000 Customers</span>
         </button>
       </div>
@@ -397,30 +397,30 @@
         </div>
 
         <!-- Filter & Inbox Cleanup Toolbar -->
-        <div class="bg-white p-3 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div class="bg-white p-3 rounded-xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs w-full max-w-full">
           <!-- Filter Tabs -->
-          <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200">
-            <button onclick="setLeadsFilter('active')" id="lfilter-active" class="px-3 py-1 rounded-md font-bold text-teal-800 bg-white shadow-sm transition-all">
+          <div class="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 overflow-x-auto no-scrollbar flex-nowrap">
+            <button onclick="setLeadsFilter('active')" id="lfilter-active" class="px-2.5 sm:px-3 py-1 rounded-md font-bold text-teal-800 bg-white shadow-sm transition-all shrink-0 whitespace-nowrap">
               Active Pending (<span id="lcount-active">0</span>)
             </button>
-            <button onclick="setLeadsFilter('all')" id="lfilter-all" class="px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all">
+            <button onclick="setLeadsFilter('all')" id="lfilter-all" class="px-2.5 sm:px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all shrink-0 whitespace-nowrap">
               All (<span id="lcount-all">0</span>)
             </button>
-            <button onclick="setLeadsFilter('resolved')" id="lfilter-resolved" class="px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all">
+            <button onclick="setLeadsFilter('resolved')" id="lfilter-resolved" class="px-2.5 sm:px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all shrink-0 whitespace-nowrap">
               Resolved (<span id="lcount-resolved">0</span>)
             </button>
-            <button onclick="setLeadsFilter('archived')" id="lfilter-archived" class="px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all">
+            <button onclick="setLeadsFilter('archived')" id="lfilter-archived" class="px-2.5 sm:px-3 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition-all shrink-0 whitespace-nowrap">
               Archived (<span id="lcount-archived">0</span>)
             </button>
           </div>
 
           <!-- Cleanup Actions -->
-          <div class="flex items-center space-x-2">
-            <button onclick="clearResolvedLeads('archive')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold flex items-center space-x-1 transition-colors" title="Move processed cards to Archive">
+          <div class="flex items-center space-x-2 shrink-0">
+            <button onclick="clearResolvedLeads('archive')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold flex items-center space-x-1 transition-colors text-xs" title="Move processed cards to Archive">
               <i data-lucide="archive" class="w-3.5 h-3.5 text-slate-500"></i>
               <span>Archive Resolved</span>
             </button>
-            <button onclick="clearResolvedLeads('delete')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg font-semibold flex items-center space-x-1 transition-colors" title="Permanently delete processed cards">
+            <button onclick="clearResolvedLeads('delete')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg font-semibold flex items-center space-x-1 transition-colors text-xs" title="Permanently delete processed cards">
               <i data-lucide="trash-2" class="w-3.5 h-3.5 text-red-500"></i>
               <span>Clean Resolved</span>
             </button>
@@ -445,19 +445,26 @@
       </div>
 
       <!-- TAB 3: CUSTOMER SEARCH DIRECTORY (2,000 records) -->
-      <div id="manager-view-customers" class="space-y-4 hidden">
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <div id="manager-view-customers" class="space-y-4 hidden w-full max-w-full">
+        <div class="bg-white p-3 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4 w-full max-w-full">
           <div class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
               <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-slate-400"></i>
               <input type="text" id="cust-search-input" onkeyup="searchCustomers(this.value)" placeholder="Search across 2,000 customers by name, phone (+91...), address, or zone..." class="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none">
             </div>
-            <button onclick="openExcelUploadModal()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-semibold flex items-center space-x-1.5 shrink-0">
+            <button onclick="openExcelUploadModal()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-semibold flex items-center justify-center space-x-1.5 shrink-0">
               <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
               <span>Import Excel / CSV</span>
             </button>
           </div>
-          <div class="overflow-x-auto">
+
+          <!-- Mobile Cards View for Small Screens (< 640px) -->
+          <div id="customers-mobile-cards" class="block sm:hidden space-y-2.5">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Desktop Table View for Screens (>= 640px) -->
+          <div class="hidden sm:block overflow-x-auto w-full max-w-full">
             <table class="w-full text-left text-xs border-collapse">
               <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
                 <tr>

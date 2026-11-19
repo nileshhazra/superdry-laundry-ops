@@ -249,17 +249,23 @@ function setManagerTab(tab) {
   ['leads', 'tagging', 'customers'].forEach(t => {
     const btn = document.getElementById(`mtab-${t}`);
     const view = document.getElementById(`manager-view-${t}`);
+    if (!btn || !view) return;
     if (t === tab) {
-      btn.className = 'pb-3 border-b-2 border-teal-600 text-teal-700 flex items-center space-x-2 font-semibold shrink-0';
+      btn.className = 'pb-2.5 sm:pb-3 border-b-2 border-teal-600 text-teal-700 flex items-center space-x-1.5 sm:space-x-2 font-semibold shrink-0 whitespace-nowrap';
       view.classList.remove('hidden');
     } else {
-      btn.className = 'pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-2 font-semibold shrink-0';
+      btn.className = 'pb-2.5 sm:pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-1.5 sm:space-x-2 font-semibold shrink-0 whitespace-nowrap';
       view.classList.add('hidden');
     }
   });
 
-  if (tab === 'customers') {
-    searchCustomers('');
+  if (tab === 'leads') {
+    renderManagerLeads();
+  } else if (tab === 'tagging') {
+    renderManagerTagging();
+  } else if (tab === 'customers') {
+    const q = document.getElementById('cust-search-input')?.value || '';
+    searchCustomers(q);
   }
   lucide.createIcons();
 }
@@ -713,11 +719,11 @@ function renderManagerTagging() {
   container.innerHTML = ordersToTag.map(o => `
     <div class="py-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div>
-        <div class="flex items-center space-x-2">
-          <span class="font-mono font-bold text-slate-900">${o.id}</span>
+        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <span class="font-mono font-bold text-slate-900 shrink-0 whitespace-nowrap">${o.id}</span>
           <span class="text-xs font-bold text-slate-700">${o.customerName}</span>
-          <span class="bg-cyan-100 text-cyan-800 text-[10px] font-bold px-2 py-0.5 rounded">${o.status.replace(/_/g, ' ')}</span>
-          ${o.isExpress ? '<span class="bg-red-100 text-red-700 text-[10px] font-black px-1.5 py-0.5 rounded">⚡ EXPRESS</span>' : ''}
+          <span class="bg-cyan-100 text-cyan-800 text-[10px] font-bold px-2 py-0.5 rounded shrink-0 whitespace-nowrap">${o.status.replace(/_/g, ' ')}</span>
+          ${o.isExpress ? '<span class="bg-red-100 text-red-700 text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 whitespace-nowrap">⚡ EXPRESS</span>' : ''}
         </div>
         <p class="text-xs text-slate-500 mt-1">${o.totalPieces} Pieces Counted • Zone: ${o.zone} • ${o.customerPhone}</p>
         <div class="flex flex-wrap gap-1.5 mt-2">
@@ -729,7 +735,7 @@ function renderManagerTagging() {
           `).join('')}
         </div>
       </div>
-      <div class="flex items-center space-x-2 shrink-0">
+      <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 shrink-0 mt-2 md:mt-0">
         <button onclick="previewThermalTags('${o.id}')" class="px-3 py-1.5 bg-slate-900 hover:bg-black text-white rounded-lg text-xs font-bold shadow-sm flex items-center space-x-1.5">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i>
           <span>Print Thermal Tags</span>
@@ -773,30 +779,57 @@ function searchCustomers(query) {
     }
 
     const tbody = document.getElementById('customers-table-body');
-    if (!tbody) return;
+    const mobileCards = document.getElementById('customers-mobile-cards');
 
     if (list.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">No customers found matching "${query}".</td></tr>`;
+      if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">No customers found matching "${query}".</td></tr>`;
+      if (mobileCards) mobileCards.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">No customers found matching "${query}".</div>`;
       return;
     }
 
-    tbody.innerHTML = list.map(c => `
-      <tr class="hover:bg-slate-50">
-        <td class="p-3 font-mono font-bold text-teal-700">${c.id}</td>
-        <td class="p-3 font-bold text-slate-900">${c.name}</td>
-        <td class="p-3 font-mono text-slate-600">${c.phone}</td>
-        <td class="p-3 text-slate-600">
-          <div>${c.address}</div>
-          <span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">${c.zone}</span>
-        </td>
-        <td class="p-3 font-bold text-slate-800">${c.totalOrders} Orders</td>
-        <td class="p-3 text-right">
-          <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-2.5 py-1 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-md font-bold text-[11px]">
-            + New Order
-          </button>
-        </td>
-      </tr>
-    `).join('');
+    if (tbody) {
+      tbody.innerHTML = list.map(c => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-3 font-mono font-bold text-teal-700">${c.id}</td>
+          <td class="p-3 font-bold text-slate-900">${c.name}</td>
+          <td class="p-3 font-mono text-slate-600">${c.phone}</td>
+          <td class="p-3 text-slate-600">
+            <div>${c.address}</div>
+            <span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">${c.zone}</span>
+          </td>
+          <td class="p-3 font-bold text-slate-800">${c.totalOrders} Orders</td>
+          <td class="p-3 text-right">
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-2.5 py-1 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-md font-bold text-[11px]">
+              + New Order
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    if (mobileCards) {
+      mobileCards.innerHTML = list.map(c => `
+        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-1.5">
+              <span class="font-mono text-[10px] font-bold text-teal-700 bg-teal-100/70 px-1.5 py-0.5 rounded">${c.id}</span>
+              <span class="font-bold text-slate-900 text-xs">${c.name}</span>
+            </div>
+            <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-semibold shrink-0">${c.zone}</span>
+          </div>
+          <div class="text-xs text-slate-600">
+            <div class="font-mono text-[11px] text-slate-700">${c.phone}</div>
+            <div class="text-[11px] text-slate-500 truncate">${c.address}</div>
+          </div>
+          <div class="flex items-center justify-between pt-1.5 border-t border-slate-200/80 text-[11px]">
+            <span class="font-semibold text-slate-700">${c.totalOrders} Past Orders</span>
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold text-xs shadow-sm">
+              + New Order
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
   }, 150);
 }
 
