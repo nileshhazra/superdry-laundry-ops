@@ -40,6 +40,14 @@ let mockDb = {
   riders: []
 };
 
+// Safety fallback stubs for compatibility
+function openDynamicUpiQrModal(orderId) {
+  if (typeof openWhatsAppReadyModal === 'function') {
+    openWhatsAppReadyModal(orderId);
+  }
+}
+window.openDynamicUpiQrModal = openDynamicUpiQrModal;
+
 // -----------------------------------------------------------------
 // INITIALIZATION & MODE DETECTION
 // -----------------------------------------------------------------
@@ -119,23 +127,27 @@ async function detectModeAndInit() {
     }
   }
 
-  // If no customers or state yet, load static JSON files
-  if (!mockDb.customers || mockDb.customers.length === 0) {
+  // Ensure customers and demo state are completely loaded
+  if (!mockDb.customers || mockDb.customers.length < 500) {
     try {
       const [custRes, stateRes] = await Promise.all([
         fetch('./data/customers.json'),
         fetch('./data/initial_state.json')
       ]);
-      mockDb.customers = await custRes.json();
-      const initState = await stateRes.json();
-      mockDb.orders = initState.orders || [];
-      mockDb.leads = initState.leads || [];
-      mockDb.garmentsCatalog = initState.garmentsCatalog || [];
-      mockDb.storeSettings = initState.storeSettings || mockDb.storeSettings;
+      if (custRes.ok) {
+        mockDb.customers = await custRes.json();
+      }
+      if (stateRes.ok) {
+        const initState = await stateRes.json();
+        if (!mockDb.orders || mockDb.orders.length === 0) mockDb.orders = initState.orders || [];
+        if (!mockDb.leads || mockDb.leads.length === 0) mockDb.leads = initState.leads || [];
+        if (!mockDb.garmentsCatalog || mockDb.garmentsCatalog.length === 0) mockDb.garmentsCatalog = initState.garmentsCatalog || [];
+        mockDb.storeSettings = initState.storeSettings || mockDb.storeSettings;
+      }
       initDefaultRiders();
       saveDemoState();
     } catch (err) {
-      console.warn('Fallback: loading embedded demo datasets');
+      console.warn('Fallback: loading embedded demo datasets', err);
       initDefaultRiders();
     }
   } else if (!mockDb.riders || mockDb.riders.length === 0) {
@@ -218,9 +230,16 @@ function initDefaultRiders() {
 function saveDemoState() {
   if (isStaticMode) {
     try {
-      localStorage.setItem('superdry_demo_state', JSON.stringify(mockDb));
+      const compactState = {
+        orders: mockDb.orders || [],
+        leads: mockDb.leads || [],
+        garmentsCatalog: mockDb.garmentsCatalog || [],
+        storeSettings: mockDb.storeSettings || {},
+        riders: mockDb.riders || []
+      };
+      localStorage.setItem('superdry_demo_state', JSON.stringify(compactState));
     } catch (e) {
-      console.warn('LocalStorage limit reached or disabled');
+      console.warn('LocalStorage limit reached or disabled:', e);
     }
   }
 }
@@ -571,6 +590,8 @@ async function refreshAll() {
     fetchFleet()
   ]);
   renderActiveScreen();
+  // Pre-populate customer directories so they are never empty
+  searchCustomers('');
 }
 
 async function fetchCatalog() {
@@ -777,7 +798,7 @@ function renderAdminOrders() {
 
 function setAdminTableTab(tab) {
   currentAdminTableTab = tab;
-  const tabs = ['orders', 'pod', 'reconciliation', 'franchise'];
+  const tabs = ['orders', 'pod', 'reconciliation', 'franchise', 'customers'];
   
   tabs.forEach(t => {
     const btn = document.getElementById(`atab-${t}`);
@@ -815,6 +836,8 @@ function setAdminTableTab(tab) {
     renderAdminReconciliation();
   } else if (tab === 'franchise') {
     renderFranchiseHub();
+  } else if (tab === 'customers') {
+    searchCustomers('');
   }
   lucide.createIcons();
 }
@@ -1323,63 +1346,183 @@ async function assignOrderRider(orderId, riderName) {
 }
 
 let customerSearchTimer = null;
-function searchCustomers(query) {
+let activeCustomerZoneFilter = 'ALL';
+
+function filterCustomersByZone(zone) {
+  activeCustomerZoneFilter = zone;
+  const adminInput = document.getElementById('admin-cust-search-input');
+  const mgrInput = document.getElementById('cust-search-input');
+  const q = (adminInput && adminInput.value) || (mgrInput && mgrInput.value) || '';
+  searchCustomers(q);
+}
+
+function openCustomersDirectory() {
+  if (currentPersona === 'admin') {
+    setAdminTableTab('customers');
+    const input = document.getElementById('admin-cust-search-input');
+    if (input) {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      input.focus();
+    }
+  } else {
+    setPersona('manager');
+    setManagerTab('customers');
+    const input = document.getElementById('cust-search-input');
+    if (input) {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      input.focus();
+    }
+  }
+}
+
+function refreshCustomerDirectory() {
+  searchCustomers('');
+}
+
+function searchCustomers(query, context = 'all') {
   clearTimeout(customerSearchTimer);
   customerSearchTimer = setTimeout(async () => {
     let list = [];
+    const q = (query || '').toLowerCase().trim();
+    const zoneFilter = activeCustomerZoneFilter;
+
     if (isStaticMode) {
-      const q = (query || '').toLowerCase().trim();
+      // Ensure mockDb.customers is loaded
+      if (!mockDb.customers || mockDb.customers.length < 500) {
+        try {
+          const res = await fetch('./data/customers.json');
+          if (res.ok) mockDb.customers = await res.json();
+        } catch (e) {
+          console.warn('Failed loading ./data/customers.json', e);
+        }
+      }
       const allCust = mockDb.customers || [];
-      if (!q) {
-        list = allCust.slice(0, 25);
-      } else {
-        list = allCust.filter(c =>
+      list = allCust.filter(c => {
+        const matchesQuery = !q ||
           (c.name && c.name.toLowerCase().includes(q)) ||
           (c.phone && c.phone.includes(q)) ||
           (c.address && c.address.toLowerCase().includes(q)) ||
-          (c.zone && c.zone.toLowerCase().includes(q))
-        ).slice(0, 25);
-      }
+          (c.zone && c.zone.toLowerCase().includes(q)) ||
+          (c.id && c.id.toLowerCase().includes(q));
+        const matchesZone = !zoneFilter || zoneFilter === 'ALL' || (c.zone && c.zone.includes(zoneFilter));
+        return matchesQuery && matchesZone;
+      }).slice(0, 50);
     } else {
       try {
-        const res = await fetch(`/api/customers?q=${encodeURIComponent(query)}&limit=25`);
-        list = await res.json();
+        const res = await fetch(`/api/customers?q=${encodeURIComponent(query)}&limit=50`);
+        if (res.ok) {
+          list = await res.json();
+          if (zoneFilter && zoneFilter !== 'ALL') {
+            list = list.filter(c => c.zone && c.zone.includes(zoneFilter));
+          }
+        }
       } catch (err) {
-        console.error(err);
+        console.error('Error fetching customers:', err);
       }
     }
 
-    const tbody = document.getElementById('customers-table-body');
-    const mobileCards = document.getElementById('customers-mobile-cards');
+    // Update Admin Customers View elements
+    const adminTbody = document.getElementById('admin-customers-table-body');
+    const adminMobileCards = document.getElementById('admin-customers-mobile-cards');
+    const adminCountPill = document.getElementById('admin-cust-count-pill');
+    
+    // Update Manager Customers View elements
+    const mgrTbody = document.getElementById('customers-table-body');
+    const mgrMobileCards = document.getElementById('customers-mobile-cards');
+
+    const totalCustCount = (statsData && statsData.totalCustomers) || (mockDb.customers ? mockDb.customers.length : 2004);
+    if (adminCountPill) {
+      adminCountPill.innerText = `${list.length} of ${totalCustCount.toLocaleString('en-IN')} Customers`;
+    }
+
+    const emptyRowHtml = `<tr><td colspan="7" class="p-8 text-center text-[#898989] text-xs">No verified customers found matching "${query || 'selected filter'}".</td></tr>`;
+    const emptyCardsHtml = `<div class="p-6 text-center text-[#898989] text-xs">No verified customers found matching "${query || 'selected filter'}".</div>`;
 
     if (list.length === 0) {
-      if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-[#898989]">No customers found matching "${query}".</td></tr>`;
-      if (mobileCards) mobileCards.innerHTML = `<div class="p-6 text-center text-[#898989] text-xs">No customers found matching "${query}".</div>`;
+      if (adminTbody) adminTbody.innerHTML = emptyRowHtml;
+      if (adminMobileCards) adminMobileCards.innerHTML = emptyCardsHtml;
+      if (mgrTbody) mgrTbody.innerHTML = emptyRowHtml;
+      if (mgrMobileCards) mgrMobileCards.innerHTML = emptyCardsHtml;
       return;
     }
 
-    if (tbody) {
-      tbody.innerHTML = list.map(c => `
-        <tr class="hover:bg-[#F8FAF3] transition-colors">
-          <td class="p-3 font-mono font-bold text-[#1E293B]">${c.id}</td>
-          <td class="p-3 font-bold text-[#1E293B]">${c.name}</td>
-          <td class="p-3 font-mono text-[#545454]">${c.phone}</td>
-          <td class="p-3 text-[#545454]">
-            <div>${c.address}</div>
-            <span class="text-[10px] bg-[#EEF4E3] text-[#1E293B] px-2 py-0.5 rounded-full font-medium">${c.zone}</span>
+    // Render Admin Table Rows
+    if (adminTbody) {
+      adminTbody.innerHTML = list.map(c => `
+        <tr class="hover:bg-[#F8FAF3] transition-colors border-b border-[#EEF4E3]">
+          <td class="p-3.5 font-mono font-bold text-[#1E293B]">${c.id}</td>
+          <td class="p-3.5">
+            <div class="font-bold text-[#1E293B]">${c.name}</div>
+            <div class="text-[10px] text-[#545454]">Active Member</div>
           </td>
-          <td class="p-3 font-bold text-[#1E293B]">${c.totalOrders} Orders</td>
-          <td class="p-3 text-right">
-            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full font-bold text-xs shadow-sm transition-all">
-              + New Order
+          <td class="p-3.5 font-mono text-[#545454]">${c.phone}</td>
+          <td class="p-3.5 text-[#545454]">
+            <div class="truncate max-w-[220px]">${c.address}</div>
+            <span class="text-[10px] bg-[#EEF4E3] text-[#2D5A1E] font-semibold px-2 py-0.5 rounded-full inline-block mt-0.5">${c.zone}</span>
+          </td>
+          <td class="p-3.5 font-bold text-[#1E293B]">${c.totalOrders || 0} Orders</td>
+          <td class="p-3.5">
+            <span class="text-[10px] bg-[#F8FAF3] border border-[#E2E8D5] text-[#1E293B] font-medium px-2 py-0.5 rounded-full">${c.preferredService || 'Wash & Iron'}</span>
+          </td>
+          <td class="p-3.5 text-right">
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full font-bold text-xs shadow-xs transition-all inline-flex items-center space-x-1">
+              <i data-lucide="plus" class="w-3 h-3"></i>
+              <span>New Intake</span>
             </button>
           </td>
         </tr>
       `).join('');
     }
 
-    if (mobileCards) {
-      mobileCards.innerHTML = list.map(c => `
+    // Render Admin Mobile Cards
+    if (adminMobileCards) {
+      adminMobileCards.innerHTML = list.map(c => `
+        <div class="p-3.5 bg-white border border-[#E2E8D5] rounded-2xl space-y-2 shadow-xs">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-1.5">
+              <span class="font-mono text-[10px] font-bold text-[#1E293B] bg-[#EEF4E3] px-2 py-0.5 rounded-full">${c.id}</span>
+              <span class="font-bold text-[#1E293B] text-xs">${c.name}</span>
+            </div>
+            <span class="text-[10px] bg-[#EEF4E3] text-[#2D5A1E] px-2 py-0.5 rounded-full font-semibold shrink-0">${c.zone}</span>
+          </div>
+          <div class="text-xs text-[#545454] space-y-0.5">
+            <div class="font-mono text-[11px] text-[#1E293B]">${c.phone}</div>
+            <div class="text-[11px] text-[#898989] truncate">${c.address}</div>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-[#EEF4E3] text-xs">
+            <span class="font-semibold text-[#1E293B]">${c.totalOrders || 0} Orders</span>
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full font-bold text-xs shadow-xs transition-all">
+              + New Intake
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Manager Table Rows
+    if (mgrTbody) {
+      mgrTbody.innerHTML = list.map(c => `
+        <tr class="hover:bg-[#F8FAF3] transition-colors border-b border-[#EEF4E3]">
+          <td class="p-3 font-mono font-bold text-[#1E293B]">${c.id}</td>
+          <td class="p-3 font-bold text-[#1E293B]">${c.name}</td>
+          <td class="p-3 font-mono text-[#545454]">${c.phone}</td>
+          <td class="p-3 text-[#545454]">
+            <div class="truncate max-w-[200px]">${c.address}</div>
+            <span class="text-[10px] bg-[#EEF4E3] text-[#1E293B] px-2 py-0.5 rounded-full font-medium inline-block mt-0.5">${c.zone}</span>
+          </td>
+          <td class="p-3 font-bold text-[#1E293B]">${c.totalOrders || 0} Orders</td>
+          <td class="p-3 text-right">
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full font-bold text-xs shadow-sm transition-all">
+              + New Intake
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Render Manager Mobile Cards
+    if (mgrMobileCards) {
+      mgrMobileCards.innerHTML = list.map(c => `
         <div class="p-3.5 bg-white border border-[#E2E8D5] rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-1.5">
@@ -1393,15 +1536,17 @@ function searchCustomers(query) {
             <div class="text-[11px] text-[#898989] truncate">${c.address}</div>
           </div>
           <div class="flex items-center justify-between pt-2 border-t border-[#E2E8D5] text-xs">
-            <span class="font-medium text-[#545454]">${c.totalOrders} Orders</span>
+            <span class="font-medium text-[#545454]">${c.totalOrders || 0} Orders</span>
             <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full font-bold text-xs shadow-sm transition-all">
-              + New Order
+              + New Intake
             </button>
           </div>
         </div>
       `).join('');
     }
-  }, 150);
+
+    lucide.createIcons();
+  }, 100);
 }
 
 // -----------------------------------------------------------------
@@ -1656,18 +1801,18 @@ async function renderRiderDeliveries() {
               <a href="https://maps.google.com/?q=${encodeURIComponent(o.customerAddress || o.zone)}" target="_blank" class="px-2.5 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold flex items-center justify-center space-x-1 shrink-0" title="Navigate with Google Maps">
                 <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
               </a>
-              <button onclick="openDynamicUpiQrModal('${o.id}')" class="px-2.5 py-2 bg-[#F8FAF3] hover:bg-[#EEF4E3] border border-[#E2E8D5] text-[#2D5A1E] rounded-full text-xs font-bold flex items-center justify-center space-x-1 shrink-0" title="Show Dynamic UPI QR">
-                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
-                <span class="hidden sm:inline">UPI QR</span>
+              <button onclick="openWhatsAppReadyModal('${o.id}')" class="px-2.5 py-2 bg-[#F8FAF3] hover:bg-[#EEF4E3] border border-[#E2E8D5] text-[#2D5A1E] rounded-full text-xs font-bold flex items-center justify-center space-x-1 shrink-0" title="Check Doorstep Availability via WhatsApp">
+                <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                <span class="hidden sm:inline">WhatsApp</span>
               </button>
               ${o.status === 'PACKED' ? `
                 <button onclick="updateOrderStatus('${o.id}', 'OUT_FOR_DELIVERY')" class="flex-1 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-[#A6CE39] rounded-full font-bold text-xs transition">
                   Start Trip
                 </button>
               ` : `
-                <button onclick="completeRiderDelivery('${o.id}', ${o.subtotal})" class="flex-1 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full font-bold text-xs flex items-center justify-center space-x-1 transition">
+                <button onclick="completeRiderDelivery('${o.id}')" class="flex-1 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full font-bold text-xs flex items-center justify-center space-x-1 transition">
                   <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                  <span>Delivered & Paid</span>
+                  <span>Delivered & Handover</span>
                 </button>
               `}
             </div>
@@ -3289,3 +3434,360 @@ function copyStoreCloseSummary() {
 }
 
 
+function filterCorridor(corridor) {
+  currentCorridorFilter = corridor;
+  ['all', 'north', 'east', 'south'].forEach(c => {
+    const btn = document.getElementById(`corridor-tab-${c}`);
+    if (!btn) return;
+    if (c === corridor.toLowerCase()) {
+      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#1E3304] text-[#A6CE39]';
+    } else {
+      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#EEF4E3] text-[#545454] hover:text-[#1E293B]';
+    }
+  });
+  renderDispatchRecommendations();
+}
+
+async function expediteEarlyOrder(orderId) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+  await updateOrderStatus(orderId, 'PACKED');
+  alert(`Order ${orderId} (${order.customerName}) expedited to PACKED in workshop! Ready for rider dispatch.`);
+  refreshAll();
+}
+
+
+let liveNotifications = [];
+
+const HANDOVER_LEVEL_MAP = {
+  'PICKED_UP': {
+    from: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+    to: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+    badge: 'FIELD RIDER',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Pickup Completed',
+    summary: (order) => `Picked up ${order.totalPieces || 1} pcs from ${order.customerName} in ${order.zone}. Rider returning to counter.`
+  },
+  'RECEIVED_IN_STORE': {
+    from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+    to: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
+    badge: 'FRONT DESK',
+    badgeColor: 'bg-[#F8FAF3] text-[#1E293B]',
+    action: 'Intake Tagged',
+    summary: (order) => `Order #${order.id} (${order.totalPieces || 1} pcs) tagged & queued for Washing Station.`
+  },
+  'WASHING': {
+    from: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
+    to: { role: 'washer', name: 'Anil Verma (Dry Clean Specialist)' },
+    badge: 'WORKSHOP: WASH',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Washing Cycle Started',
+    summary: (order) => `Order #${order.id} loaded into commercial washer. Next: Hydro-extraction & Drying.`
+  },
+  'DRYING': {
+    from: { role: 'washer', name: 'Anil Verma (Dry Clean Specialist)' },
+    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    badge: 'WORKSHOP: DRYING',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Drying & Inspection',
+    summary: (order) => `Order #${order.id} dried & passed stain inspection. Queued for steam press.`
+  },
+  'IRONING': {
+    from: { role: 'washer', name: 'Anil Verma (Dry Cleaning)' },
+    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    badge: 'WORKSHOP: PRESS',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Steam Ironing Underway',
+    summary: (order) => `Steam press & crease finishing in progress for Order #${order.id} (${order.customerName}).`
+  },
+  'PACKED': {
+    from: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    to: { role: 'manager', name: 'Aakash Sharma & Field Riders' },
+    badge: 'WORKSHOP: PACKED',
+    badgeColor: 'bg-[#1E3304] text-[#A6CE39]',
+    action: 'Order Packed & Ready',
+    summary: (order) => `Quality passed! Order #${order.id} (${order.customerName}, ${order.zone}) is packed on hanger.`
+  },
+  'OUT_FOR_DELIVERY': {
+    from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+    to: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+    badge: 'DISPATCH',
+    badgeColor: 'bg-[#2D5A1E] text-white',
+    action: 'Dispatched for Delivery',
+    summary: (order) => `Order #${order.id} handed to Rajesh Kumar for doorstep delivery in ${order.zone}.`
+  },
+  'DELIVERED': {
+    from: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+    to: { role: 'manager', name: 'Aakash Sharma & Super Admin' },
+    badge: 'DELIVERY COMPLETE',
+    badgeColor: 'bg-[#A6CE39] text-[#1E3304]',
+    action: 'Delivered & Paid',
+    summary: (order) => `Delivered to ${order.customerName}. Payment of ₹${order.subtotal} collected (POD uploaded).`
+  }
+};
+
+function initNotifications() {
+  const saved = localStorage.getItem('bumbledry_live_notifications');
+  if (saved) {
+    try {
+      liveNotifications = JSON.parse(saved);
+    } catch (e) {}
+  }
+
+  // Pre-seed 3 recent realistic handover notifications if empty
+  if (!liveNotifications || liveNotifications.length === 0) {
+    liveNotifications = [
+      {
+        id: 'NOTIF-101',
+        orderId: 'ORD-1042',
+        badge: 'WORKSHOP: PACKED',
+        badgeColor: 'bg-[#1E3304] text-[#A6CE39]',
+        action: 'Order Packed & Ready',
+        summary: 'Quality passed! Order #ORD-1042 (Pooja Rao, Sector 15) is packed on hanger.',
+        from: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+        to: { role: 'manager', name: 'Aakash Sharma & Field Riders' },
+        timestamp: new Date(Date.now() - 4 * 60 * 1000).toISOString(),
+        read: false
+      },
+      {
+        id: 'NOTIF-102',
+        orderId: 'ORD-1040',
+        badge: 'DISPATCH',
+        badgeColor: 'bg-[#2D5A1E] text-white',
+        action: 'Dispatched for Delivery',
+        summary: 'Order #ORD-1040 handed to Rajesh Kumar for doorstep delivery in DLF Phase 4.',
+        from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+        to: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+        timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+        read: false
+      },
+      {
+        id: 'NOTIF-103',
+        orderId: 'ORD-1045',
+        badge: 'FRONT DESK',
+        badgeColor: 'bg-[#F8FAF3] text-[#1E293B]',
+        action: 'Intake Tagged',
+        summary: 'Order #ORD-1045 (3 pcs) tagged & queued for Washing Station.',
+        from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+        to: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
+        timestamp: new Date(Date.now() - 32 * 60 * 1000).toISOString(),
+        read: true
+      }
+    ];
+    saveNotifications();
+  }
+
+  updateNotificationBadge();
+  renderNotificationCenter();
+}
+
+function saveNotifications() {
+  try {
+    localStorage.setItem('bumbledry_live_notifications', JSON.stringify(liveNotifications.slice(0, 50)));
+  } catch (e) {}
+}
+
+function updateNotificationBadge() {
+  const badge = document.getElementById('notification-badge');
+  if (!badge) return;
+  const unreadCount = liveNotifications.filter(n => !n.read).length;
+  if (unreadCount > 0) {
+    badge.innerText = unreadCount > 9 ? '9+' : unreadCount;
+    badge.classList.remove('hidden');
+  } else {
+    badge.innerText = '0';
+    badge.classList.add('hidden');
+  }
+}
+
+function broadcastHandoverNotification(orderId, newStatus) {
+  const config = HANDOVER_LEVEL_MAP[newStatus];
+  if (!config) return;
+
+  const order = allOrders.find(o => o.id === orderId) || { id: orderId, customerName: 'Customer', zone: 'Sector 15', totalPieces: 1, subtotal: 0 };
+  const notif = {
+    id: 'NOTIF-' + Date.now(),
+    orderId: order.id,
+    badge: config.badge,
+    badgeColor: config.badgeColor,
+    action: config.action,
+    summary: config.summary(order),
+    from: config.from,
+    to: config.to,
+    timestamp: new Date().toISOString(),
+    read: false
+  };
+
+  liveNotifications.unshift(notif);
+  saveNotifications();
+  updateNotificationBadge();
+  renderNotificationCenter();
+  showToastNotification(notif);
+
+  try {
+    localStorage.setItem('bumbledry_last_broadcast_notif', JSON.stringify(notif));
+  } catch (e) {}
+}
+
+function showToastNotification(notif, isCrossTab = false) {
+  const container = document.getElementById('live-toast-container');
+  if (!container) return;
+
+  playNotificationChime();
+
+  const toastId = `toast-${notif.id}`;
+  const toastEl = document.createElement('div');
+  toastEl.id = toastId;
+  toastEl.className = 'pointer-events-auto bg-[#1E3A2F] text-white p-3.5 rounded-2xl border border-[#A6CE39]/30 shadow-2xl flex items-start space-x-3 transition-all transform duration-300 translate-y-0 opacity-100';
+  toastEl.innerHTML = `
+    <div class="w-8 h-8 rounded-full bg-[#A6CE39] text-[#1E3304] flex items-center justify-center shrink-0 font-bold mt-0.5">
+      <i data-lucide="bell" class="w-4 h-4"></i>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] uppercase font-black tracking-wider text-[#A6CE39]">${notif.badge}</span>
+        <span class="text-[10px] text-neutral-400">Just now</span>
+      </div>
+      <h5 class="font-bold text-xs text-white truncate mt-0.5">${notif.action}: ${notif.orderId}</h5>
+      <p class="text-[11px] text-neutral-300 leading-snug mt-1">${notif.summary}</p>
+      <div class="text-[10px] text-neutral-400 mt-1.5 flex items-center space-x-1 border-t border-white/10 pt-1">
+        <span>Handover: <strong>${notif.from.name}</strong></span>
+        <span>→</span>
+        <span class="text-[#A6CE39]"><strong>${notif.to.name}</strong></span>
+      </div>
+    </div>
+    <button onclick="dismissToast('${toastId}')" class="text-neutral-400 hover:text-white p-1">
+      <i data-lucide="x" class="w-3.5 h-3.5"></i>
+    </button>
+  `;
+
+  container.appendChild(toastEl);
+  lucide.createIcons();
+
+  setTimeout(() => {
+    dismissToast(toastId);
+  }, 6000);
+}
+
+function dismissToast(toastId) {
+  const toast = document.getElementById(toastId);
+  if (!toast) return;
+  toast.classList.add('opacity-0', 'translate-y-2');
+  setTimeout(() => {
+    if (toast.parentNode) toast.parentNode.removeChild(toast);
+  }, 300);
+}
+
+function playNotificationChime() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    const now = ctx.currentTime;
+    osc.frequency.setValueAtTime(587.33, now);
+    osc.frequency.setValueAtTime(880.00, now + 0.12);
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+    osc.start(now);
+    osc.stop(now + 0.55);
+  } catch (e) {}
+}
+
+function testNotificationChime() {
+  playNotificationChime();
+  const testNotif = {
+    id: 'TEST-' + Date.now(),
+    orderId: 'ORD-1044',
+    badge: 'WORKSHOP: PRESS',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Steam Ironing Underway',
+    summary: 'Steam press & crease finishing in progress for Order #ORD-1044 (Priya Sharma).',
+    from: { role: 'washer', name: 'Anil Verma (Dry Clean)' },
+    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    timestamp: new Date().toISOString(),
+    read: false
+  };
+  showToastNotification(testNotif);
+}
+
+function toggleNotificationCenter(e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  const dropdown = document.getElementById('notification-dropdown');
+  if (!dropdown) return;
+  if (dropdown.classList.contains('hidden')) {
+    dropdown.classList.remove('hidden');
+    renderNotificationCenter();
+  } else {
+    dropdown.classList.add('hidden');
+  }
+}
+
+function renderNotificationCenter() {
+  const container = document.getElementById('notifications-list-container');
+  if (!container) return;
+
+  if (liveNotifications.length === 0) {
+    container.innerHTML = `
+      <div class="p-8 text-center text-[#898989] text-xs">
+        <i data-lucide="bell-off" class="w-6 h-6 mx-auto mb-2 text-[#898989]"></i>
+        <div>No notifications right now.</div>
+        <div class="text-[10px] text-[#545454] mt-0.5">Station handover events will appear here in real time.</div>
+      </div>
+    `;
+    lucide.createIcons();
+    return;
+  }
+
+  container.innerHTML = liveNotifications.map(n => `
+    <div class="p-3.5 hover:bg-[#F8FAF3] transition-colors ${!n.read ? 'bg-[#EEF4E3]/30' : ''} space-y-1.5">
+      <div class="flex items-center justify-between">
+        <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full ${n.badgeColor || 'bg-[#F8FAF3] text-[#1E293B]'}">${n.badge}</span>
+        <span class="text-[10px] text-[#545454]">${new Date(n.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+      </div>
+      <div class="font-bold text-[#1E293B] text-xs flex items-center justify-between">
+        <span>${n.action}: <strong class="font-mono text-[#1E3304]">${n.orderId}</strong></span>
+        ${!n.read ? '<span class="w-2 h-2 rounded-full bg-[#E11900] shrink-0" title="Unread"></span>' : ''}
+      </div>
+      <p class="text-[11px] text-[#545454] leading-relaxed">${n.summary}</p>
+      <div class="text-[10px] text-[#898989] flex items-center space-x-1 pt-0.5">
+        <span>From: <strong class="text-[#1E293B]">${n.from.name}</strong></span>
+        <span>→</span>
+        <span>To: <strong class="text-[#2D5A1E]">${n.to.name}</strong></span>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+}
+
+function markAllNotificationsRead() {
+  liveNotifications.forEach(n => { n.read = true; });
+  saveNotifications();
+  updateNotificationBadge();
+  renderNotificationCenter();
+}
+
+function clearAllNotifications() {
+  liveNotifications = [];
+  saveNotifications();
+  updateNotificationBadge();
+  renderNotificationCenter();
+}
+
+// Close notification dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('notification-dropdown');
+  const bellBtn = document.getElementById('btn-notification-bell');
+  if (dropdown && !dropdown.classList.contains('hidden')) {
+    if (!dropdown.contains(e.target) && !bellBtn.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  }
+});

@@ -262,7 +262,7 @@
         <span class="w-2 h-2 rounded-full bg-[#A6CE39] shrink-0"></span>
         <span id="role-context-label" class="font-medium text-[#1E293B] shrink-0 whitespace-nowrap">Active Console</span>
         <span class="text-[#CBCBCB] hidden sm:inline">|</span>
-        <span class="truncate hidden sm:inline text-[#545454]">2,000 Customers connected</span>
+        <button onclick="openCustomersDirectory()" class="hover:text-[#1E3304] hover:underline cursor-pointer truncate hidden sm:inline text-[#545454] text-xs font-semibold" title="Click to view all 2,000+ customers">2,000 Customers connected</button>
       </div>
       <div class="flex items-center space-x-3 text-[#545454] shrink-0">
         <button onclick="openStoreProfileModal()" class="hover:text-[#1E293B] flex items-center space-x-1 cursor-pointer transition-colors" title="Configure active branch">
@@ -360,11 +360,14 @@
           </div>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-[#E2E8D5]">
-          <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">Connected Customers</span>
+        <div onclick="openCustomersDirectory()" class="bg-white p-5 rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] hover:shadow-md transition-all cursor-pointer group" title="Click to open 2,000+ Customer Directory">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#545454]">Connected Customers</span>
+            <span class="text-[10px] text-[#2D5A1E] font-bold group-hover:underline">View 2,000+ Directory →</span>
+          </div>
           <div class="mt-2 flex items-baseline justify-between">
             <span id="stat-total-customers" class="text-3xl font-black text-[#1E293B] tracking-tight">2,000</span>
-            <span class="text-[11px] font-medium text-[#545454]">Gurugram</span>
+            <span class="text-[11px] font-bold text-[#2D5A1E] bg-[#EEF4E3] px-2.5 py-0.5 rounded-full">Gurugram Verified</span>
           </div>
         </div>
       </div>
@@ -398,6 +401,10 @@
             <button onclick="setAdminTableTab('franchise')" id="atab-franchise" class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all whitespace-nowrap flex items-center space-x-1">
               <i data-lucide="building" class="w-3.5 h-3.5"></i>
               <span>Franchise Hub</span>
+            </button>
+            <button onclick="setAdminTableTab('customers')" id="atab-customers" class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all whitespace-nowrap flex items-center space-x-1">
+              <i data-lucide="users" class="w-3.5 h-3.5"></i>
+              <span>Customers Directory (2,000+)</span>
             </button>
           </div>
 
@@ -658,6 +665,71 @@
             </div>
           </div>
         </div>
+
+        <!-- VIEW 5: STORE CUSTOMERS DIRECTORY (2,000+ RECORDS) -->
+        <div id="admin-customers-view" class="p-4 sm:p-5 space-y-4 hidden">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#F8FAF3] p-4 rounded-2xl border border-[#E2E8D5]">
+            <div class="space-y-1">
+              <div class="flex items-center space-x-2">
+                <span class="font-black text-[#1E293B] text-base">Verified Customer Base</span>
+                <span id="admin-cust-count-pill" class="bg-[#A6CE39] text-[#1E3304] text-[10px] font-black px-2.5 py-0.5 rounded-full">2,004 Customers</span>
+              </div>
+              <p class="text-xs text-[#545454]">Active store customers across Sector 15, DLF Phase 4, Cyber City, and Gurugram corridors.</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="openNewCustomerModal()" class="px-3.5 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold transition flex items-center space-x-1.5 shadow-sm">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                <span>+ Add New Customer</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search & Filters -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#898989]"></i>
+              <input type="text" id="admin-cust-search-input" oninput="searchCustomers(this.value)" onkeyup="searchCustomers(this.value)" placeholder="Search 2,000+ customers by name, phone, address, or zone..." class="w-full pl-9 pr-4 py-2 bg-white border border-[#E2E8D5] rounded-full text-xs text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-[#A6CE39]">
+            </div>
+            <div class="flex items-center space-x-2 shrink-0">
+              <select id="admin-cust-zone-filter" onchange="filterCustomersByZone(this.value)" class="px-3 py-2 bg-white border border-[#E2E8D5] rounded-full text-xs text-[#1E293B] font-semibold focus:outline-none focus:ring-2 focus:ring-[#A6CE39]">
+                <option value="ALL">All Delivery Corridors</option>
+                <option value="Sector 15">Sector 15 - North</option>
+                <option value="DLF Phase 4">DLF Phase 4 - East</option>
+                <option value="DLF Phase 2">DLF Phase 2 - East</option>
+                <option value="Cyber Hub">Cyber Hub - North</option>
+                <option value="South City 1">South City 1 - South</option>
+              </select>
+              <button onclick="refreshCustomerDirectory()" class="p-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full transition" title="Refresh Database">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="overflow-x-auto rounded-xl border border-[#E2E8D5]">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-[#F8FAF3] border-b border-[#E2E8D5] text-[#545454] font-semibold">
+                <tr>
+                  <th class="p-3">Customer ID</th>
+                  <th class="p-3">Full Name</th>
+                  <th class="p-3">Phone</th>
+                  <th class="p-3">Doorstep Address & Corridor</th>
+                  <th class="p-3">Past Orders</th>
+                  <th class="p-3">Preferred Service</th>
+                  <th class="p-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-customers-table-body" class="divide-y divide-[#E2E8D5] text-[#1E293B]">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mobile Cards View for Small Screens -->
+          <div id="admin-customers-mobile-cards" class="sm:hidden space-y-2.5">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
       </div>
 
       <!-- FLEET RADAR & TRANSIT GAP TRACKER (Uber Fleet Portal) -->
@@ -863,7 +935,7 @@
           <div class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
               <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-[#898989]"></i>
-              <input type="text" id="cust-search-input" onkeyup="searchCustomers(this.value)" placeholder="Search 2,000 customers by name, phone, or zone..." class="w-full pl-10 pr-4 py-2.5 bg-[#F8FAF3] focus:bg-white border border-transparent focus:border-[#A6CE39] rounded-xl text-xs focus:outline-none transition-all">
+              <input type="text" id="cust-search-input" oninput="searchCustomers(this.value)" onkeyup="searchCustomers(this.value)" placeholder="Search 2,000 customers by name, phone, or zone..." class="w-full pl-10 pr-4 py-2.5 bg-[#F8FAF3] focus:bg-white border border-transparent focus:border-[#A6CE39] rounded-xl text-xs focus:outline-none transition-all">
             </div>
             <button onclick="openExcelUploadModal()" class="px-4 py-2.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold flex items-center justify-center space-x-1.5 shrink-0 transition-all">
               <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
@@ -1250,7 +1322,7 @@
         <div>
           <label class="block font-bold text-[#1E293B] mb-1">Select Customer:</label>
           <div class="relative">
-            <input type="text" id="order-cust-search" onkeyup="searchOrderCustomer(this.value)" placeholder="Search by name or phone (+91...)" class="w-full bg-[#F8FAF3] focus:bg-white border border-transparent focus:border-[#A6CE39] rounded-xl p-3 text-xs focus:outline-none transition-all">
+            <input type="text" id="order-cust-search" oninput="searchOrderCustomer(this.value)" onkeyup="searchOrderCustomer(this.value)" placeholder="Search by name or phone (+91...)" class="w-full bg-[#F8FAF3] focus:bg-white border border-transparent focus:border-[#A6CE39] rounded-xl p-3 text-xs focus:outline-none transition-all">
             <div id="order-cust-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E2E8D5] rounded-2xl shadow-xl z-20 max-h-48 overflow-y-auto hidden divide-y divide-[#E2E8D5]"></div>
           </div>
           <div id="selected-cust-card" class="mt-2 p-3 bg-[#F8FAF3] rounded-xl border border-[#E2E8D5] hidden">
