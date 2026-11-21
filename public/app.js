@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateClock();
   setInterval(updateClock, 1000);
 
+  initFranchiseStores();
+  updateStoreHeaderDisplay();
   await detectModeAndInit();
   initAuth();
   await refreshAll();
@@ -755,26 +757,44 @@ function renderAdminOrders() {
 
 function setAdminTableTab(tab) {
   currentAdminTableTab = tab;
-  const ordersBtn = document.getElementById('atab-orders');
-  const podBtn = document.getElementById('atab-pod');
-  const ordersView = document.getElementById('admin-orders-view');
-  const podView = document.getElementById('admin-pod-view');
+  const tabs = ['orders', 'pod', 'reconciliation', 'franchise'];
+  
+  tabs.forEach(t => {
+    const btn = document.getElementById(`atab-${t}`);
+    const view = document.getElementById(`admin-${t}-view`);
+    if (btn) {
+      if (t === tab) {
+        btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm transition-all whitespace-nowrap flex items-center space-x-1';
+      } else {
+        btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all whitespace-nowrap flex items-center space-x-1';
+      }
+    }
+    if (view) {
+      if (t === tab) {
+        view.classList.remove('hidden');
+      } else {
+        view.classList.add('hidden');
+      }
+    }
+  });
+
   const filterContainer = document.getElementById('admin-orders-filter-container');
+  if (filterContainer) {
+    if (tab === 'orders') {
+      filterContainer.classList.remove('hidden');
+    } else {
+      filterContainer.classList.add('hidden');
+    }
+  }
 
   if (tab === 'orders') {
-    if (ordersBtn) ordersBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm transition-all';
-    if (podBtn) podBtn.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all';
-    if (ordersView) ordersView.classList.remove('hidden');
-    if (podView) podView.classList.add('hidden');
-    if (filterContainer) filterContainer.classList.remove('hidden');
     renderAdminOrders();
-  } else {
-    if (podBtn) podBtn.className = 'px-4 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm transition-all';
-    if (ordersBtn) ordersBtn.className = 'px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all';
-    if (podView) podView.classList.remove('hidden');
-    if (ordersView) ordersView.classList.add('hidden');
-    if (filterContainer) filterContainer.classList.add('hidden');
+  } else if (tab === 'pod') {
     renderAdminPodTable();
+  } else if (tab === 'reconciliation') {
+    renderAdminReconciliation();
+  } else if (tab === 'franchise') {
+    renderFranchiseHub();
   }
   lucide.createIcons();
 }
@@ -1609,7 +1629,17 @@ async function renderRiderDeliveries() {
               </div>
             </div>
             <div class="text-neutral-600 text-[11px]">${o.customerAddress}</div>
-            <div class="flex space-x-2 pt-1">
+            <div class="flex items-center space-x-1.5 pt-1">
+              <a href="tel:${o.customerPhone}" class="px-2.5 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold flex items-center justify-center space-x-1 shrink-0" title="Call Customer">
+                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+              </a>
+              <a href="https://maps.google.com/?q=${encodeURIComponent(o.customerAddress || o.zone)}" target="_blank" class="px-2.5 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold flex items-center justify-center space-x-1 shrink-0" title="Navigate with Google Maps">
+                <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
+              </a>
+              <button onclick="openDynamicUpiQrModal('${o.id}')" class="px-2.5 py-2 bg-[#F8FAF3] hover:bg-[#EEF4E3] border border-[#E2E8D5] text-[#2D5A1E] rounded-full text-xs font-bold flex items-center justify-center space-x-1 shrink-0" title="Show Dynamic UPI QR">
+                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                <span class="hidden sm:inline">UPI QR</span>
+              </button>
               ${o.status === 'PACKED' ? `
                 <button onclick="updateOrderStatus('${o.id}', 'OUT_FOR_DELIVERY')" class="flex-1 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-[#A6CE39] rounded-full font-bold text-xs transition">
                   Start Trip
@@ -1617,7 +1647,7 @@ async function renderRiderDeliveries() {
               ` : `
                 <button onclick="completeRiderDelivery('${o.id}', ${o.subtotal})" class="flex-1 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full font-bold text-xs flex items-center justify-center space-x-1 transition">
                   <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                  <span>Mark Delivered & Paid</span>
+                  <span>Delivered & Paid</span>
                 </button>
               `}
             </div>
@@ -2779,4 +2809,595 @@ async function checkInAtStoreCounter(riderId) {
   } catch (err) {
     console.error(err);
   }
+}
+
+
+// =================================================================
+// MULTI-STORE FRANCHISE & ONBOARDING SYSTEM (STORE-IN-A-BOX)
+// =================================================================
+const defaultFranchiseStores = [
+  {
+    id: 'STORE-101',
+    code: '101',
+    name: 'Sector 15 Flagship',
+    city: 'Gurugram',
+    address: 'Shop 4B, Main Market, Sector 15, Gurugram, Haryana - 122001',
+    phone: '+91 98765 43210',
+    manager: 'Aakash Sharma',
+    gstin: '06AAAAA0000A1Z5',
+    upiVpa: 'bumbledry.sec15@icici',
+    geofenceKm: 5.0,
+    dailyTarget: 15000,
+    activeRiders: 2,
+    workshopStaff: 3
+  },
+  {
+    id: 'STORE-102',
+    code: '102',
+    name: 'Cyber City Hub',
+    city: 'Gurugram',
+    address: 'DLF Cyber City, Building 10 Ground Arcade, Gurugram - 122002',
+    phone: '+91 98111 22334',
+    manager: 'Pooja Mehta',
+    gstin: '06BBBBB1111B2Z6',
+    upiVpa: 'bumbledry.cyber@hdfcbank',
+    geofenceKm: 4.0,
+    dailyTarget: 22000,
+    activeRiders: 3,
+    workshopStaff: 4
+  },
+  {
+    id: 'STORE-103',
+    code: '103',
+    name: 'Indirapuram Central',
+    city: 'Ghaziabad',
+    address: 'Plot 12, Aditya Mall Commercial Complex, Indirapuram - 201014',
+    phone: '+91 99222 33445',
+    manager: 'Vikas Gupta',
+    gstin: '09CCCCC2222C3Z7',
+    upiVpa: 'bumbledry.ind@sbi',
+    geofenceKm: 6.0,
+    dailyTarget: 18000,
+    activeRiders: 2,
+    workshopStaff: 3
+  }
+];
+
+const defaultFranchiseRates = [
+  { service: 'Wash & Fold (Laundry)', unit: 'Per Kilogram', sla: '24 Hours', rate: 79 },
+  { service: 'Wash & Steam Iron (Signature)', unit: 'Per Kilogram', sla: '24 Hours', rate: 109 },
+  { service: 'Formal Shirt / Trouser Dry Clean', unit: 'Per Piece', sla: '48 Hours', rate: 149 },
+  { service: '2-Piece Men Suit / Blazer Care', unit: 'Per Set', sla: '48 Hours', rate: 399 },
+  { service: 'Deluxe Silk Saree / Lehenga Care', unit: 'Per Piece', sla: '72 Hours', rate: 349 },
+  { service: 'Premium Sneaker & Shoe Spa', unit: 'Per Pair', sla: '48 Hours', rate: 299 },
+  { service: 'Heavy Blanket / Quilt Sanitization', unit: 'Per Piece', sla: '48 Hours', rate: 399 }
+];
+
+let franchiseStores = [...defaultFranchiseStores];
+let activeStoreId = 'STORE-101';
+let standardFranchiseRates = [...defaultFranchiseRates];
+let currentCorridorFilter = 'all';
+
+function initFranchiseStores() {
+  const savedStores = localStorage.getItem('bumbledry_franchise_stores');
+  if (savedStores) {
+    try { franchiseStores = JSON.parse(savedStores); } catch (e) {}
+  }
+  const savedActive = localStorage.getItem('bumbledry_active_store_id');
+  if (savedActive && franchiseStores.some(s => s.id === savedActive)) {
+    activeStoreId = savedActive;
+  }
+  const savedRates = localStorage.getItem('bumbledry_standard_rates');
+  if (savedRates) {
+    try { standardFranchiseRates = JSON.parse(savedRates); } catch (e) {}
+  }
+}
+
+function getActiveStore() {
+  return franchiseStores.find(s => s.id === activeStoreId) || franchiseStores[0];
+}
+
+function updateStoreHeaderDisplay() {
+  const store = getActiveStore();
+  const nameEl = document.getElementById('header-store-name');
+  const codeEl = document.getElementById('header-store-code');
+  const statusEl = document.getElementById('status-store-label');
+
+  if (nameEl) nameEl.innerText = store.name;
+  if (codeEl) codeEl.innerText = `#${store.code}`;
+  if (statusEl) statusEl.innerText = `${store.name} (${store.city})`;
+}
+
+function switchActiveBranch(storeId) {
+  const target = franchiseStores.find(s => s.id === storeId);
+  if (!target) return;
+  activeStoreId = storeId;
+  localStorage.setItem('bumbledry_active_store_id', storeId);
+  updateStoreHeaderDisplay();
+  closeStoreProfileModal();
+  refreshAll();
+  lucide.createIcons();
+}
+
+function openStoreProfileModal() {
+  const modal = document.getElementById('modal-store-profile');
+  if (!modal) return;
+
+  const store = getActiveStore();
+  const branchGrid = document.getElementById('modal-branch-selector-grid');
+  if (branchGrid) {
+    branchGrid.innerHTML = franchiseStores.map(s => {
+      const isSelected = s.id === activeStoreId;
+      return `
+        <button type="button" onclick="switchActiveBranch('${s.id}')" class="p-2.5 rounded-xl text-left border transition-all ${isSelected ? 'bg-[#EEF4E3] border-[#A6CE39] ring-1 ring-[#A6CE39]' : 'bg-[#F8FAF3] border-[#E2E8D5] hover:border-[#A6CE39]'}">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-[#1E293B] text-xs">${s.name}</span>
+            <span class="text-[9px] font-mono px-1 rounded ${isSelected ? 'bg-[#1E3304] text-[#A6CE39]' : 'bg-[#E2E8D5] text-[#545454]'}">#${s.code}</span>
+          </div>
+          <div class="text-[10px] text-[#545454] truncate mt-0.5">${s.city} • ${s.manager}</div>
+        </button>
+      `;
+    }).join('');
+  }
+
+  // Populate form fields
+  const nameInput = document.getElementById('store-name-input');
+  const codeInput = document.getElementById('store-code-input');
+  const phoneInput = document.getElementById('store-phone-input');
+  const upiInput = document.getElementById('store-upi-input');
+  const addrInput = document.getElementById('store-address-input');
+  const gstinInput = document.getElementById('store-gstin-input');
+  const radInput = document.getElementById('store-radius-input');
+
+  if (nameInput) nameInput.value = store.name || '';
+  if (codeInput) codeInput.value = store.code || '';
+  if (phoneInput) phoneInput.value = store.phone || '';
+  if (upiInput) upiInput.value = store.upiVpa || '';
+  if (addrInput) addrInput.value = store.address || '';
+  if (gstinInput) gstinInput.value = store.gstin || '';
+  if (radInput) radInput.value = store.geofenceKm || 5;
+
+  modal.classList.remove('hidden');
+  lucide.createIcons();
+}
+
+function closeStoreProfileModal() {
+  const modal = document.getElementById('modal-store-profile');
+  if (modal) modal.classList.add('hidden');
+}
+
+function saveStoreProfile(e) {
+  if (e) e.preventDefault();
+  const store = getActiveStore();
+  if (!store) return;
+
+  const nameInput = document.getElementById('store-name-input');
+  const codeInput = document.getElementById('store-code-input');
+  const phoneInput = document.getElementById('store-phone-input');
+  const upiInput = document.getElementById('store-upi-input');
+  const addrInput = document.getElementById('store-address-input');
+  const gstinInput = document.getElementById('store-gstin-input');
+  const radInput = document.getElementById('store-radius-input');
+
+  if (nameInput) store.name = nameInput.value.trim();
+  if (codeInput) store.code = codeInput.value.trim();
+  if (phoneInput) store.phone = phoneInput.value.trim();
+  if (upiInput) store.upiVpa = upiInput.value.trim();
+  if (addrInput) store.address = addrInput.value.trim();
+  if (gstinInput) store.gstin = gstinInput.value.trim();
+  if (radInput) store.geofenceKm = parseFloat(radInput.value) || 5;
+
+  localStorage.setItem('bumbledry_franchise_stores', JSON.stringify(franchiseStores));
+  updateStoreHeaderDisplay();
+  closeStoreProfileModal();
+  renderFranchiseHub();
+  alert('Store profile updated successfully!');
+}
+
+function openOnboardFranchiseModal() {
+  closeStoreProfileModal();
+  const modal = document.getElementById('modal-onboard-franchise');
+  if (modal) modal.classList.remove('hidden');
+  lucide.createIcons();
+}
+
+function closeOnboardFranchiseModal() {
+  const modal = document.getElementById('modal-onboard-franchise');
+  if (modal) modal.classList.add('hidden');
+}
+
+function handleOnboardFranchise(e) {
+  if (e) e.preventDefault();
+  const name = document.getElementById('new-branch-name').value.trim();
+  const city = document.getElementById('new-branch-city').value.trim();
+  const code = document.getElementById('new-branch-code').value.trim();
+  const address = document.getElementById('new-branch-address').value.trim();
+  const manager = document.getElementById('new-branch-manager').value.trim();
+  const phone = document.getElementById('new-branch-phone').value.trim();
+
+  const newStore = {
+    id: `STORE-${code}`,
+    code: code,
+    name: name,
+    city: city,
+    address: address,
+    phone: phone,
+    manager: manager,
+    gstin: `06AAAAA${code}00A1Z5`,
+    upiVpa: `bumbledry.${code.toLowerCase()}@icici`,
+    geofenceKm: 5.0,
+    dailyTarget: 20000,
+    activeRiders: 2,
+    workshopStaff: 3
+  };
+
+  franchiseStores.push(newStore);
+  localStorage.setItem('bumbledry_franchise_stores', JSON.stringify(franchiseStores));
+  closeOnboardFranchiseModal();
+  switchActiveBranch(newStore.id);
+  alert(`Congratulations! Franchise Branch "${name}" has been onboarded and launched!`);
+}
+
+function renderFranchiseHub() {
+  const grid = document.getElementById('franchise-stores-grid');
+  if (grid) {
+    grid.innerHTML = franchiseStores.map(s => {
+      const isSelected = s.id === activeStoreId;
+      return `
+        <div class="bg-white p-4 rounded-2xl border transition-all ${isSelected ? 'border-[#A6CE39] ring-2 ring-[#A6CE39]/30 bg-[#F8FAF3]' : 'border-[#E2E8D5] hover:border-[#A6CE39]'} space-y-3">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="flex items-center space-x-1.5">
+                <span class="font-black text-[#1E293B] text-sm">${s.name}</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.2 rounded-full font-bold ${isSelected ? 'bg-[#1E3304] text-[#A6CE39]' : 'bg-[#EEF4E3] text-[#2D5A1E]'}">#${s.code}</span>
+              </div>
+              <p class="text-[11px] text-[#545454] mt-0.5">${s.city}</p>
+            </div>
+            ${isSelected ? '<span class="text-[10px] bg-[#A6CE39] text-[#1E3304] font-black px-2 py-0.5 rounded-full">ACTIVE</span>' : ''}
+          </div>
+
+          <div class="text-[11px] text-[#545454] space-y-1 bg-white p-2.5 rounded-xl border border-[#EEF4E3]">
+            <div><strong>Manager:</strong> ${s.manager} (${s.phone})</div>
+            <div><strong>UPI VPA:</strong> <code class="font-mono text-[#1E3304]">${s.upiVpa || 'bumbledry@bank'}</code></div>
+            <div><strong>Coverage:</strong> ${s.geofenceKm} KM Radius</div>
+          </div>
+
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-[#545454]">Fleet: <strong>${s.activeRiders} Riders</strong> • <strong>${s.workshopStaff} Staff</strong></span>
+            ${!isSelected ? `
+              <button onclick="switchActiveBranch('${s.id}')" class="px-3 py-1 bg-[#EEF4E3] hover:bg-[#A6CE39] text-[#1E3304] rounded-full text-xs font-bold transition-all">
+                Switch Branch
+              </button>
+            ` : `
+              <button onclick="openStoreProfileModal()" class="px-3 py-1 bg-white border border-[#E2E8D5] hover:border-[#A6CE39] text-[#1E293B] rounded-full text-xs font-semibold transition-all">
+                Edit Profile
+              </button>
+            `}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const ratesTable = document.getElementById('franchise-rates-table');
+  if (ratesTable) {
+    ratesTable.innerHTML = standardFranchiseRates.map((r, i) => `
+      <tr class="hover:bg-[#F8FAF3] border-b border-[#EEF4E3]">
+        <td class="p-2.5 font-bold text-[#1E293B]">${r.service}</td>
+        <td class="p-2.5 text-[#545454]">${r.unit}</td>
+        <td class="p-2.5 text-[#545454] font-medium">${r.sla}</td>
+        <td class="p-2.5 text-right">
+          <input type="number" id="rate-input-${i}" value="${r.rate}" class="w-20 px-2 py-1 bg-[#F8FAF3] border border-[#E2E8D5] rounded-lg text-xs font-mono font-bold text-right text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+        </td>
+      </tr>
+    `).join('');
+  }
+}
+
+function saveStoreRateCard() {
+  standardFranchiseRates.forEach((r, i) => {
+    const input = document.getElementById(`rate-input-${i}`);
+    if (input) {
+      r.rate = parseInt(input.value, 10) || r.rate;
+    }
+  });
+  localStorage.setItem('bumbledry_standard_rates', JSON.stringify(standardFranchiseRates));
+  alert('Franchise Price Master updated successfully!');
+}
+
+function exportStoreDataJson() {
+  const exportPayload = {
+    store: getActiveStore(),
+    allStores: franchiseStores,
+    orders: allOrders,
+    leads: allLeads,
+    catalog: standardFranchiseRates,
+    exportedAt: new Date().toISOString()
+  };
+
+  const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `bumbledry_${getActiveStore().code}_backup.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importStoreDataJson(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.allStores) franchiseStores = data.allStores;
+      if (data.store) activeStoreId = data.store.id;
+      if (data.orders) allOrders = data.orders;
+      if (data.catalog) standardFranchiseRates = data.catalog;
+
+      localStorage.setItem('bumbledry_franchise_stores', JSON.stringify(franchiseStores));
+      localStorage.setItem('bumbledry_active_store_id', activeStoreId);
+      updateStoreHeaderDisplay();
+      refreshAll();
+      alert('Store data and franchise settings imported successfully!');
+    } catch (err) {
+      alert('Invalid store backup JSON file format.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// =================================================================
+// DAILY CASH & EOD RECONCILIATION ENGINE
+// =================================================================
+function renderAdminReconciliation() {
+  const delivered = allOrders.filter(o => o.status === 'DELIVERED');
+  const activeWorkshop = allOrders.filter(o => ['WASHING', 'DRYING', 'IRONING'].includes(o.status));
+  const packed = allOrders.filter(o => o.status === 'PACKED');
+  const totalBilled = allOrders.reduce((sum, o) => sum + (o.subtotal || 0), 0);
+
+  let cashCollected = 0;
+  let digitalCollected = 0;
+  delivered.forEach(o => {
+    if (o.paymentMode === 'CASH') {
+      cashCollected += (o.subtotal || 0);
+    } else {
+      digitalCollected += (o.subtotal || 0);
+    }
+  });
+
+  const intakePieces = allOrders.reduce((sum, o) => sum + (o.totalPieces || 0), 0);
+  const packedPieces = packed.reduce((sum, o) => sum + (o.totalPieces || 0), 0);
+  const deliveredPieces = delivered.reduce((sum, o) => sum + (o.totalPieces || 0), 0);
+  const overnightPieces = activeWorkshop.reduce((sum, o) => sum + (o.totalPieces || 0), 0);
+
+  const bEl = document.getElementById('eod-stat-billed');
+  const cEl = document.getElementById('eod-stat-cash');
+  const dEl = document.getElementById('eod-stat-digital');
+  const oEl = document.getElementById('eod-stat-overnight');
+  const countEl = document.getElementById('eod-stat-order-count');
+
+  if (bEl) bEl.innerText = `₹${totalBilled.toLocaleString('en-IN')}`;
+  if (cEl) cEl.innerText = `₹${cashCollected.toLocaleString('en-IN')}`;
+  if (dEl) dEl.innerText = `₹${digitalCollected.toLocaleString('en-IN')}`;
+  if (oEl) oEl.innerText = `${overnightPieces} pcs`;
+  if (countEl) countEl.innerText = allOrders.length;
+
+  const inP = document.getElementById('eod-intake-pieces');
+  const pkP = document.getElementById('eod-packed-pieces');
+  const dlP = document.getElementById('eod-delivered-pieces');
+  const ovP = document.getElementById('eod-overnight-pieces');
+
+  if (inP) inP.innerText = `${intakePieces} pcs`;
+  if (pkP) pkP.innerText = `${packedPieces} pcs`;
+  if (dlP) dlP.innerText = `${deliveredPieces} pcs`;
+  if (ovP) ovP.innerText = `${overnightPieces} pcs`;
+
+  const expectedDrawerEl = document.getElementById('drawer-expected-total');
+  if (expectedDrawerEl) expectedDrawerEl.innerText = `₹${cashCollected.toLocaleString('en-IN')}`;
+
+  calculateEodCashDrawer();
+}
+
+function calculateEodCashDrawer() {
+  const n500 = parseInt(document.getElementById('denom-500')?.value || '0', 10) || 0;
+  const n200 = parseInt(document.getElementById('denom-200')?.value || '0', 10) || 0;
+  const n100 = parseInt(document.getElementById('denom-100')?.value || '0', 10) || 0;
+  const nCoins = parseInt(document.getElementById('denom-coins')?.value || '0', 10) || 0;
+
+  const t500 = n500 * 500;
+  const t200 = n200 * 200;
+  const t100 = n100 * 100;
+  const tCoins = nCoins;
+
+  const totalCounted = t500 + t200 + t100 + tCoins;
+
+  const el500 = document.getElementById('denom-total-500');
+  const el200 = document.getElementById('denom-total-200');
+  const el100 = document.getElementById('denom-total-100');
+  const elCoins = document.getElementById('denom-total-coins');
+  const countedEl = document.getElementById('drawer-counted-total');
+  const alertEl = document.getElementById('drawer-variance-alert');
+
+  if (el500) el500.innerText = `₹${t500.toLocaleString('en-IN')}`;
+  if (el200) el200.innerText = `₹${t200.toLocaleString('en-IN')}`;
+  if (el100) el100.innerText = `₹${t100.toLocaleString('en-IN')}`;
+  if (elCoins) elCoins.innerText = `₹${tCoins.toLocaleString('en-IN')}`;
+  if (countedEl) countedEl.innerText = `₹${totalCounted.toLocaleString('en-IN')}`;
+
+  const expectedStr = (document.getElementById('drawer-expected-total')?.innerText || '0').replace(/[^0-9]/g, '');
+  const expectedNum = parseInt(expectedStr, 10) || 0;
+  const variance = totalCounted - expectedNum;
+
+  if (alertEl) {
+    if (totalCounted === 0 && expectedNum > 0) {
+      alertEl.className = 'text-[11px] font-bold p-2.5 rounded-xl text-center bg-[#F8FAF3] text-[#545454]';
+      alertEl.innerText = `Enter physical cash notes counted in counter drawer to verify match.`;
+    } else if (variance === 0) {
+      alertEl.className = 'text-[11px] font-bold p-2.5 rounded-xl text-center bg-[#EEF4E3] text-[#2D5A1E]';
+      alertEl.innerText = `Exact match! Physical cash matches system expected collection (₹${totalCounted}).`;
+    } else if (variance > 0) {
+      alertEl.className = 'text-[11px] font-bold p-2.5 rounded-xl text-center bg-blue-50 text-[#276EF1]';
+      alertEl.innerText = `Drawer Surplus: +₹${variance.toLocaleString('en-IN')} excess cash in drawer.`;
+    } else {
+      alertEl.className = 'text-[11px] font-bold p-2.5 rounded-xl text-center bg-rose-50 text-rose-700';
+      alertEl.innerText = `Drawer Shortage: -₹${Math.abs(variance).toLocaleString('en-IN')} cash missing from expected balance!`;
+    }
+  }
+}
+
+function generateStoreCloseWhatsAppSummary() {
+  const store = getActiveStore();
+  const dateStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  const billed = document.getElementById('eod-stat-billed')?.innerText || '₹0';
+  const cash = document.getElementById('eod-stat-cash')?.innerText || '₹0';
+  const digital = document.getElementById('eod-stat-digital')?.innerText || '₹0';
+  const counted = document.getElementById('drawer-counted-total')?.innerText || '₹0';
+  const delivered = document.getElementById('eod-delivered-pieces')?.innerText || '0 pcs';
+  const overnight = document.getElementById('eod-overnight-pieces')?.innerText || '0 pcs';
+  const notes = document.getElementById('eod-manager-notes')?.value || 'All shifts closed cleanly.';
+
+  const waText = 
+`*BUMBLEDRY STORE DAILY CLOSE REPORT*
+*Branch:* ${store.name} (#${store.code})
+*Date:* ${dateStr}
+*Manager:* ${store.manager}
+
+*FINANCIAL SUMMARY:*
+• Total Orders Billed: ${allOrders.length}
+• Total Gross Revenue: ${billed}
+• Cash in Drawer: ${counted} (Expected: ${cash})
+• Digital / UPI Collections: ${digital}
+
+*GARMENT INVENTORY:*
+• Cleared & Delivered: ${delivered}
+• Overnight in Workshop: ${overnight}
+
+*MANAGER REMARKS:*
+"${notes}"
+
+Verified by Store Console`;
+
+  const textarea = document.getElementById('eod-whatsapp-text');
+  if (textarea) textarea.value = waText;
+
+  const modal = document.getElementById('modal-eod-summary');
+  if (modal) modal.classList.remove('hidden');
+  lucide.createIcons();
+}
+
+function closeEodSummaryModal() {
+  const modal = document.getElementById('modal-eod-summary');
+  if (modal) modal.classList.add('hidden');
+}
+
+function copyEodSummaryText() {
+  const textarea = document.getElementById('eod-whatsapp-text');
+  if (!textarea) return;
+  navigator.clipboard.writeText(textarea.value).then(() => {
+    const btn = document.getElementById('btn-copy-eod-text');
+    if (btn) {
+      btn.innerText = 'Copied!';
+      setTimeout(() => { btn.innerText = 'Copy Text'; }, 2000);
+    }
+  });
+}
+
+function shareEodViaWhatsApp() {
+  const textarea = document.getElementById('eod-whatsapp-text');
+  if (!textarea) return;
+  const store = getActiveStore();
+  const phone = store.phone.replace(/[^0-9]/g, '');
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(textarea.value)}`;
+  window.open(url, '_blank');
+}
+
+function printEodReconciliationSheet() {
+  window.print();
+}
+
+// =================================================================
+// SMART DIRECTIONAL CORRIDORS & EARLY EXPEDITE
+// =================================================================
+function filterCorridor(corridor) {
+  currentCorridorFilter = corridor;
+  ['all', 'north', 'east', 'south'].forEach(c => {
+    const btn = document.getElementById(`corridor-tab-${c}`);
+    if (!btn) return;
+    if (c === corridor.toLowerCase()) {
+      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#1E3304] text-[#A6CE39]';
+    } else {
+      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#EEF4E3] text-[#545454] hover:text-[#1E293B]';
+    }
+  });
+  renderDispatchRecommendations();
+}
+
+async function expediteEarlyOrder(orderId) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+  await updateOrderStatus(orderId, 'PACKED');
+  alert(`Order ${orderId} (${order.customerName}) expedited to PACKED in workshop! Ready for rider dispatch.`);
+  refreshAll();
+}
+
+// =================================================================
+// DYNAMIC UPI QR CODE GENERATOR
+// =================================================================
+function openDynamicUpiQrModal(orderId) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+
+  const store = getActiveStore();
+  const amount = order.subtotal || 650;
+  const vpa = store.upiVpa || 'bumbledry@icici';
+
+  const orderLabel = document.getElementById('qr-order-id-label');
+  const amountLabel = document.getElementById('qr-order-amount-label');
+  const vpaLabel = document.getElementById('qr-store-vpa-label');
+  const container = document.getElementById('qr-canvas-container');
+
+  if (orderLabel) orderLabel.innerText = `Order: ${order.id} • ${order.customerName}`;
+  if (amountLabel) amountLabel.innerText = `₹${amount}`;
+  if (vpaLabel) vpaLabel.innerText = vpa;
+
+  if (container) {
+    container.innerHTML = `
+      <svg class="w-36 h-36 text-[#1E3A2F]" viewBox="0 0 100 100" fill="currentColor">
+        <path d="M10,10 h24 v24 h-24 z M14,14 v16 h16 v-16 z M18,18 h8 v8 h-8 z" />
+        <path d="M66,10 h24 v24 h-24 z M70,14 v16 h16 v-16 z M74,18 h8 v8 h-8 z" />
+        <path d="M10,66 h24 v24 h-24 z M14,70 v16 h16 v-16 z M18,74 h8 v8 h-8 z" />
+        <rect x="42" y="14" width="6" height="6" />
+        <rect x="52" y="14" width="6" height="6" />
+        <rect x="42" y="24" width="6" height="6" />
+        <rect x="52" y="30" width="6" height="6" />
+        <rect x="14" y="44" width="6" height="6" />
+        <rect x="24" y="44" width="6" height="6" />
+        <rect x="34" y="44" width="6" height="6" />
+        <rect x="44" y="44" width="12" height="12" fill="#A6CE39" />
+        <rect x="60" y="44" width="6" height="6" />
+        <rect x="74" y="44" width="6" height="6" />
+        <rect x="84" y="44" width="6" height="6" />
+        <rect x="42" y="66" width="6" height="6" />
+        <rect x="52" y="66" width="6" height="6" />
+        <rect x="66" y="66" width="6" height="6" />
+        <rect x="76" y="74" width="6" height="6" />
+        <rect x="84" y="84" width="6" height="6" />
+        <rect x="42" y="80" width="6" height="6" />
+        <rect x="52" y="80" width="6" height="6" />
+      </svg>
+      <div class="text-[10px] font-mono text-[#545454] font-bold">SCAN WITH ANY UPI APP</div>
+    `;
+  }
+
+  const modal = document.getElementById('modal-dynamic-upi-qr');
+  if (modal) modal.classList.remove('hidden');
+  lucide.createIcons();
+}
+
+function closeDynamicUpiQrModal() {
+  const modal = document.getElementById('modal-dynamic-upi-qr');
+  if (modal) modal.classList.add('hidden');
 }

@@ -161,10 +161,20 @@
       <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16 gap-2 sm:gap-3">
           
-          <!-- Brand: Bumbledry Signature Typography -->
-          <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-            <span class="text-lg sm:text-2xl font-black tracking-tight text-[#1E3304]">Bumble<span class="text-[#8FB828]">dry</span></span>
-            <span class="bg-[#A6CE39] text-[#1E3304] text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full uppercase tracking-wider">OPS</span>
+          <!-- Brand & Franchise Store Switcher -->
+          <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
+            <div class="flex items-center space-x-1.5 sm:space-x-2">
+              <span class="text-lg sm:text-2xl font-black tracking-tight text-[#1E3304]">Bumble<span class="text-[#8FB828]">dry</span></span>
+              <span class="bg-[#A6CE39] text-[#1E3304] text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full uppercase tracking-wider">OPS</span>
+            </div>
+
+            <!-- Active Franchise Store Switcher Pill -->
+            <button onclick="openStoreProfileModal()" class="hidden md:flex items-center space-x-1.5 bg-[#F8FAF3] hover:bg-[#EEF4E3] border border-[#E2E8D5] hover:border-[#A6CE39] px-2.5 sm:px-3 py-1 rounded-full text-xs transition-all shadow-xs group" title="Switch Store or Configure Branch Profile">
+              <i data-lucide="store" class="w-3.5 h-3.5 text-[#2D5A1E] group-hover:scale-110 transition-transform"></i>
+              <span id="header-store-name" class="font-bold text-[#1E293B]">Sector 15 Flagship</span>
+              <span id="header-store-code" class="text-[9px] bg-[#EEF4E3] group-hover:bg-[#D8ECAB] text-[#2D5A1E] font-bold px-1.5 py-0.2 rounded-full font-mono">#101</span>
+              <i data-lucide="chevron-down" class="w-3 h-3 text-[#545454]"></i>
+            </button>
           </div>
 
           <!-- Logged In User Profile & Monochromatic Role Badge -->
@@ -209,9 +219,12 @@
         <span class="text-[#CBCBCB] hidden sm:inline">|</span>
         <span class="truncate hidden sm:inline">2,000 Customers connected</span>
       </div>
-      <div class="hidden md:flex items-center space-x-3 text-[#545454] shrink-0">
-        <span>Sector 15 Main Store</span>
-        <span id="live-clock" class="font-mono text-[#898989]"></span>
+      <div class="flex items-center space-x-3 text-[#545454] shrink-0">
+        <button onclick="openStoreProfileModal()" class="hover:text-[#1E293B] flex items-center space-x-1 cursor-pointer transition-colors" title="Configure active branch">
+          <i data-lucide="map-pin" class="w-3 h-3 text-[#A6CE39]"></i>
+          <span id="status-store-label" class="font-semibold text-[#1E293B]">Sector 15 Main Store</span>
+        </button>
+        <span id="live-clock" class="font-mono text-[#898989] hidden md:inline"></span>
       </div>
     </div>
   </div>
@@ -325,12 +338,21 @@
       <!-- Master Orders Table with Filtering -->
       <div class="bg-white rounded-2xl border border-[#E2E8D5] overflow-hidden">
         <div class="p-4 sm:p-5 border-b border-[#E2E8D5] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div class="flex items-center space-x-2 bg-[#EEF4E3] p-1 rounded-full">
-            <button onclick="setAdminTableTab('orders')" id="atab-orders" class="px-4 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm transition-all">
+          <div class="flex items-center space-x-1.5 bg-[#EEF4E3] p-1 rounded-full overflow-x-auto no-scrollbar">
+            <button onclick="setAdminTableTab('orders')" id="atab-orders" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#1E3304] text-[#A6CE39] shadow-sm transition-all whitespace-nowrap">
               Orders Ledger
             </button>
-            <button onclick="setAdminTableTab('pod')" id="atab-pod" class="px-4 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all">
-              Payment & POD Audit
+            <button onclick="setAdminTableTab('pod')" id="atab-pod" class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all whitespace-nowrap flex items-center space-x-1">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+              <span>Payment & POD Audit</span>
+            </button>
+            <button onclick="setAdminTableTab('reconciliation')" id="atab-reconciliation" class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all whitespace-nowrap flex items-center space-x-1">
+              <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+              <span>Daily EOD Drawer</span>
+            </button>
+            <button onclick="setAdminTableTab('franchise')" id="atab-franchise" class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#545454] hover:text-[#1E293B] transition-all whitespace-nowrap flex items-center space-x-1">
+              <i data-lucide="building" class="w-3.5 h-3.5"></i>
+              <span>Franchise Hub</span>
             </button>
           </div>
 
@@ -389,6 +411,206 @@
               <!-- Rendered via JS -->
             </tbody>
           </table>
+        </div>
+
+        <!-- VIEW 3: DAILY CASH & EOD RECONCILIATION DRAWER -->
+        <div id="admin-reconciliation-view" class="p-5 space-y-6 hidden">
+          <!-- Top EOD Metric Tiles -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="bg-[#F8FAF3] p-4 rounded-2xl border border-[#E2E8D5]">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#545454]">Total Billed Today</span>
+              <div id="eod-stat-billed" class="text-2xl font-black text-[#1E293B] mt-1">₹0</div>
+              <span class="text-[10px] text-[#545454]"><span id="eod-stat-order-count">0</span> orders booked</span>
+            </div>
+            <div class="bg-[#F8FAF3] p-4 rounded-2xl border border-[#E2E8D5]">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#2D5A1E]">Physical Cash in Drawer</span>
+              <div id="eod-stat-cash" class="text-2xl font-black text-[#2D5A1E] mt-1">₹0</div>
+              <span class="text-[10px] text-[#545454]">Counter + Rider Cash</span>
+            </div>
+            <div class="bg-[#F8FAF3] p-4 rounded-2xl border border-[#E2E8D5]">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#276EF1]">Digital UPI Collected</span>
+              <div id="eod-stat-digital" class="text-2xl font-black text-[#276EF1] mt-1">₹0</div>
+              <span class="text-[10px] text-[#545454]">POD Screenshot Verified</span>
+            </div>
+            <div class="bg-[#F8FAF3] p-4 rounded-2xl border border-[#E2E8D5]">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#E11900]">Overnight in Workshop</span>
+              <div id="eod-stat-overnight" class="text-2xl font-black text-[#E11900] mt-1">0 pcs</div>
+              <span class="text-[10px] text-[#545454]">Hanging on Workshop racks</span>
+            </div>
+          </div>
+
+          <!-- Drawer Reconciliation Sheet & Cash Counter Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <!-- Left: Cash Drawer Calculator -->
+            <div class="bg-[#F8FAF3] p-4 sm:p-5 rounded-2xl border border-[#E2E8D5] space-y-4">
+              <div class="flex items-center justify-between border-b border-[#E2E8D5] pb-3">
+                <div class="flex items-center space-x-2">
+                  <i data-lucide="calculator" class="w-4 h-4 text-[#2D5A1E]"></i>
+                  <h4 class="font-bold text-xs uppercase tracking-wider text-[#1E293B]">Physical Cash Drawer Count</h4>
+                </div>
+                <span class="text-[10px] bg-white border border-[#E2E8D5] px-2 py-0.5 rounded-full font-mono text-[#545454]">Daily Denominations</span>
+              </div>
+
+              <div class="space-y-2 text-xs">
+                <div class="grid grid-cols-3 gap-2 items-center bg-white p-2 rounded-xl border border-[#E2E8D5]">
+                  <span class="font-bold text-[#1E293B]">₹500 Notes</span>
+                  <input type="number" id="denom-500" value="0" min="0" oninput="calculateEodCashDrawer()" class="px-2.5 py-1 rounded-lg border border-[#E2E8D5] text-xs font-mono text-center focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+                  <span id="denom-total-500" class="text-right font-mono font-bold text-[#1E293B]">₹0</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 items-center bg-white p-2 rounded-xl border border-[#E2E8D5]">
+                  <span class="font-bold text-[#1E293B]">₹200 Notes</span>
+                  <input type="number" id="denom-200" value="0" min="0" oninput="calculateEodCashDrawer()" class="px-2.5 py-1 rounded-lg border border-[#E2E8D5] text-xs font-mono text-center focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+                  <span id="denom-total-200" class="text-right font-mono font-bold text-[#1E293B]">₹0</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 items-center bg-white p-2 rounded-xl border border-[#E2E8D5]">
+                  <span class="font-bold text-[#1E293B]">₹100 Notes</span>
+                  <input type="number" id="denom-100" value="0" min="0" oninput="calculateEodCashDrawer()" class="px-2.5 py-1 rounded-lg border border-[#E2E8D5] text-xs font-mono text-center focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+                  <span id="denom-total-100" class="text-right font-mono font-bold text-[#1E293B]">₹0</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 items-center bg-white p-2 rounded-xl border border-[#E2E8D5]">
+                  <span class="font-bold text-[#1E293B]">₹50 / ₹20 / Coins</span>
+                  <input type="number" id="denom-coins" value="0" min="0" oninput="calculateEodCashDrawer()" class="px-2.5 py-1 rounded-lg border border-[#E2E8D5] text-xs font-mono text-center focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+                  <span id="denom-total-coins" class="text-right font-mono font-bold text-[#1E293B]">₹0</span>
+                </div>
+              </div>
+
+              <div class="p-3 bg-white rounded-xl border border-[#E2E8D5] flex items-center justify-between">
+                <div>
+                  <div class="text-[11px] text-[#545454]">Counted Physical Drawer:</div>
+                  <div id="drawer-counted-total" class="text-lg font-black text-[#1E3304]">₹0</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-[11px] text-[#545454]">System Expected Cash:</div>
+                  <div id="drawer-expected-total" class="text-lg font-black text-[#1E293B]">₹0</div>
+                </div>
+              </div>
+              <div id="drawer-variance-alert" class="text-[11px] font-bold p-2.5 rounded-xl text-center bg-[#EEF4E3] text-[#2D5A1E]">
+                Drawer matches expected cash balance.
+              </div>
+            </div>
+
+            <!-- Right: Workshop Garment Reconciliation & Owner Sign-Off -->
+            <div class="bg-[#F8FAF3] p-4 sm:p-5 rounded-2xl border border-[#E2E8D5] flex flex-col justify-between space-y-4">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between border-b border-[#E2E8D5] pb-3">
+                  <div class="flex items-center space-x-2">
+                    <i data-lucide="shirt" class="w-4 h-4 text-[#1E3A2F]"></i>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-[#1E293B]">Garment Inventory Flow (Today)</h4>
+                  </div>
+                  <span class="text-[10px] text-[#545454]">Store Close Audit</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div class="bg-white p-3 rounded-xl border border-[#E2E8D5]">
+                    <div class="text-[#545454] text-[11px]">Intake at Counter:</div>
+                    <div id="eod-intake-pieces" class="font-black text-base text-[#1E293B] mt-0.5">0 pcs</div>
+                  </div>
+                  <div class="bg-white p-3 rounded-xl border border-[#E2E8D5]">
+                    <div class="text-[#545454] text-[11px]">Ironed & Packed:</div>
+                    <div id="eod-packed-pieces" class="font-black text-base text-[#1E293B] mt-0.5">0 pcs</div>
+                  </div>
+                  <div class="bg-white p-3 rounded-xl border border-[#E2E8D5]">
+                    <div class="text-[#545454] text-[11px]">Delivered to Customers:</div>
+                    <div id="eod-delivered-pieces" class="font-black text-base text-[#2D5A1E] mt-0.5">0 pcs</div>
+                  </div>
+                  <div class="bg-white p-3 rounded-xl border border-[#E2E8D5]">
+                    <div class="text-[#545454] text-[11px]">Overnight in Store:</div>
+                    <div id="eod-overnight-pieces" class="font-black text-base text-[#E11900] mt-0.5">0 pcs</div>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-[#1E293B] mb-1">Store Manager EOD Closing Note:</label>
+                  <textarea id="eod-manager-notes" rows="2" placeholder="e.g. All deliveries completed on time. 2 suits kept for stain treatment tomorrow morning." class="w-full p-2.5 rounded-xl bg-white border border-[#E2E8D5] text-xs text-[#1E293B] focus:outline-none focus:ring-1 focus:ring-[#A6CE39]"></textarea>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="pt-3 border-t border-[#E2E8D5] flex flex-wrap items-center justify-between gap-2">
+                <button onclick="printEodReconciliationSheet()" class="px-3.5 py-2 bg-white hover:bg-[#EEF4E3] border border-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold flex items-center space-x-1.5 transition-all">
+                  <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                  <span>Print Day Slip</span>
+                </button>
+                <button onclick="generateStoreCloseWhatsAppSummary()" class="px-4 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold flex items-center space-x-1.5 shadow-sm transition-all">
+                  <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                  <span>Send WhatsApp EOD Summary to Owner</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW 4: FRANCHISE & STORE CONFIGURATION HUB -->
+        <div id="admin-franchise-view" class="p-5 space-y-6 hidden">
+          <!-- Multi-Store Branch Cards -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="font-black text-sm text-[#1E293B] flex items-center space-x-2">
+                  <i data-lucide="building" class="w-4 h-4 text-[#2D5A1E]"></i>
+                  <span>Franchise Store Network</span>
+                </h4>
+                <p class="text-[11px] text-[#545454]">Manage multiple outlets and franchise store profiles</p>
+              </div>
+              <button onclick="openOnboardFranchiseModal()" class="px-3.5 py-1.5 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-bold shadow-xs flex items-center space-x-1 transition-all">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>+ Onboard Franchise Branch</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="franchise-stores-grid">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Franchise Garment Rate Card (Live Price Master) -->
+          <div class="bg-[#F8FAF3] p-4 sm:p-5 rounded-2xl border border-[#E2E8D5] space-y-3">
+            <div class="flex items-center justify-between border-b border-[#E2E8D5] pb-3">
+              <div>
+                <h4 class="font-bold text-xs uppercase tracking-wider text-[#1E293B]">Franchise Standard Rate Master</h4>
+                <p class="text-[11px] text-[#545454]">Store POS pricing per kilogram & garment piece</p>
+              </div>
+              <button onclick="saveStoreRateCard()" class="px-3.5 py-1.5 bg-[#1E3A2F] text-white hover:bg-[#152B23] rounded-full text-xs font-semibold flex items-center space-x-1 transition-all">
+                <i data-lucide="save" class="w-3.5 h-3.5 text-[#A6CE39]"></i>
+                <span>Save Rate Card</span>
+              </button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead class="bg-white border-b border-[#E2E8D5] text-[#545454]">
+                  <tr>
+                    <th class="p-2.5">Service Category</th>
+                    <th class="p-2.5">Billing Unit</th>
+                    <th class="p-2.5">Turnaround SLA</th>
+                    <th class="p-2.5 text-right">Standard Rate (₹)</th>
+                  </tr>
+                </thead>
+                <tbody id="franchise-rates-table" class="divide-y divide-[#E2E8D5] text-[#1E293B] bg-white">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Store Data Distribution & Backup Tools -->
+          <div class="bg-white p-4 rounded-2xl border border-[#E2E8D5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div>
+              <span class="font-bold text-[#1E293B] block">Store Distribution & Offline Backup</span>
+              <span class="text-[#545454] text-[11px]">Export entire store state to deploy or migrate to another franchise location.</span>
+            </div>
+            <div class="flex items-center space-x-2 shrink-0">
+              <button onclick="exportStoreDataJson()" class="px-3.5 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-bold flex items-center space-x-1.5 transition-all">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Export Store Data</span>
+              </button>
+              <button onclick="document.getElementById('import-store-input').click()" class="px-3.5 py-1.5 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-bold flex items-center space-x-1.5 transition-all">
+                <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                <span>Import Backup</span>
+              </button>
+              <input type="file" id="import-store-input" accept=".json" onchange="importStoreDataJson(event)" class="hidden">
+            </div>
+          </div>
         </div>
       </div>
 
@@ -491,14 +713,43 @@
       </div>
 
       <!-- SMART DISPATCH & LOGISTIC ROUTE RECOMMENDATIONS (SAVE TURNS) -->
-      <div id="manager-dispatch-recommendations" class="bg-white rounded-2xl border border-[#E2E8D5] p-4 sm:p-5 space-y-3">
-        <div class="flex items-center justify-between border-b border-[#E2E8D5] pb-3">
+      <div id="manager-dispatch-recommendations" class="bg-white rounded-2xl border border-[#E2E8D5] p-4 sm:p-5 space-y-3.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E2E8D5] pb-3">
           <div class="flex items-center space-x-2">
             <span class="w-2.5 h-2.5 rounded-full bg-[#A6CE39]"></span>
-            <h3 class="font-bold text-[#1E293B] text-sm">Smart Dispatch & Trip Combining Engine</h3>
+            <h3 class="font-bold text-[#1E293B] text-sm">Smart Directional Corridors & Turn Saver</h3>
           </div>
-          <span class="text-[10px] bg-[#EEF4E3] text-[#1E293B] font-semibold px-2.5 py-0.5 rounded-full">Turn Reducer Active</span>
+          <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar">
+            <button onclick="filterCorridor('all')" id="corridor-tab-all" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#1E3304] text-[#A6CE39]">All Corridors</button>
+            <button onclick="filterCorridor('North')" id="corridor-tab-north" class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#EEF4E3] text-[#545454] hover:text-[#1E293B]">North (Sec 14/15)</button>
+            <button onclick="filterCorridor('East')" id="corridor-tab-east" class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#EEF4E3] text-[#545454] hover:text-[#1E293B]">East (DLF/Cyber)</button>
+            <button onclick="filterCorridor('South')" id="corridor-tab-south" class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#EEF4E3] text-[#545454] hover:text-[#1E293B]">South (Golf Course)</button>
+          </div>
         </div>
+
+        <!-- Live Early Expedite Opportunity Banner -->
+        <div id="early-expedite-alert-banner" class="bg-[#F3F9E4] border border-[#D8ECAB] p-3 sm:p-3.5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+          <div class="flex items-start space-x-2.5">
+            <div class="w-7 h-7 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="zap" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <span class="font-black text-[#1E3304] text-xs uppercase tracking-wider block">Turn-Saver Recommendation Active</span>
+              <p class="text-[#2D5A1E] text-[11px] mt-0.5" id="early-expedite-text">
+                Pickup in DLF Phase 4 (Sumit Saxena, 4:30 PM). Order #ORD-1044 is in Steam Press due tomorrow. Expediting it now saves 1 round trip (8.2 km, ₹130 fuel)!
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 shrink-0">
+            <button onclick="expediteEarlyOrder('ORD-1044')" class="px-3 py-1.5 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-bold transition-all">
+              Fast-Track in Workshop
+            </button>
+            <button onclick="openWhatsAppReadyModal('ORD-1044')" class="px-3 py-1.5 bg-[#1E3A2F] hover:bg-[#152B23] text-white rounded-full text-xs font-semibold transition-all">
+              Ask Customer Availability
+            </button>
+          </div>
+        </div>
+
         <div id="dispatch-recommendations-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <!-- Populated dynamically via JS -->
         </div>
@@ -640,6 +891,37 @@
         <span class="text-[11px] bg-[#F8FAF3] text-[#1E293B] font-semibold px-2.5 py-0.5 rounded-full w-fit">
           Real-time Sync Active
         </span>
+      </div>
+
+      <!-- Workshop Station Lead & Accountability Header -->
+      <div class="bg-white rounded-2xl border border-[#E2E8D5] p-3 sm:p-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+        <div class="flex items-center space-x-2.5 bg-[#F8FAF3] p-2.5 rounded-xl border border-[#EEF4E3]">
+          <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0">
+            <i data-lucide="waves" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <span class="text-[10px] text-[#545454] uppercase tracking-wider font-bold block">Washing Station</span>
+            <span class="font-bold text-[#1E293B]">Ramesh Singh (Lead)</span>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2.5 bg-[#F8FAF3] p-2.5 rounded-xl border border-[#EEF4E3]">
+          <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <span class="text-[10px] text-[#545454] uppercase tracking-wider font-bold block">Dry Clean Station</span>
+            <span class="font-bold text-[#1E293B]">Anil Verma (Specialist)</span>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2.5 bg-[#F8FAF3] p-2.5 rounded-xl border border-[#EEF4E3]">
+          <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0">
+            <i data-lucide="shirt" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <span class="text-[10px] text-[#545454] uppercase tracking-wider font-bold block">Steam Press & Packing</span>
+            <span class="font-bold text-[#1E293B]">Suresh Yadav (Quality)</span>
+          </div>
+        </div>
       </div>
 
       <!-- Mobile Stage Switcher Pills -->
@@ -1456,6 +1738,247 @@
         <button type="button" onclick="closeTestCredentialsModal()" class="px-3.5 py-1.5 bg-[#E2E8D5] hover:bg-[#D8ECAB] text-[#1E293B] rounded-xl text-xs font-bold transition-colors">
           Close
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: STORE PROFILE & BRANCH SWITCHER                         -->
+  <!-- ============================================================== -->
+  <div id="modal-store-profile" class="fixed inset-0 bg-[#1E3A2F]/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full border border-[#E2E8D5] shadow-2xl overflow-hidden animate-fadeIn" onclick="event.stopPropagation()">
+      <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between bg-[#F8FAF3]">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center">
+            <i data-lucide="store" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-sm text-[#1E293B]">Franchise Store & Profile Hub</h3>
+            <p class="text-[11px] text-[#545454]">Switch active branch or edit store operational settings</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeStoreProfileModal()" class="w-8 h-8 rounded-full hover:bg-[#E2E8D5] text-[#545454] hover:text-[#1E293B] flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-4 text-xs overflow-y-auto max-h-[75vh]">
+        <!-- Branch Switcher -->
+        <div>
+          <label class="block font-bold text-[#1E293B] mb-1.5">Select Active Store Branch:</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" id="modal-branch-selector-grid">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <form id="store-profile-form" onsubmit="saveStoreProfile(event)" class="space-y-3 pt-3 border-t border-[#E2E8D5]">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-[#1E293B] mb-1">Branch Name</label>
+              <input type="text" id="store-name-input" required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs font-semibold text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+            </div>
+            <div>
+              <label class="block font-bold text-[#1E293B] mb-1">Store Code</label>
+              <input type="text" id="store-code-input" required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs font-mono font-bold text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-[#1E293B] mb-1">Store Manager Phone / WA</label>
+              <input type="text" id="store-phone-input" required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs font-mono text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+            </div>
+            <div>
+              <label class="block font-bold text-[#1E293B] mb-1">Store UPI VPA (for QR)</label>
+              <input type="text" id="store-upi-input" placeholder="store@bank" class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs font-mono text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-[#1E293B] mb-1">Physical Store Address</label>
+            <input type="text" id="store-address-input" required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-[#1E293B] mb-1">GSTIN Number</label>
+              <input type="text" id="store-gstin-input" class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs font-mono text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+            </div>
+            <div>
+              <label class="block font-bold text-[#1E293B] mb-1">Geofence Delivery Radius (KM)</label>
+              <input type="number" step="0.5" id="store-radius-input" class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs font-mono text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+            </div>
+          </div>
+
+          <div class="pt-3 flex items-center justify-between border-t border-[#E2E8D5]">
+            <button type="button" onclick="openOnboardFranchiseModal()" class="text-xs font-bold text-[#2D5A1E] hover:underline flex items-center space-x-1">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>+ Add New Store</span>
+            </button>
+            <button type="submit" class="px-5 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-black shadow-sm transition-all flex items-center space-x-1.5">
+              <i data-lucide="check" class="w-4 h-4"></i>
+              <span>Save Store Profile</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ONBOARD NEW FRANCHISE STORE (STORE-IN-A-BOX)            -->
+  <!-- ============================================================== -->
+  <div id="modal-onboard-franchise" class="fixed inset-0 bg-[#1E3A2F]/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full border border-[#E2E8D5] shadow-2xl overflow-hidden animate-fadeIn" onclick="event.stopPropagation()">
+      <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between bg-[#F8FAF3]">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center">
+            <i data-lucide="building" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-sm text-[#1E293B]">Onboard New Franchise Branch</h3>
+            <p class="text-[11px] text-[#545454]">Deploy Bumbledry Store-in-a-Box in 30 seconds</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeOnboardFranchiseModal()" class="w-8 h-8 rounded-full hover:bg-[#E2E8D5] text-[#545454] hover:text-[#1E293B] flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleOnboardFranchise(event)" class="p-5 space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-[#1E293B] mb-1">Franchise Branch Name</label>
+          <input type="text" id="new-branch-name" placeholder="e.g. South Extension Hub" required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs font-semibold text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-[#1E293B] mb-1">City / Region</label>
+            <input type="text" id="new-branch-city" placeholder="e.g. New Delhi" required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-[#1E293B] mb-1">Branch Code</label>
+            <input type="text" id="new-branch-code" placeholder="104" required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs font-mono font-bold text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-[#1E293B] mb-1">Store Address</label>
+          <input type="text" id="new-branch-address" placeholder="e.g. Main Market, Block G, South Ext Part 1" required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-[#1E293B] mb-1">Store Manager Name</label>
+            <input type="text" id="new-branch-manager" placeholder="e.g. Arvind Rao" required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-[#1E293B] mb-1">Manager Phone</label>
+            <input type="text" id="new-branch-phone" placeholder="+91 98..." required class="w-full px-3 py-2 bg-[#F8FAF3] border border-[#E2E8D5] rounded-xl text-xs font-mono text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
+          </div>
+        </div>
+
+        <div class="p-3 bg-[#F3F9E4] text-[#5A7812] rounded-xl text-[11px] font-semibold">
+          Auto-provisions pre-configured laundry price catalog and manager logins for the new franchise.
+        </div>
+
+        <div class="pt-3 border-t border-[#E2E8D5] flex items-center justify-end space-x-2">
+          <button type="button" onclick="closeOnboardFranchiseModal()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-semibold">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-black shadow-sm flex items-center space-x-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Launch Branch Console</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: DYNAMIC UPI QR CODE FOR DOORSTEP & COUNTER PAYMENT      -->
+  <!-- ============================================================== -->
+  <div id="modal-dynamic-upi-qr" class="fixed inset-0 bg-[#1E3A2F]/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full border border-[#E2E8D5] shadow-2xl overflow-hidden animate-fadeIn" onclick="event.stopPropagation()">
+      <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between bg-[#F8FAF3]">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center">
+            <i data-lucide="qr-code" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-sm text-[#1E293B]">Instant UPI Payment QR</h3>
+            <p class="text-[10px] text-[#545454]">Customer scans with GPay / PhonePe / Paytm</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeDynamicUpiQrModal()" class="w-8 h-8 rounded-full hover:bg-[#E2E8D5] text-[#545454] hover:text-[#1E293B] flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 text-center space-y-4">
+        <div>
+          <span class="text-xs text-[#545454] block" id="qr-order-id-label">Order ORD-1040</span>
+          <div class="text-3xl font-black text-[#1E293B] tracking-tight mt-0.5" id="qr-order-amount-label">₹650</div>
+          <span class="text-[11px] text-[#2D5A1E] font-bold bg-[#EEF4E3] px-2.5 py-0.5 rounded-full inline-block mt-1" id="qr-store-vpa-label">bumbledry.sec15@icici</span>
+        </div>
+
+        <!-- Rendered High-Quality SVG QR Placeholder -->
+        <div class="mx-auto w-52 h-52 bg-white p-3 rounded-2xl border-2 border-[#1E3A2F] shadow-sm flex flex-col items-center justify-center space-y-2" id="qr-canvas-container">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <div class="text-[11px] text-[#545454]">
+          Customer scans to pay exact amount directly to store bank account. Zero manual errors.
+        </div>
+
+        <div class="pt-2 flex items-center justify-center space-x-2">
+          <button type="button" onclick="closeDynamicUpiQrModal()" class="w-full py-2.5 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-2xl text-xs font-black shadow-sm transition-all flex items-center justify-center space-x-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Payment Received</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: STORE OWNER EOD WHATSAPP CLOSING SLIP                   -->
+  <!-- ============================================================== -->
+  <div id="modal-eod-summary" class="fixed inset-0 bg-[#1E3A2F]/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full border border-[#E2E8D5] shadow-2xl overflow-hidden animate-fadeIn" onclick="event.stopPropagation()">
+      <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between bg-[#F8FAF3]">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-full bg-[#2D5A1E] text-white flex items-center justify-center">
+            <i data-lucide="message-square" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-sm text-[#1E293B]">Daily EOD Close Report</h3>
+            <p class="text-[10px] text-[#545454]">Formatted for Store Owner WhatsApp</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeEodSummaryModal()" class="w-8 h-8 rounded-full hover:bg-[#E2E8D5] text-[#545454] hover:text-[#1E293B] flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-[#1E293B] mb-1">WhatsApp EOD Text Preview:</label>
+          <textarea id="eod-whatsapp-text" rows="9" class="w-full p-3 font-mono text-[11px] bg-[#F8FAF3] border border-[#E2E8D5] rounded-2xl text-[#1E293B] focus:outline-none focus:ring-1 focus:ring-[#A6CE39] leading-relaxed"></textarea>
+        </div>
+
+        <div class="p-3 bg-[#EEF4E3] text-[#2D5A1E] rounded-xl text-[11px] font-semibold">
+          Includes daily revenue, drawer cash tally, verified UPI settlements, and overnight workshop balance.
+        </div>
+
+        <div class="pt-2 flex items-center justify-end space-x-2">
+          <button type="button" onclick="copyEodSummaryText()" class="px-4 py-2 bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] rounded-full text-xs font-bold transition-all flex items-center space-x-1.5">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span id="btn-copy-eod-text">Copy Text</span>
+          </button>
+          <button type="button" onclick="shareEodViaWhatsApp()" class="px-5 py-2 bg-[#2D5A1E] hover:bg-[#234717] text-white rounded-full text-xs font-bold shadow-sm transition-all flex items-center space-x-1.5">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span>Send to Owner WA</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
