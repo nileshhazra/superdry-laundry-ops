@@ -129,66 +129,15 @@
           </button>
         </form>
 
-        <!-- Quick 1-Tap Login Section with Monochromatic Icons (No Emojis) -->
-        <div class="pt-4 border-t border-[#E2E8D5] space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] font-black uppercase tracking-wider text-[#545454]">Sample Test Accounts (1-Tap Login)</span>
-            <span class="text-[10px] text-[#2D5A1E] font-bold bg-[#EEF4E3] px-2 py-0.5 rounded-full">Test Credentials</span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <!-- Admin -->
-            <button type="button" onclick="quickLogin('admin', 'admin123')" class="p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group">
-              <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <i data-lucide="shield-check" class="w-4 h-4"></i>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-black text-[#1E293B]">Admin</div>
-                  <div class="text-[10px] text-[#545454]">Pass: <code class="font-mono text-[#1E3304] font-bold">admin123</code></div>
-                </div>
-              </div>
-            </button>
-
-            <!-- Manager -->
-            <button type="button" onclick="quickLogin('manager', 'manager123')" class="p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group">
-              <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <i data-lucide="clipboard-list" class="w-4 h-4"></i>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-black text-[#1E293B]">Manager</div>
-                  <div class="text-[10px] text-[#545454]">Pass: <code class="font-mono text-[#1E3304] font-bold">manager123</code></div>
-                </div>
-              </div>
-            </button>
-
-            <!-- Washer -->
-            <button type="button" onclick="quickLogin('washer', 'washer123')" class="p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group">
-              <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <i data-lucide="shirt" class="w-4 h-4"></i>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-black text-[#1E293B]">Washer</div>
-                  <div class="text-[10px] text-[#545454]">Pass: <code class="font-mono text-[#1E3304] font-bold">washer123</code></div>
-                </div>
-              </div>
-            </button>
-
-            <!-- Rider -->
-            <button type="button" onclick="quickLogin('rider', 'rider123')" class="p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group">
-              <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <i data-lucide="bike" class="w-4 h-4"></i>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-black text-[#1E293B]">Rider</div>
-                  <div class="text-[10px] text-[#545454]">Pass: <code class="font-mono text-[#1E3304] font-bold">rider123</code></div>
-                </div>
-              </div>
-            </button>
-          </div>
+        <!-- Shortcut hint to pop test accounts -->
+        <div class="pt-3 border-t border-[#E2E8D5] flex items-center justify-between text-[11px] text-[#545454]">
+          <span class="flex items-center space-x-1.5">
+            <i data-lucide="key-round" class="w-3.5 h-3.5 text-[#5A7812]"></i>
+            <span>Test accounts:</span>
+          </span>
+          <button type="button" onclick="openTestCredentialsModal()" class="inline-flex items-center space-x-1 font-mono text-[10px] text-[#1E3304] bg-[#EEF4E3] hover:bg-[#E2E8D5] px-2 py-0.5 rounded-md border border-[#D8ECAB] transition-colors cursor-pointer" title="Press ⌘ + Return">
+            <span>⌘ + Return</span>
+          </button>
         </div>
 
       </div>
@@ -1407,6 +1356,105 @@
         <button onclick="sendWhatsAppReadyMessage()" class="px-5 py-2 bg-[#A6CE39] hover:bg-[#92BA2B] text-[#1E3304] rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5">
           <i data-lucide="send" class="w-4 h-4"></i>
           <span>Send via WhatsApp</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: TEST CREDENTIALS POPUP (Triggered via ⌘ + Return)      -->
+  <!-- ============================================================== -->
+  <div id="modal-test-credentials" class="fixed inset-0 bg-[#1E3A2F]/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full border border-[#E2E8D5] shadow-2xl overflow-hidden animate-fadeIn" onclick="event.stopPropagation()">
+      <div class="p-5 border-b border-[#E2E8D5] flex items-center justify-between bg-[#F8FAF3]">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center">
+            <i data-lucide="key-round" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-sm text-[#1E293B]">Test Account Credentials</h3>
+            <p class="text-[11px] text-[#545454]">Click any role below to autofill and sign in</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeTestCredentialsModal()" class="w-8 h-8 rounded-full hover:bg-[#E2E8D5] text-[#545454] hover:text-[#1E293B] flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-2.5">
+        <!-- Admin -->
+        <button type="button" onclick="selectTestCredential('admin', 'admin123')" class="w-full p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="text-xs font-black text-[#1E293B] flex items-center space-x-2">
+                <span>Super Admin</span>
+                <span class="text-[10px] bg-[#1E3A2F] text-[#A6CE39] px-2 py-0.5 rounded-full font-bold">Admin</span>
+              </div>
+              <div class="text-[11px] text-[#545454]">User: <code class="font-mono text-[#1E3304] font-bold">admin</code> • Pass: <code class="font-mono text-[#1E3304] font-bold">admin123</code></div>
+            </div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-[#898989] group-hover:text-[#1E3304] group-hover:translate-x-0.5 transition-all"></i>
+        </button>
+
+        <!-- Store Manager -->
+        <button type="button" onclick="selectTestCredential('manager', 'manager123')" class="w-full p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="text-xs font-black text-[#1E293B] flex items-center space-x-2">
+                <span>Store Manager</span>
+                <span class="text-[10px] bg-[#EEF4E3] text-[#2D5A1E] px-2 py-0.5 rounded-full font-bold">Manager</span>
+              </div>
+              <div class="text-[11px] text-[#545454]">User: <code class="font-mono text-[#1E3304] font-bold">manager</code> • Pass: <code class="font-mono text-[#1E3304] font-bold">manager123</code></div>
+            </div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-[#898989] group-hover:text-[#1E3304] group-hover:translate-x-0.5 transition-all"></i>
+        </button>
+
+        <!-- Washer -->
+        <button type="button" onclick="selectTestCredential('washer', 'washer123')" class="w-full p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <i data-lucide="shirt" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="text-xs font-black text-[#1E293B] flex items-center space-x-2">
+                <span>Workshop Master</span>
+                <span class="text-[10px] bg-[#EEF4E3] text-[#2D5A1E] px-2 py-0.5 rounded-full font-bold">Workshop</span>
+              </div>
+              <div class="text-[11px] text-[#545454]">User: <code class="font-mono text-[#1E3304] font-bold">washer</code> • Pass: <code class="font-mono text-[#1E3304] font-bold">washer123</code></div>
+            </div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-[#898989] group-hover:text-[#1E3304] group-hover:translate-x-0.5 transition-all"></i>
+        </button>
+
+        <!-- Rider -->
+        <button type="button" onclick="selectTestCredential('rider', 'rider123')" class="w-full p-3 text-left rounded-2xl border border-[#E2E8D5] hover:border-[#A6CE39] bg-[#F8FAF3] hover:bg-[#EEF4E3] transition-all group flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <i data-lucide="bike" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="text-xs font-black text-[#1E293B] flex items-center space-x-2">
+                <span>Field Rider</span>
+                <span class="text-[10px] bg-[#EEF4E3] text-[#2D5A1E] px-2 py-0.5 rounded-full font-bold">Rider</span>
+              </div>
+              <div class="text-[11px] text-[#545454]">User: <code class="font-mono text-[#1E3304] font-bold">rider</code> • Pass: <code class="font-mono text-[#1E3304] font-bold">rider123</code></div>
+            </div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-[#898989] group-hover:text-[#1E3304] group-hover:translate-x-0.5 transition-all"></i>
+        </button>
+      </div>
+
+      <div class="p-4 border-t border-[#E2E8D5] bg-[#F8FAF3] flex items-center justify-between text-[11px] text-[#545454]">
+        <span>Press <kbd class="px-1.5 py-0.5 bg-white border border-[#E2E8D5] rounded text-[10px] font-mono">Esc</kbd> to close</span>
+        <button type="button" onclick="closeTestCredentialsModal()" class="px-3.5 py-1.5 bg-[#E2E8D5] hover:bg-[#D8ECAB] text-[#1E293B] rounded-xl text-xs font-bold transition-colors">
+          Close
         </button>
       </div>
     </div>

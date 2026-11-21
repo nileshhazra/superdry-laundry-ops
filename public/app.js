@@ -305,6 +305,34 @@ function handleLoginSubmit(e) {
 }
 
 function quickLogin(username, password) {
+  selectTestCredential(username, password);
+}
+
+function openTestCredentialsModal() {
+  const modal = document.getElementById('modal-test-credentials');
+  if (modal) {
+    modal.classList.remove('hidden');
+    if (window.lucide) lucide.createIcons();
+  }
+}
+
+function closeTestCredentialsModal() {
+  const modal = document.getElementById('modal-test-credentials');
+  if (modal) modal.classList.add('hidden');
+}
+
+function toggleTestCredentialsModal() {
+  const modal = document.getElementById('modal-test-credentials');
+  if (!modal) return;
+  if (modal.classList.contains('hidden')) {
+    openTestCredentialsModal();
+  } else {
+    closeTestCredentialsModal();
+  }
+}
+
+function selectTestCredential(username, password) {
+  closeTestCredentialsModal();
   const uInput = document.getElementById('login-username');
   const pInput = document.getElementById('login-password');
   if (uInput) uInput.value = username;
@@ -315,6 +343,32 @@ function quickLogin(username, password) {
     authenticateSuccess(user, true);
   }
 }
+
+// Global Keyboard Shortcut: ⌘ + Return (Mac) / Ctrl + Enter (Win/Linux) pops test credentials
+window.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && (e.key === 'Enter' || e.keyCode === 13)) {
+    // Only intercept or toggle when in auth view or when test credentials requested
+    const authView = document.getElementById('auth-view');
+    if (authView && !authView.classList.contains('hidden')) {
+      e.preventDefault();
+      toggleTestCredentialsModal();
+    }
+  } else if (e.key === 'Escape' || e.keyCode === 27) {
+    closeTestCredentialsModal();
+  }
+});
+
+// Close modal when clicking on the backdrop
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('modal-test-credentials');
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeTestCredentialsModal();
+      }
+    });
+  }
+});
 
 function showAuthError(msg) {
   const err = document.getElementById('auth-error');
