@@ -31,9 +31,9 @@ let mockDb = {
   garmentsCatalog: [],
   storeSettings: {
     storeName: 'Bumbledry Laundry & Dry Cleaners',
-    phone: '+91 98765 43210',
-    address: 'Shop 4B, Main Market, Sector 15, Gurugram, Haryana',
-    gstin: '06AAAAA0000A1Z5',
+    phone: '+31 20 794 6010',
+    address: 'Gerard Doustraat 42, 1072 VR Amsterdam, Netherlands',
+    gstin: 'NL864219800B01',
     expressSurchargePercent: 50,
     freePickupThreshold: 299
   },
@@ -168,13 +168,13 @@ function initDefaultRiders() {
   mockDb.riders = [
     {
       id: 'RIDER-01',
-      name: 'Rajesh Kumar',
-      phone: '+91 9811882233',
-      vehicle: 'Honda Activa (HR26-BW-4821)',
+      name: 'Matteo Bianchi',
+      phone: '+31 6 8118 8223',
+      vehicle: 'Urban Arrow Cargo E-Bike (AMS-EC-401)',
       status: 'RETURNING_TO_STORE',
       currentRun: {
         id: 'RUN-201',
-        zone: 'Sector 14 - North',
+        zone: 'Centrum - North Canal',
         orderIds: ['ORD-1040', 'ORD-1041'],
         totalOrders: 2,
         dispatchedAt: new Date(Date.now() - 48 * 60 * 1000).toISOString(),
@@ -188,7 +188,7 @@ function initDefaultRiders() {
       location: {
         lat: 28.4740,
         lng: 77.0425,
-        address: 'Near Old Railway Road, 3.8 km from Store',
+        address: 'Near Sarphatipark, 1.4 km from Store',
         speedKmh: 0,
         batteryLevel: '74%',
         lastPingAt: new Date().toISOString()
@@ -203,15 +203,15 @@ function initDefaultRiders() {
     },
     {
       id: 'RIDER-02',
-      name: 'Amit Singh',
-      phone: '+91 9822993344',
-      vehicle: 'TVS Jupiter (HR26-DE-1190)',
+      name: 'Liam van Dijk',
+      phone: '+31 6 8229 9334',
+      vehicle: 'Babboe Pro E-Trike (AMS-EB-812)',
       status: 'IDLE_AT_STORE',
       currentRun: null,
       location: {
         lat: 28.4595,
         lng: 77.0266,
-        address: 'At Store (Sector 15 Market Counter)',
+        address: 'At Store (De Pijp Main Counter)',
         speedKmh: 0,
         batteryLevel: '92%',
         lastPingAt: new Date().toISOString()
@@ -252,41 +252,41 @@ const AUTH_USERS = [
     username: 'admin',
     password: 'admin123',
     role: 'admin',
-    name: 'Deepak Verma',
+    name: 'Lucas van de Berg',
     shortRole: 'Admin',
     title: 'Super Admin',
     iconName: 'shield-check',
-    scope: 'Central Operations'
+    scope: 'European Operations Central'
   },
   {
     username: 'manager',
     password: 'manager123',
     role: 'manager',
-    name: 'Aakash Sharma',
+    name: 'Lars Jansen',
     shortRole: 'Manager',
     title: 'Store Manager',
     iconName: 'clipboard-list',
-    scope: 'Front Desk & Dispatch'
+    scope: 'Front Desk & E-Cargo Dispatch'
   },
   {
     username: 'washer',
     password: 'washer123',
     role: 'washer',
-    name: 'Ramesh Singh',
+    name: 'Erik Lindqvist',
     shortRole: 'Workshop',
     title: 'Workshop Master',
     iconName: 'shirt',
-    scope: 'Washing & Ironing'
+    scope: 'Eco-Wash & Garment Care'
   },
   {
     username: 'rider',
     password: 'rider123',
     role: 'rider',
-    name: 'Rajesh Kumar',
+    name: 'Matteo Bianchi',
     shortRole: 'Rider',
     title: 'Field Agent',
     iconName: 'bike',
-    scope: 'Delivery & Pickups'
+    scope: 'E-Cargo Bike Dispatch'
   }
 ];
 
@@ -318,6 +318,7 @@ function showLoginView() {
   if (err) err.classList.add('hidden');
   const pass = document.getElementById('login-password');
   if (pass) pass.value = '';
+  lucide.createIcons();
 }
 
 function handleLoginSubmit(e) {
@@ -861,7 +862,7 @@ function renderAdminPodTable() {
           <div class="font-bold text-[#1D252C]">${o.customerName}</div>
           <div class="text-[#72767E] font-mono text-[11px]">${o.customerPhone}</div>
         </td>
-        <td class="p-3.5 font-medium text-[#1D252C]">${o.assignedRider || 'Rajesh Kumar'}</td>
+        <td class="p-3.5 font-medium text-[#1D252C]">${o.assignedRider || 'Matteo Bianchi'}</td>
         <td class="p-3.5"><span class="bg-[#FAF1E5] text-[#1D252C] px-2 py-0.5 rounded-full font-medium text-[11px]">${o.totalPieces || 1} Pieces Handed Over</span></td>
         <td class="p-3.5 font-bold text-[#0A610A] text-xs">Doorstep Verified</td>
         <td class="p-3.5 text-[#72767E]">${o.deliveredAt ? new Date(o.deliveredAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' }) : 'Today'}</td>
@@ -897,8 +898,8 @@ function openAdminPodModal(orderId) {
   activeAdminPodOrderId = orderId;
   document.getElementById('admin-pod-title').innerText = `Payment Proof: ${order.id}`;
   document.getElementById('admin-pod-cust-name').innerText = order.customerName;
-  document.getElementById('admin-pod-amount').innerText = `₹${order.subtotal}`;
-  document.getElementById('admin-pod-rider-info').innerText = `Delivered by: ${order.assignedRider || 'Rajesh Kumar'} • Mode: ${order.paymentMode || 'UPI / QR Code'}`;
+  document.getElementById('admin-pod-amount').innerText = `€${order.subtotal}`;
+  document.getElementById('admin-pod-rider-info').innerText = `Delivered by: ${order.assignedRider || 'Matteo Bianchi'} • Mode: ${order.paymentMode || 'UPI / QR Code'}`;
   document.getElementById('admin-pod-timestamp').innerText = order.deliveredAt ? `Delivered: ${new Date(order.deliveredAt).toLocaleString('en-IN')}` : 'Delivered Today';
 
   const fullImg = document.getElementById('admin-pod-full-image');
@@ -1246,7 +1247,7 @@ function renderDispatchRecommendations() {
         badgeColor: 'bg-[#FAF1E5] text-[#0A610A] border-[#EFE9E1]',
         description: `Rider going to ${zone} for pickup (${pInZone[0].customerName}). ${dInZone.length} order(s) are ready for delivery in the same area. Dispatched together to avoid duplicate round-trips.`,
         actionLabel: `Assign Combined Run`,
-        actionFn: `combineZoneTrip('${zone}', 'Rajesh Kumar')`
+        actionFn: `combineZoneTrip('${zone}', 'Matteo Bianchi')`
       });
     }
   });
@@ -1648,7 +1649,7 @@ function renderKanbanColumn(ordersList, nextStatus, nextBtnLabel, isFinal = fals
         <div class="flex items-center justify-between pt-2 border-t border-[#FAF1E5] text-xs">
           <div>
             <span class="text-neutral-500 text-[10px] block">Due ${new Date(o.promisedDelivery).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
-            <span class="text-[10px] text-neutral-400 font-medium">${o.assignedWasher || 'Staff: Suresh & Ramesh'}</span>
+            <span class="text-[10px] text-neutral-400 font-medium">${o.assignedWasher || 'Staff: Erik & Antoine'}</span>
           </div>
           ${!isFinal ? `
             <button onclick="updateOrderStatus('${o.id}', '${nextStatus}')" class="px-3.5 py-1.5 bg-[#003D29] hover:bg-[#002B1D] text-[#108910] text-xs font-bold rounded-full transition-transform active:scale-95">
@@ -1776,7 +1777,7 @@ async function renderRiderDeliveries() {
         </div>
         <div class="text-right">
           <span class="bg-[#003D29] text-white text-xs font-bold px-2.5 py-0.5 rounded-full">${cluster.orders.length} Orders</span>
-          <div class="text-[10px] text-neutral-600 font-semibold mt-0.5">Collect ₹${cluster.totalAmountToCollect}</div>
+          <div class="text-[10px] text-neutral-600 font-semibold mt-0.5">Collect €${cluster.totalAmountToCollect}</div>
         </div>
       </div>
 
@@ -1903,7 +1904,7 @@ function completeRiderDelivery(orderId, amount) {
   document.getElementById('modal-del-cust-name').innerText = order.customerName;
   document.getElementById('modal-del-cust-phone').innerText = order.customerPhone;
   document.getElementById('modal-del-address').innerText = order.customerAddress;
-  document.getElementById('modal-del-amount').innerText = `₹${amount || order.subtotal}`;
+  document.getElementById('modal-del-amount').innerText = `€${amount || order.subtotal}`;
 
   removePodImagePreview();
   const fileInput = document.getElementById('rider-pod-file-input');
@@ -2185,7 +2186,7 @@ async function submitWhatsAppSim() {
           phone: senderPhone,
           channel: 'WhatsApp Missed Call',
           message: 'Missed voice call. Automated callback template dispatched.',
-          zone: 'Sector 14 - North',
+          zone: 'Centrum - North Canal',
           address: '',
           status: 'PENDING_CALLBACK',
           attempts: 1,
@@ -2195,13 +2196,13 @@ async function submitWhatsAppSim() {
         });
       }
     } else if (type === 'LOCATION_PIN') {
-      autoReply = `Thank you! We have received your location pin. Rider Rajesh Kumar has been dispatched for pickup between 3:00 PM - 5:00 PM. Order tracking ID: ORD-${1000 + mockDb.orders.length + 1}.`;
-      const locMsg = `Customer shared GPS location: 28.4595° N, 77.0266° E (${addressText || 'Sector 15 Main Market'})`;
+      autoReply = `Thank you! We have received your location pin. Rider Matteo Bianchi has been dispatched for pickup between 3:00 PM - 5:00 PM. Order tracking ID: ORD-${1000 + mockDb.orders.length + 1}.`;
+      const locMsg = `Customer shared GPS location: 28.4595° N, 77.0266° E (${addressText || 'Gerard Doustraat Market'})`;
 
       if (existing) {
         existing.channel = 'WhatsApp Live Location';
         existing.message = locMsg;
-        existing.address = addressText || '#42, Pocket 2, Sector 15, Gurugram';
+        existing.address = addressText || '#42, Pocket 2, De Pijp, Amsterdam';
         existing.status = 'LOCATION_RECEIVED';
       } else {
         mockDb.leads.unshift({
@@ -2210,8 +2211,8 @@ async function submitWhatsAppSim() {
           phone: senderPhone,
           channel: 'WhatsApp Live Location',
           message: locMsg,
-          zone: 'Sector 15 - North',
-          address: addressText || '#42, Pocket 2, Sector 15, Gurugram',
+          zone: 'De Pijp - Flagship',
+          address: addressText || '#42, Pocket 2, De Pijp, Amsterdam',
           status: 'LOCATION_RECEIVED',
           attempts: 1,
           createdAt: new Date().toISOString(),
@@ -2225,8 +2226,8 @@ async function submitWhatsAppSim() {
         customerId: `CUST-${Math.floor(Math.random() * 8000 + 1000)}`,
         customerName: senderName,
         customerPhone: senderPhone,
-        customerAddress: addressText || '#42, Pocket 2, Sector 15, Gurugram',
-        zone: 'Sector 15 - North',
+        customerAddress: addressText || '#42, Pocket 2, De Pijp, Amsterdam',
+        zone: 'De Pijp - Flagship',
         status: 'PICKUP_REQUESTED',
         isExpress: false,
         totalPieces: 0,
@@ -2236,10 +2237,10 @@ async function submitWhatsAppSim() {
         paymentMode: 'COD / UPI on Delivery',
         createdAt: new Date().toISOString(),
         promisedDelivery: new Date(Date.now() + 48 * 3600 * 1000).toISOString(),
-        assignedRider: 'Rajesh Kumar (Field Agent)'
+        assignedRider: 'Matteo Bianchi (Field Agent)'
       });
     } else {
-      autoReply = `Hello from Bumbledry Laundry! Our dry cleaning rate is ₹90 for shirts, ₹110 for trousers, and ₹280 for suits with free doorstep pickup. Would you like to schedule a pickup today?`;
+      autoReply = `Hello from Bumbledry Laundry! Our dry cleaning rate is €90 for shirts, €110 for trousers, and €280 for suits with free doorstep pickup. Would you like to schedule a pickup today?`;
       if (existing) {
         existing.attempts = (existing.attempts || 1) + 1;
         existing.message = messageText || existing.message;
@@ -2251,7 +2252,7 @@ async function submitWhatsAppSim() {
           phone: senderPhone,
           channel: 'WhatsApp Chat',
           message: messageText || 'Inquiry about dry cleaning rates',
-          zone: 'DLF Phase 2 - East',
+          zone: 'Centrum - Canal Ring',
           address: '',
           status: 'PENDING_CALLBACK',
           attempts: 1,
@@ -2423,7 +2424,7 @@ function renderOrderItemsTable() {
       <td class="p-2.5 font-semibold text-[#1D252C]">${item.garmentName}</td>
       <td class="p-2.5">${item.service}</td>
       <td class="p-2.5">${item.hasStain ? `<span class="text-[#E11900] font-semibold">${item.specialNote}</span>` : '—'}</td>
-      <td class="p-2.5 text-right font-bold font-mono">₹${item.rate}</td>
+      <td class="p-2.5 text-right font-bold font-mono">€${item.rate}</td>
       <td class="p-2.5 text-right">
         <button onclick="removeGarmentItem(${idx})" class="text-neutral-500 hover:text-[#1D252C] font-semibold text-xs">Remove</button>
       </td>
@@ -2439,7 +2440,7 @@ function recalculateOrderTotal() {
   if (isExpress) {
     subtotal = Math.round(subtotal * 1.5);
   }
-  document.getElementById('order-total-amount').innerText = `₹${subtotal}`;
+  document.getElementById('order-total-amount').innerText = `€${subtotal}`;
 }
 
 async function submitNewOrder() {
@@ -2478,7 +2479,7 @@ async function submitNewOrder() {
       paymentMode: 'COD / UPI on Delivery',
       createdAt: now.toISOString(),
       promisedDelivery: promised.toISOString(),
-      assignedWasher: 'Suresh Care Master'
+      assignedWasher: 'Antoine Garment Master'
     };
 
     mockDb.orders.unshift(newOrder);
@@ -2718,7 +2719,7 @@ async function uploadExcelFile() {
           const name = getVal(['name', 'customername', 'fullname', 'clientname', 'customer']);
           let phone = getVal(['phone', 'mobile', 'contact', 'phonenumber', 'mobilenumber']);
           const address = getVal(['address', 'deliveryaddress', 'location']);
-          const zone = getVal(['zone', 'sector', 'area']) || 'Sector 15 - North';
+          const zone = getVal(['zone', 'sector', 'area']) || 'De Pijp - Flagship';
 
           if (!name && !phone) return;
           if (phone && !phone.startsWith('+')) {
@@ -2738,7 +2739,7 @@ async function uploadExcelFile() {
               id: newId,
               name: name || `Customer ${newId}`,
               phone: phone || '+91 0000000000',
-              address: address || 'Store Area, Gurugram',
+              address: address || 'Store Area, Amsterdam',
               zone,
               totalOrders: 0,
               loyaltyPoints: 0,
@@ -2933,7 +2934,7 @@ async function sendRiderWarning(riderId) {
   if (isStaticMode) {
     const rider = mockDb.riders.find(r => r.id === riderId);
     if (!rider) return;
-    const msg = `ALERT from Bumbledry Store Manager: Your Sector 14 delivery run was completed 25 minutes ago. Next batch of 3 customer orders is packed and waiting. Please report back to the store immediately.`;
+    const msg = `ALERT from Bumbledry Store Manager: Your Centrum delivery run was completed 25 minutes ago. Next batch of 3 customer orders is packed and waiting. Please report back to the store immediately.`;
     alert(`WhatsApp Warning dispatched to ${rider.name} (${rider.phone})!\n\n"${msg}"`);
     return;
   }
@@ -2960,7 +2961,7 @@ async function checkInAtStoreCounter(riderId) {
     rider.todayStats.integrityScore = Math.max(50, rider.todayStats.integrityScore - 5);
     rider.status = 'IDLE_AT_STORE';
     rider.currentRun = null;
-    rider.location.address = 'At Store (Sector 15 Market Counter)';
+    rider.location.address = 'At Store (De Pijp Main Counter)';
     saveDemoState();
     alert('Trip closed with 11 min unaccounted transit gap logged in owner audit.');
     await refreshAll();
@@ -2988,13 +2989,13 @@ const defaultFranchiseStores = [
   {
     id: 'STORE-101',
     code: '101',
-    name: 'Sector 15 Flagship',
-    city: 'Gurugram',
-    address: 'Shop 4B, Main Market, Sector 15, Gurugram, Haryana - 122001',
-    phone: '+91 98765 43210',
-    manager: 'Aakash Sharma',
-    gstin: '06AAAAA0000A1Z5',
-    upiVpa: 'bumbledry.sec15@icici',
+    name: 'De Pijp Flagship',
+    city: 'Amsterdam',
+    address: 'Gerard Doustraat 42, 1072 VR Amsterdam, Netherlands',
+    phone: '+31 20 794 6010',
+    manager: 'Lars Jansen',
+    gstin: 'NL864219800B01',
+    upiVpa: 'bumbledry.depijp@ing.nl',
     geofenceKm: 5.0,
     dailyTarget: 15000,
     activeRiders: 2,
@@ -3003,13 +3004,13 @@ const defaultFranchiseStores = [
   {
     id: 'STORE-102',
     code: '102',
-    name: 'Cyber City Hub',
-    city: 'Gurugram',
-    address: 'DLF Cyber City, Building 10 Ground Arcade, Gurugram - 122002',
-    phone: '+91 98111 22334',
-    manager: 'Pooja Mehta',
-    gstin: '06BBBBB1111B2Z6',
-    upiVpa: 'bumbledry.cyber@hdfcbank',
+    name: 'Centrum Canal Hub',
+    city: 'Amsterdam',
+    address: 'Prinsengracht 268, 1016 HJ Amsterdam, Netherlands',
+    phone: '+31 20 794 6020',
+    manager: 'Sophie van den Berg',
+    gstin: 'NL864219800B02',
+    upiVpa: 'bumbledry.centrum@abnamro.nl',
     geofenceKm: 4.0,
     dailyTarget: 22000,
     activeRiders: 3,
@@ -3018,13 +3019,13 @@ const defaultFranchiseStores = [
   {
     id: 'STORE-103',
     code: '103',
-    name: 'Indirapuram Central',
+    name: 'Zuidas Business Quarter',
     city: 'Ghaziabad',
-    address: 'Plot 12, Aditya Mall Commercial Complex, Indirapuram - 201014',
-    phone: '+91 99222 33445',
-    manager: 'Vikas Gupta',
-    gstin: '09CCCCC2222C3Z7',
-    upiVpa: 'bumbledry.ind@sbi',
+    address: 'Gustav Mahlerlaan 102, 1082 MK Amsterdam, Netherlands',
+    phone: '+31 20 794 6030',
+    manager: 'Alexander Wright',
+    gstin: 'NL864219800B03',
+    upiVpa: 'bumbledry.zuidas@rabobank.nl',
     geofenceKm: 6.0,
     dailyTarget: 18000,
     activeRiders: 2,
@@ -3461,68 +3462,68 @@ let liveNotifications = [];
 
 const HANDOVER_LEVEL_MAP = {
   'PICKED_UP': {
-    from: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
-    to: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+    from: { role: 'rider', name: 'Matteo Bianchi (Field Rider)' },
+    to: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
     badge: 'FIELD RIDER',
     badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
     action: 'Pickup Completed',
     summary: (order) => `Picked up ${order.totalPieces || 1} pcs from ${order.customerName} in ${order.zone}. Rider returning to counter.`
   },
   'RECEIVED_IN_STORE': {
-    from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
-    to: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
+    from: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
+    to: { role: 'washer', name: 'Erik Lindqvist (Washing Lead)' },
     badge: 'FRONT DESK',
     badgeColor: 'bg-[#F7F5F0] text-[#1D252C]',
     action: 'Intake Tagged',
     summary: (order) => `Order #${order.id} (${order.totalPieces || 1} pcs) tagged & queued for Washing Station.`
   },
   'WASHING': {
-    from: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
-    to: { role: 'washer', name: 'Anil Verma (Dry Clean Specialist)' },
+    from: { role: 'washer', name: 'Erik Lindqvist (Washing Lead)' },
+    to: { role: 'washer', name: 'Stefan Müller (Dry Clean Specialist)' },
     badge: 'WORKSHOP: WASH',
     badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
     action: 'Washing Cycle Started',
     summary: (order) => `Order #${order.id} loaded into commercial washer. Next: Hydro-extraction & Drying.`
   },
   'DRYING': {
-    from: { role: 'washer', name: 'Anil Verma (Dry Clean Specialist)' },
-    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    from: { role: 'washer', name: 'Stefan Müller (Dry Clean Specialist)' },
+    to: { role: 'washer', name: 'Antoine Dubois (Steam Press)' },
     badge: 'WORKSHOP: DRYING',
     badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
     action: 'Drying & Inspection',
     summary: (order) => `Order #${order.id} dried & passed stain inspection. Queued for steam press.`
   },
   'IRONING': {
-    from: { role: 'washer', name: 'Anil Verma (Dry Cleaning)' },
-    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    from: { role: 'washer', name: 'Stefan Müller (Dry Cleaning)' },
+    to: { role: 'washer', name: 'Antoine Dubois (Steam Press)' },
     badge: 'WORKSHOP: PRESS',
     badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
     action: 'Steam Ironing Underway',
     summary: (order) => `Steam press & crease finishing in progress for Order #${order.id} (${order.customerName}).`
   },
   'PACKED': {
-    from: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
-    to: { role: 'manager', name: 'Aakash Sharma & Field Riders' },
+    from: { role: 'washer', name: 'Antoine Dubois (Steam Press)' },
+    to: { role: 'manager', name: 'Lars Jansen & Field Riders' },
     badge: 'WORKSHOP: PACKED',
     badgeColor: 'bg-[#003D29] text-[#108910]',
     action: 'Order Packed & Ready',
     summary: (order) => `Quality passed! Order #${order.id} (${order.customerName}, ${order.zone}) is packed on hanger.`
   },
   'OUT_FOR_DELIVERY': {
-    from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
-    to: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+    from: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
+    to: { role: 'rider', name: 'Matteo Bianchi (Field Rider)' },
     badge: 'DISPATCH',
     badgeColor: 'bg-[#003D29] text-white',
     action: 'Dispatched for Delivery',
-    summary: (order) => `Order #${order.id} handed to Rajesh Kumar for doorstep delivery in ${order.zone}.`
+    summary: (order) => `Order #${order.id} handed to Matteo Bianchi for doorstep delivery in ${order.zone}.`
   },
   'DELIVERED': {
-    from: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
-    to: { role: 'manager', name: 'Aakash Sharma & Super Admin' },
+    from: { role: 'rider', name: 'Matteo Bianchi (Field Rider)' },
+    to: { role: 'manager', name: 'Lars Jansen & Super Admin' },
     badge: 'DELIVERY COMPLETE',
     badgeColor: 'bg-[#108910] text-white',
     action: 'Delivered & Paid',
-    summary: (order) => `Delivered to ${order.customerName}. Payment of ₹${order.subtotal} collected (POD uploaded).`
+    summary: (order) => `Delivered to ${order.customerName}. Payment of €${order.subtotal} collected (POD uploaded).`
   }
 };
 
@@ -3543,9 +3544,9 @@ function initNotifications() {
         badge: 'WORKSHOP: PACKED',
         badgeColor: 'bg-[#003D29] text-[#108910]',
         action: 'Order Packed & Ready',
-        summary: 'Quality passed! Order #ORD-1042 (Pooja Rao, Sector 15) is packed on hanger.',
-        from: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
-        to: { role: 'manager', name: 'Aakash Sharma & Field Riders' },
+        summary: 'Quality passed! Order #ORD-1042 (Pooja Rao, De Pijp) is packed on hanger.',
+        from: { role: 'washer', name: 'Antoine Dubois (Steam Press)' },
+        to: { role: 'manager', name: 'Lars Jansen & Field Riders' },
         timestamp: new Date(Date.now() - 4 * 60 * 1000).toISOString(),
         read: false
       },
@@ -3555,9 +3556,9 @@ function initNotifications() {
         badge: 'DISPATCH',
         badgeColor: 'bg-[#003D29] text-white',
         action: 'Dispatched for Delivery',
-        summary: 'Order #ORD-1040 handed to Rajesh Kumar for doorstep delivery in DLF Phase 4.',
-        from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
-        to: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+        summary: 'Order #ORD-1040 handed to Matteo Bianchi for doorstep delivery in Jordaan.',
+        from: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
+        to: { role: 'rider', name: 'Matteo Bianchi (Field Rider)' },
         timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
         read: false
       },
@@ -3568,8 +3569,8 @@ function initNotifications() {
         badgeColor: 'bg-[#F7F5F0] text-[#1D252C]',
         action: 'Intake Tagged',
         summary: 'Order #ORD-1045 (3 pcs) tagged & queued for Washing Station.',
-        from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
-        to: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
+        from: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
+        to: { role: 'washer', name: 'Erik Lindqvist (Washing Lead)' },
         timestamp: new Date(Date.now() - 32 * 60 * 1000).toISOString(),
         read: true
       }
@@ -3604,7 +3605,7 @@ function broadcastHandoverNotification(orderId, newStatus) {
   const config = HANDOVER_LEVEL_MAP[newStatus];
   if (!config) return;
 
-  const order = allOrders.find(o => o.id === orderId) || { id: orderId, customerName: 'Customer', zone: 'Sector 15', totalPieces: 1, subtotal: 0 };
+  const order = allOrders.find(o => o.id === orderId) || { id: orderId, customerName: 'Customer', zone: 'De Pijp', totalPieces: 1, subtotal: 0 };
   const notif = {
     id: 'NOTIF-' + Date.now(),
     orderId: order.id,
@@ -3710,8 +3711,8 @@ function testNotificationChime() {
     badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
     action: 'Steam Ironing Underway',
     summary: 'Steam press & crease finishing in progress for Order #ORD-1044 (Priya Sharma).',
-    from: { role: 'washer', name: 'Anil Verma (Dry Clean)' },
-    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    from: { role: 'washer', name: 'Stefan Müller (Dry Clean)' },
+    to: { role: 'washer', name: 'Antoine Dubois (Steam Press)' },
     timestamp: new Date().toISOString(),
     read: false
   };

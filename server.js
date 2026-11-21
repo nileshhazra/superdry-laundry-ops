@@ -31,41 +31,41 @@ const AUTH_USERS = [
     username: 'admin',
     password: 'admin123',
     role: 'admin',
-    name: 'Deepak Verma',
+    name: 'Lucas van de Berg',
     shortRole: 'Admin',
     title: 'Super Admin',
     iconName: 'shield-check',
-    scope: 'Central Operations'
+    scope: 'European Operations Central'
   },
   {
     username: 'manager',
     password: 'manager123',
     role: 'manager',
-    name: 'Aakash Sharma',
+    name: 'Lars Jansen',
     shortRole: 'Manager',
     title: 'Store Manager',
     iconName: 'clipboard-list',
-    scope: 'Front Desk & Dispatch'
+    scope: 'Front Desk & E-Cargo Dispatch'
   },
   {
     username: 'washer',
     password: 'washer123',
     role: 'washer',
-    name: 'Ramesh Singh',
+    name: 'Erik Lindqvist',
     shortRole: 'Workshop',
     title: 'Workshop Master',
     iconName: 'shirt',
-    scope: 'Washing & Ironing'
+    scope: 'Eco-Wash & Garment Care'
   },
   {
     username: 'rider',
     password: 'rider123',
     role: 'rider',
-    name: 'Rajesh Kumar',
+    name: 'Matteo Bianchi',
     shortRole: 'Rider',
     title: 'Field Agent',
     iconName: 'bike',
-    scope: 'Delivery & Pickups'
+    scope: 'E-Cargo Bike Dispatch'
   }
 ];
 
@@ -166,7 +166,7 @@ app.post('/api/customers', (req, res) => {
     name,
     phone,
     address,
-    zone: zone || 'Sector 15 - North',
+    zone: zone || 'De Pijp - Flagship',
     totalOrders: 0,
     loyaltyPoints: 0,
     preferredService: preferredService || 'Wash & Steam Iron',
@@ -214,7 +214,7 @@ app.post('/api/customers/upload-excel', upload.single('file'), (req, res) => {
       const name = getVal(['name', 'customername', 'fullname', 'clientname', 'customer']);
       let phone = getVal(['phone', 'mobile', 'contact', 'phonenumber', 'mobilenumber', 'cell', 'tel']);
       const address = getVal(['address', 'deliveryaddress', 'location', 'addressline', 'flat', 'house']);
-      const zone = getVal(['zone', 'sector', 'area', 'locality']) || 'Sector 15 - North';
+      const zone = getVal(['zone', 'sector', 'area', 'locality']) || 'De Pijp - Flagship';
       const preferredService = getVal(['preferredservice', 'service', 'servicepreference']) || 'Wash & Steam Iron';
       const pastOrdersStr = getVal(['pastorders', 'totalorders', 'orders']);
       const pastOrders = parseInt(pastOrdersStr, 10) || 0;
@@ -247,7 +247,7 @@ app.post('/api/customers/upload-excel', upload.single('file'), (req, res) => {
           id: newId,
           name: name || `Customer ${newId}`,
           phone: phone || '+91 0000000000',
-          address: address || 'Store Area, Gurugram',
+          address: address || 'Store Area, Amsterdam',
           zone,
           totalOrders: pastOrders,
           loyaltyPoints: pastOrders * 10,
@@ -366,7 +366,7 @@ app.post('/api/orders', (req, res) => {
     customerName,
     customerPhone,
     customerAddress,
-    zone: zone || 'Sector 15 - North',
+    zone: zone || 'De Pijp - Flagship',
     status: 'RECEIVED_IN_STORE',
     isExpress: Boolean(isExpress),
     totalPieces: processedItems.length,
@@ -378,7 +378,7 @@ app.post('/api/orders', (req, res) => {
     createdAt: now.toISOString(),
     promisedDelivery: promised.toISOString(),
     assignedRider: null,
-    assignedWasher: 'Suresh Care Master'
+    assignedWasher: 'Antoine Garment Master'
   };
 
   orders.unshift(newOrder);
@@ -616,7 +616,7 @@ app.post('/api/leads', (req, res) => {
     phone,
     channel: channel || 'WhatsApp Inbound',
     message: message || 'Inquired about laundry pickup',
-    zone: zone || 'Sector 15 - North',
+    zone: zone || 'De Pijp - Flagship',
     address: address || '',
     status: 'PENDING_CALLBACK',
     attempts: 1,
@@ -711,13 +711,13 @@ app.get('/api/logistics/routes', (req, res) => {
 let riders = [
   {
     id: 'RIDER-01',
-    name: 'Rajesh Kumar',
-    phone: '+91 9811882233',
-    vehicle: 'Honda Activa (HR26-BW-4821)',
+    name: 'Matteo Bianchi',
+    phone: '+31 6 8118 8223',
+    vehicle: 'Urban Arrow Cargo E-Bike (AMS-EC-401)',
     status: 'RETURNING_TO_STORE', // 'IDLE_AT_STORE' | 'OUT_FOR_DELIVERY' | 'RETURNING_TO_STORE' | 'OVERDUE_RETURN'
     currentRun: {
       id: 'RUN-201',
-      zone: 'Sector 14 - North',
+      zone: 'Centrum - North Canal',
       orderIds: ['ORD-1040', 'ORD-1041'],
       totalOrders: 2,
       dispatchedAt: new Date(Date.now() - 48 * 60 * 1000).toISOString(),
@@ -731,7 +731,7 @@ let riders = [
     location: {
       lat: 28.4740,
       lng: 77.0425,
-      address: 'Near Old Railway Road, 3.8 km from Store',
+      address: 'Near Sarphatipark, 1.4 km from Store',
       speedKmh: 0, // stationary!
       batteryLevel: '74%',
       lastPingAt: new Date().toISOString()
@@ -746,15 +746,15 @@ let riders = [
   },
   {
     id: 'RIDER-02',
-    name: 'Amit Singh',
-    phone: '+91 9822993344',
-    vehicle: 'TVS Jupiter (HR26-DE-1190)',
+    name: 'Liam van Dijk',
+    phone: '+31 6 8229 9334',
+    vehicle: 'Babboe Pro E-Trike (AMS-EB-812)',
     status: 'IDLE_AT_STORE',
     currentRun: null,
     location: {
       lat: 28.4595,
       lng: 77.0266,
-      address: 'At Store (Sector 15 Market Counter)',
+      address: 'At Store (De Pijp Main Counter)',
       speedKmh: 0,
       batteryLevel: '92%',
       lastPingAt: new Date().toISOString()
@@ -817,7 +817,7 @@ app.post('/api/fleet/start-return', (req, res) => {
   if (!rider.currentRun) {
     rider.currentRun = {
       id: `RUN-${Math.floor(Math.random() * 800 + 100)}`,
-      zone: 'Sector 14 - North',
+      zone: 'Centrum - North Canal',
       orderIds: ['ORD-1040', 'ORD-1041'],
       totalOrders: 2,
       dispatchedAt: new Date(now.getTime() - 25 * 60 * 1000).toISOString()
@@ -864,7 +864,7 @@ app.post('/api/fleet/check-in-store', (req, res) => {
   // Reset to idle at store
   rider.status = 'IDLE_AT_STORE';
   rider.currentRun = null;
-  rider.location.address = 'At Store (Sector 15 Market Counter)';
+  rider.location.address = 'At Store (De Pijp Main Counter)';
 
   res.json({
     success: true,
@@ -882,7 +882,7 @@ app.post('/api/fleet/send-warning', (req, res) => {
   const rider = riders.find(r => r.id === (riderId || 'RIDER-01'));
   if (!rider) return res.status(404).json({ error: 'Rider not found' });
 
-  const msg = `ALERT from Bumbledry Store Manager: Your Sector 14 delivery run was completed ${rider.currentRun ? rider.currentRun.unaccountedGapMinutes : 15} minutes ago. Next batch of 3 customer orders is packed and waiting. Please report back to the store immediately.`;
+  const msg = `ALERT from Bumbledry Store Manager: Your Centrum delivery run was completed ${rider.currentRun ? rider.currentRun.unaccountedGapMinutes : 15} minutes ago. Next batch of 3 customer orders is packed and waiting. Please report back to the store immediately.`;
   
   res.json({
     success: true,
@@ -924,7 +924,7 @@ app.post('/api/whatsapp/simulate', (req, res) => {
         phone: senderPhone || '+91 9899112233',
         channel: 'WhatsApp Missed Call',
         message: 'Missed voice call. System dispatched automated WhatsApp callback template.',
-        zone: 'Sector 14 - North',
+        zone: 'Centrum - North Canal',
         address: '',
         status: 'PENDING_CALLBACK',
         attempts: 1,
@@ -935,12 +935,12 @@ app.post('/api/whatsapp/simulate', (req, res) => {
       leads.unshift(createdLead);
     }
   } else if (type === 'LOCATION_PIN') {
-    const locMsg = `Customer shared GPS location: ${locationCoordinates || '28.4595° N, 77.0266° E'} (${addressText || 'Sector 15 Main Market'})`;
+    const locMsg = `Customer shared GPS location: ${locationCoordinates || '28.4595° N, 77.0266° E'} (${addressText || 'Gerard Doustraat Market'})`;
 
     if (existingLead) {
       existingLead.channel = 'WhatsApp Live Location';
       existingLead.message = locMsg;
-      existingLead.address = addressText || existingLead.address || '#42, Pocket 2, Sector 15, Gurugram';
+      existingLead.address = addressText || existingLead.address || '#42, Pocket 2, De Pijp, Amsterdam';
       existingLead.status = 'LOCATION_RECEIVED';
       existingLead.priority = 'HIGH';
       existingLead.slaMinutesRemaining = 10;
@@ -953,8 +953,8 @@ app.post('/api/whatsapp/simulate', (req, res) => {
         phone: senderPhone || '+91 9877665544',
         channel: 'WhatsApp Live Location',
         message: locMsg,
-        zone: 'Sector 15 - North',
-        address: addressText || '#42, Pocket 2, Sector 15, Gurugram',
+        zone: 'De Pijp - Flagship',
+        address: addressText || '#42, Pocket 2, De Pijp, Amsterdam',
         status: 'LOCATION_RECEIVED',
         attempts: 1,
         createdAt: new Date().toISOString(),
@@ -982,15 +982,15 @@ app.post('/api/whatsapp/simulate', (req, res) => {
       paymentMode: 'COD / UPI on Delivery',
       createdAt: new Date().toISOString(),
       promisedDelivery: new Date(Date.now() + 48 * 3600 * 1000).toISOString(),
-      assignedRider: 'Rajesh Kumar (Field Agent)',
+      assignedRider: 'Matteo Bianchi (Field Agent)',
       assignedWasher: null
     };
     orders.unshift(newOrder);
 
-    autoReply = `Thank you! We have received your location pin. Rider Rajesh Kumar has been dispatched for pickup between 3:00 PM - 5:00 PM. Order tracking ID: ORD-${nextOrderNum}.`;
+    autoReply = `Thank you! We have received your location pin. Rider Matteo Bianchi has been dispatched for pickup between 3:00 PM - 5:00 PM. Order tracking ID: ORD-${nextOrderNum}.`;
   } else {
     // Normal Chat Inquiry
-    autoReply = `Hello from Bumbledry Laundry! Our dry cleaning rate is ₹90 for shirts, ₹110 for trousers, and ₹280 for suits with free doorstep pickup. Would you like to schedule a pickup today?`;
+    autoReply = `Hello from Bumbledry Laundry! Our dry cleaning rate is €90 for shirts, €110 for trousers, and €280 for suits with free doorstep pickup. Would you like to schedule a pickup today?`;
 
     if (existingLead) {
       existingLead.attempts = (existingLead.attempts || 1) + 1;
@@ -1005,7 +1005,7 @@ app.post('/api/whatsapp/simulate', (req, res) => {
         phone: senderPhone || '+91 9955443322',
         channel: 'WhatsApp Chat',
         message: messageText || 'Inquiry about dry cleaning rates',
-        zone: 'DLF Phase 2 - East',
+        zone: 'Centrum - Canal Ring',
         address: '',
         status: 'PENDING_CALLBACK',
         attempts: 1,
