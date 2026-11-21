@@ -198,6 +198,46 @@
               <span class="inline md:hidden">WA</span>
             </button>
 
+            <!-- Real-Time Handover Notification Bell -->
+            <div class="relative shrink-0">
+              <button onclick="toggleNotificationCenter(event)" id="btn-notification-bell" class="relative p-2 rounded-full bg-[#EEF4E3] hover:bg-[#E2E8D5] text-[#1E293B] border border-[#D8ECAB] transition-colors cursor-pointer shadow-xs" title="Live Handover Notifications">
+                <i data-lucide="bell" class="w-3.5 h-3.5 text-[#1E3A2F]"></i>
+                <span id="notification-badge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#E11900] text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse">0</span>
+              </button>
+
+              <!-- Notification Center Dropdown -->
+              <div id="notification-dropdown" onclick="event.stopPropagation()" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-3xl border border-[#E2E8D5] shadow-2xl z-50 overflow-hidden animate-fadeIn">
+                <div class="p-3.5 border-b border-[#E2E8D5] bg-[#F8FAF3] flex items-center justify-between">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-7 h-7 rounded-full bg-[#1E3A2F] text-[#A6CE39] flex items-center justify-center">
+                      <i data-lucide="bell" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-black text-xs text-[#1E293B]">Station Handover Alerts</h4>
+                      <span class="text-[10px] text-[#545454]">Real-time station-to-station workflow</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-1">
+                    <button onclick="markAllNotificationsRead()" class="text-[10px] text-[#2D5A1E] hover:underline font-bold px-1.5 py-0.5">Mark Read</button>
+                    <button onclick="clearAllNotifications()" class="text-[10px] text-[#898989] hover:text-[#1E293B] px-1 py-0.5">Clear</button>
+                  </div>
+                </div>
+
+                <!-- Notification Items List -->
+                <div id="notifications-list-container" class="max-h-80 overflow-y-auto divide-y divide-[#EEF4E3] text-xs">
+                  <!-- Rendered dynamically -->
+                </div>
+
+                <div class="p-2.5 bg-[#F8FAF3] border-t border-[#E2E8D5] text-center text-[10px] text-[#545454] flex items-center justify-between px-3.5">
+                  <span class="flex items-center space-x-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#A6CE39]"></span>
+                    <span>Sound Chimes: <strong class="text-[#2D5A1E]">Active</strong></span>
+                  </span>
+                  <button onclick="testNotificationChime()" class="text-[#2D5A1E] font-bold hover:underline">Test Chime</button>
+                </div>
+              </div>
+            </div>
+
             <!-- Logout / Switch User Button -->
             <button onclick="logoutUser()" title="Logout and return to Login Screen" class="shrink-0 px-2.5 sm:px-3 py-1.5 bg-[#EEF4E3] hover:bg-rose-50 text-[#1E293B] hover:text-rose-700 border border-[#E2E8D5] hover:border-rose-200 rounded-full text-xs font-bold transition-all flex items-center space-x-1 shadow-xs">
               <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
@@ -209,6 +249,11 @@
         </div>
       </div>
     </header>
+
+  <!-- REAL-TIME FLOATING TOAST NOTIFICATION CONTAINER -->
+  <div id="live-toast-container" class="fixed top-20 right-3 sm:right-6 z-50 max-w-sm w-full space-y-2 pointer-events-none">
+    <!-- Real-time handover toast cards inserted dynamically -->
+  </div>
 
   <!-- SUBTLE GLANCEABLE STATUS STRIP -->
   <div class="bg-white border-b border-[#E2E8D5] px-3 sm:px-6 lg:px-8 py-2 text-xs text-[#545454]">

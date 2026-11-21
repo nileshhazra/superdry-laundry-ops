@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   initFranchiseStores();
   updateStoreHeaderDisplay();
+  initNotifications();
   await detectModeAndInit();
   initAuth();
   await refreshAll();
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }, 4000);
 
-  // Multi-tab sync for Standalone Demo Mode
+  // Multi-tab sync for Standalone Demo Mode & Live Handover Notifications
   window.addEventListener('storage', async (e) => {
     if (e.key === 'superdry_demo_state') {
       const saved = localStorage.getItem('superdry_demo_state');
@@ -70,6 +71,16 @@ document.addEventListener('DOMContentLoaded', async () => {
           await refreshAll();
         } catch (err) {}
       }
+    } else if (e.key === 'bumbledry_last_broadcast_notif') {
+      try {
+        const notif = JSON.parse(e.newValue);
+        if (notif) {
+          liveNotifications.unshift(notif);
+          updateNotificationBadge();
+          renderNotificationCenter();
+          showToastNotification(notif, true);
+        }
+      } catch (err) {}
     }
   });
 
@@ -1703,6 +1714,7 @@ async function submitRiderPickupIntake() {
     order.notes = notes;
     order.pickedUpAt = new Date().toISOString();
     saveDemoState();
+    broadcastHandoverNotification(order.id, 'PICKED_UP');
     closeRiderPickupModal();
     await refreshAll();
     alert(`Order ${order.id} marked Picked Up with preferred delivery slot saved! Hand over at store counter.`);
@@ -1802,6 +1814,7 @@ async function submitRiderDeliveryCompletion() {
     order.podVerified = false;
     order.deliveredAt = new Date().toISOString();
     saveDemoState();
+    broadcastHandoverNotification(order.id, 'DELIVERED');
     closeRiderDeliveryModal();
     await refreshAll();
     alert(`Delivery confirmed for ${order.id}! Payment proof recorded for Admin audit.`);
@@ -2413,6 +2426,7 @@ async function updateOrderStatus(orderId, newStatus) {
     const order = mockDb.orders.find(o => o.id === orderId);
     if (order) order.status = newStatus;
     saveDemoState();
+    broadcastHandoverNotification(orderId, newStatus);
     await refreshAll();
     if (newStatus === 'PACKED') {
       openWhatsAppReadyModal(orderId);
@@ -2425,6 +2439,7 @@ async function updateOrderStatus(orderId, newStatus) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus })
     });
+    broadcastHandoverNotification(orderId, newStatus);
     await refreshAll();
     if (newStatus === 'PACKED') {
       openWhatsAppReadyModal(orderId);
@@ -3401,3 +3416,342 @@ function closeDynamicUpiQrModal() {
   const modal = document.getElementById('modal-dynamic-upi-qr');
   if (modal) modal.classList.add('hidden');
 }
+
+
+// =================================================================
+// REAL-TIME PROCESS HANDOVER & NOTIFICATION SYSTEM
+// =================================================================
+let liveNotifications = [];
+
+const HANDOVER_LEVEL_MAP = {
+  'PICKED_UP': {
+    from: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+    to: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+    badge: 'FIELD RIDER',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Pickup Completed',
+    summary: (order) => `Picked up ${order.totalPieces || 1} pcs from ${order.customerName} in ${order.zone}. Rider returning to counter.`
+  },
+  'RECEIVED_IN_STORE': {
+    from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+    to: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
+    badge: 'FRONT DESK',
+    badgeColor: 'bg-[#F8FAF3] text-[#1E293B]',
+    action: 'Intake Tagged',
+    summary: (order) => `Order #${order.id} (${order.totalPieces || 1} pcs) tagged & queued for Washing Station.`
+  },
+  'WASHING': {
+    from: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
+    to: { role: 'washer', name: 'Anil Verma (Dry Clean Specialist)' },
+    badge: 'WORKSHOP: WASH',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Washing Cycle Started',
+    summary: (order) => `Order #${order.id} loaded into commercial washer. Next: Hydro-extraction & Drying.`
+  },
+  'DRYING': {
+    from: { role: 'washer', name: 'Anil Verma (Dry Clean Specialist)' },
+    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    badge: 'WORKSHOP: DRYING',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Drying & Inspection',
+    summary: (order) => `Order #${order.id} dried & passed stain inspection. Queued for steam press.`
+  },
+  'IRONING': {
+    from: { role: 'washer', name: 'Anil Verma (Dry Cleaning)' },
+    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    badge: 'WORKSHOP: PRESS',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Steam Ironing Underway',
+    summary: (order) => `Steam press & crease finishing in progress for Order #${order.id} (${order.customerName}).`
+  },
+  'PACKED': {
+    from: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    to: { role: 'manager', name: 'Aakash Sharma & Field Riders' },
+    badge: 'WORKSHOP: PACKED',
+    badgeColor: 'bg-[#1E3304] text-[#A6CE39]',
+    action: 'Order Packed & Ready',
+    summary: (order) => `Quality passed! Order #${order.id} (${order.customerName}, ${order.zone}) is packed on hanger.`
+  },
+  'OUT_FOR_DELIVERY': {
+    from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+    to: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+    badge: 'DISPATCH',
+    badgeColor: 'bg-[#2D5A1E] text-white',
+    action: 'Dispatched for Delivery',
+    summary: (order) => `Order #${order.id} handed to Rajesh Kumar for doorstep delivery in ${order.zone}.`
+  },
+  'DELIVERED': {
+    from: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+    to: { role: 'manager', name: 'Aakash Sharma & Super Admin' },
+    badge: 'DELIVERY COMPLETE',
+    badgeColor: 'bg-[#A6CE39] text-[#1E3304]',
+    action: 'Delivered & Paid',
+    summary: (order) => `Delivered to ${order.customerName}. Payment of ₹${order.subtotal} collected (POD uploaded).`
+  }
+};
+
+function initNotifications() {
+  const saved = localStorage.getItem('bumbledry_live_notifications');
+  if (saved) {
+    try {
+      liveNotifications = JSON.parse(saved);
+    } catch (e) {}
+  }
+
+  // Pre-seed 3 recent realistic handover notifications if empty
+  if (!liveNotifications || liveNotifications.length === 0) {
+    liveNotifications = [
+      {
+        id: 'NOTIF-101',
+        orderId: 'ORD-1042',
+        badge: 'WORKSHOP: PACKED',
+        badgeColor: 'bg-[#1E3304] text-[#A6CE39]',
+        action: 'Order Packed & Ready',
+        summary: 'Quality passed! Order #ORD-1042 (Pooja Rao, Sector 15) is packed on hanger.',
+        from: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+        to: { role: 'manager', name: 'Aakash Sharma & Field Riders' },
+        timestamp: new Date(Date.now() - 4 * 60 * 1000).toISOString(),
+        read: false
+      },
+      {
+        id: 'NOTIF-102',
+        orderId: 'ORD-1040',
+        badge: 'DISPATCH',
+        badgeColor: 'bg-[#2D5A1E] text-white',
+        action: 'Dispatched for Delivery',
+        summary: 'Order #ORD-1040 handed to Rajesh Kumar for doorstep delivery in DLF Phase 4.',
+        from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+        to: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
+        timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+        read: false
+      },
+      {
+        id: 'NOTIF-103',
+        orderId: 'ORD-1045',
+        badge: 'FRONT DESK',
+        badgeColor: 'bg-[#F8FAF3] text-[#1E293B]',
+        action: 'Intake Tagged',
+        summary: 'Order #ORD-1045 (3 pcs) tagged & queued for Washing Station.',
+        from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
+        to: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
+        timestamp: new Date(Date.now() - 32 * 60 * 1000).toISOString(),
+        read: true
+      }
+    ];
+    saveNotifications();
+  }
+
+  updateNotificationBadge();
+  renderNotificationCenter();
+}
+
+function saveNotifications() {
+  try {
+    localStorage.setItem('bumbledry_live_notifications', JSON.stringify(liveNotifications.slice(0, 50)));
+  } catch (e) {}
+}
+
+function updateNotificationBadge() {
+  const badge = document.getElementById('notification-badge');
+  if (!badge) return;
+  const unreadCount = liveNotifications.filter(n => !n.read).length;
+  if (unreadCount > 0) {
+    badge.innerText = unreadCount > 9 ? '9+' : unreadCount;
+    badge.classList.remove('hidden');
+  } else {
+    badge.innerText = '0';
+    badge.classList.add('hidden');
+  }
+}
+
+function broadcastHandoverNotification(orderId, newStatus) {
+  const config = HANDOVER_LEVEL_MAP[newStatus];
+  if (!config) return;
+
+  const order = allOrders.find(o => o.id === orderId) || { id: orderId, customerName: 'Customer', zone: 'Sector 15', totalPieces: 1, subtotal: 0 };
+  const notif = {
+    id: 'NOTIF-' + Date.now(),
+    orderId: order.id,
+    badge: config.badge,
+    badgeColor: config.badgeColor,
+    action: config.action,
+    summary: config.summary(order),
+    from: config.from,
+    to: config.to,
+    timestamp: new Date().toISOString(),
+    read: false
+  };
+
+  liveNotifications.unshift(notif);
+  saveNotifications();
+  updateNotificationBadge();
+  renderNotificationCenter();
+  showToastNotification(notif);
+
+  try {
+    localStorage.setItem('bumbledry_last_broadcast_notif', JSON.stringify(notif));
+  } catch (e) {}
+}
+
+function showToastNotification(notif, isCrossTab = false) {
+  const container = document.getElementById('live-toast-container');
+  if (!container) return;
+
+  playNotificationChime();
+
+  const toastId = `toast-${notif.id}`;
+  const toastEl = document.createElement('div');
+  toastEl.id = toastId;
+  toastEl.className = 'pointer-events-auto bg-[#1E3A2F] text-white p-3.5 rounded-2xl border border-[#A6CE39]/30 shadow-2xl flex items-start space-x-3 transition-all transform duration-300 translate-y-0 opacity-100';
+  toastEl.innerHTML = `
+    <div class="w-8 h-8 rounded-full bg-[#A6CE39] text-[#1E3304] flex items-center justify-center shrink-0 font-bold mt-0.5">
+      <i data-lucide="bell" class="w-4 h-4"></i>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] uppercase font-black tracking-wider text-[#A6CE39]">${notif.badge}</span>
+        <span class="text-[10px] text-neutral-400">Just now</span>
+      </div>
+      <h5 class="font-bold text-xs text-white truncate mt-0.5">${notif.action}: ${notif.orderId}</h5>
+      <p class="text-[11px] text-neutral-300 leading-snug mt-1">${notif.summary}</p>
+      <div class="text-[10px] text-neutral-400 mt-1.5 flex items-center space-x-1 border-t border-white/10 pt-1">
+        <span>Handover: <strong>${notif.from.name}</strong></span>
+        <span>→</span>
+        <span class="text-[#A6CE39]"><strong>${notif.to.name}</strong></span>
+      </div>
+    </div>
+    <button onclick="dismissToast('${toastId}')" class="text-neutral-400 hover:text-white p-1">
+      <i data-lucide="x" class="w-3.5 h-3.5"></i>
+    </button>
+  `;
+
+  container.appendChild(toastEl);
+  lucide.createIcons();
+
+  setTimeout(() => {
+    dismissToast(toastId);
+  }, 6000);
+}
+
+function dismissToast(toastId) {
+  const toast = document.getElementById(toastId);
+  if (!toast) return;
+  toast.classList.add('opacity-0', 'translate-y-2');
+  setTimeout(() => {
+    if (toast.parentNode) toast.parentNode.removeChild(toast);
+  }, 300);
+}
+
+function playNotificationChime() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    const now = ctx.currentTime;
+    osc.frequency.setValueAtTime(587.33, now);
+    osc.frequency.setValueAtTime(880.00, now + 0.12);
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+    osc.start(now);
+    osc.stop(now + 0.55);
+  } catch (e) {}
+}
+
+function testNotificationChime() {
+  playNotificationChime();
+  const testNotif = {
+    id: 'TEST-' + Date.now(),
+    orderId: 'ORD-1044',
+    badge: 'WORKSHOP: PRESS',
+    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
+    action: 'Steam Ironing Underway',
+    summary: 'Steam press & crease finishing in progress for Order #ORD-1044 (Priya Sharma).',
+    from: { role: 'washer', name: 'Anil Verma (Dry Clean)' },
+    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
+    timestamp: new Date().toISOString(),
+    read: false
+  };
+  showToastNotification(testNotif);
+}
+
+function toggleNotificationCenter(e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  const dropdown = document.getElementById('notification-dropdown');
+  if (!dropdown) return;
+  if (dropdown.classList.contains('hidden')) {
+    dropdown.classList.remove('hidden');
+    renderNotificationCenter();
+  } else {
+    dropdown.classList.add('hidden');
+  }
+}
+
+function renderNotificationCenter() {
+  const container = document.getElementById('notifications-list-container');
+  if (!container) return;
+
+  if (liveNotifications.length === 0) {
+    container.innerHTML = `
+      <div class="p-8 text-center text-[#898989] text-xs">
+        <i data-lucide="bell-off" class="w-6 h-6 mx-auto mb-2 text-[#898989]"></i>
+        <div>No notifications right now.</div>
+        <div class="text-[10px] text-[#545454] mt-0.5">Station handover events will appear here in real time.</div>
+      </div>
+    `;
+    lucide.createIcons();
+    return;
+  }
+
+  container.innerHTML = liveNotifications.map(n => `
+    <div class="p-3.5 hover:bg-[#F8FAF3] transition-colors ${!n.read ? 'bg-[#EEF4E3]/30' : ''} space-y-1.5">
+      <div class="flex items-center justify-between">
+        <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full ${n.badgeColor || 'bg-[#F8FAF3] text-[#1E293B]'}">${n.badge}</span>
+        <span class="text-[10px] text-[#545454]">${new Date(n.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+      </div>
+      <div class="font-bold text-[#1E293B] text-xs flex items-center justify-between">
+        <span>${n.action}: <strong class="font-mono text-[#1E3304]">${n.orderId}</strong></span>
+        ${!n.read ? '<span class="w-2 h-2 rounded-full bg-[#E11900] shrink-0" title="Unread"></span>' : ''}
+      </div>
+      <p class="text-[11px] text-[#545454] leading-relaxed">${n.summary}</p>
+      <div class="text-[10px] text-[#898989] flex items-center space-x-1 pt-0.5">
+        <span>From: <strong class="text-[#1E293B]">${n.from.name}</strong></span>
+        <span>→</span>
+        <span>To: <strong class="text-[#2D5A1E]">${n.to.name}</strong></span>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+}
+
+function markAllNotificationsRead() {
+  liveNotifications.forEach(n => { n.read = true; });
+  saveNotifications();
+  updateNotificationBadge();
+  renderNotificationCenter();
+}
+
+function clearAllNotifications() {
+  liveNotifications = [];
+  saveNotifications();
+  updateNotificationBadge();
+  renderNotificationCenter();
+}
+
+// Close notification dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('notification-dropdown');
+  const bellBtn = document.getElementById('btn-notification-bell');
+  if (dropdown && !dropdown.classList.contains('hidden')) {
+    if (!dropdown.contains(e.target) && !bellBtn.contains(e.target)) {
+      dropdown.classList.add('hidden');
+    }
+  }
+});
