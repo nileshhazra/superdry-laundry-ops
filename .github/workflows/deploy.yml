@@ -2,7 +2,7 @@ name: Deploy Bumbledry PRO to GitHub Pages
 
 on:
   push:
-    branches: [ "main", "uber-design" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
