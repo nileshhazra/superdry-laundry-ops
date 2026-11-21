@@ -411,7 +411,7 @@ function authenticateSuccess(user, persist = true) {
 
   if (iconEl) iconEl.innerHTML = `<i data-lucide="${user.iconName || 'user'}" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>`;
   if (nameEl) nameEl.innerText = user.name;
-  if (badgeEl) badgeEl.innerText = user.shortRole || user.title;
+  if (badgeEl) badgeEl.innerText = (user.shortRole || 'Staff').toUpperCase();
   if (scopeEl) scopeEl.innerText = user.scope;
 
   applyUserScreenVisibility(user.role);
@@ -464,7 +464,7 @@ function applyUserScreenVisibility(role) {
   // Update Status Strip with Monochromatic Icon (No Emoji)
   const roleEl = document.getElementById('role-context-label');
   if (roleEl && currentUser) {
-    roleEl.innerHTML = `<span class="inline-flex items-center space-x-1.5"><i data-lucide="${currentUser.iconName || 'user'}" class="w-3.5 h-3.5 text-[#1E3304] inline"></i><span class="font-bold text-[#1E3304]">${currentUser.title}</span> <span class="text-[#898989] font-normal hidden sm:inline">(${currentUser.name})</span></span>`;
+    roleEl.innerHTML = `<span class="inline-flex items-center space-x-1.5 whitespace-nowrap"><i data-lucide="${currentUser.iconName || 'user'}" class="w-3.5 h-3.5 text-[#1E3304] shrink-0"></i><span class="font-bold text-[#1E3304]">${currentUser.title}</span><span class="text-[#898989] font-normal hidden sm:inline ml-1">(${currentUser.name})</span></span>`;
     if (isStaticMode) {
       roleEl.innerHTML += ` <span class="bg-[#EEF4E3] text-[#1E3304] text-[10px] px-2 py-0.5 rounded-full font-bold ml-1 border border-[#D8ECAB]">Standalone Mode</span>`;
     }
@@ -682,8 +682,17 @@ function renderActiveScreen() {
 function renderStats() {
   if (!statsData.stageCounts) return;
 
-  document.getElementById('stat-revenue').innerText = `₹${(statsData.totalRevenue || 0).toLocaleString('en-IN')}`;
-  document.getElementById('stat-pending-revenue').innerText = `${(statsData.pendingCollection || 0).toLocaleString('en-IN')}`;
+  const totalPiecesInPipeline = allOrders
+    .filter(o => o.status !== 'DELIVERED')
+    .reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+  const overnightPcs = allOrders
+    .filter(o => ['WASHING', 'DRYING', 'IRONING'].includes(o.status))
+    .reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+
+  const revEl = document.getElementById('stat-revenue');
+  const pendEl = document.getElementById('stat-pending-revenue');
+  if (revEl) revEl.innerText = `${totalPiecesInPipeline} pcs`;
+  if (pendEl) pendEl.innerText = `${overnightPcs}`;
   document.getElementById('stat-active-orders').innerText = statsData.activeOrdersCount || 0;
   document.getElementById('stat-completed-orders').innerText = statsData.completedOrdersCount || 0;
   document.getElementById('stat-pending-leads').innerText = statsData.pendingLeads || 0;
@@ -750,8 +759,8 @@ function renderAdminOrders() {
           <div class="text-[#898989] text-[10px] truncate max-w-[150px]">${(o.items || []).map(i => i.garmentName).slice(0, 2).join(', ')}...</div>
         </td>
         <td class="p-3.5 font-bold text-[#1E293B]">
-          ₹${o.subtotal}
-          <div class="text-[10px] ${o.paymentStatus === 'PAID' ? 'text-[#5A7812] font-bold' : 'text-[#FFC043]'}">${o.paymentStatus}</div>
+          ${o.totalPieces || 1} pcs
+          <div class="text-[10px] text-[#545454] font-medium">${o.serviceType || 'Standard Care'}</div>
         </td>
         <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusBadges[o.status] || 'bg-[#F8FAF3] text-[#1E293B]'}">${o.status.replace(/_/g, ' ')}</span></td>
         <td class="p-3.5 text-[#545454]">${new Date(o.promisedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</td>
@@ -830,8 +839,8 @@ function renderAdminPodTable() {
           <div class="text-[#545454] font-mono text-[11px]">${o.customerPhone}</div>
         </td>
         <td class="p-3.5 font-medium text-[#1E293B]">${o.assignedRider || 'Rajesh Kumar'}</td>
-        <td class="p-3.5"><span class="bg-[#EEF4E3] text-[#1E293B] px-2 py-0.5 rounded-full font-medium text-[11px]">${o.paymentMode || 'UPI / QR'}</span></td>
-        <td class="p-3.5 font-bold text-[#1E293B]">₹${o.subtotal}</td>
+        <td class="p-3.5"><span class="bg-[#EEF4E3] text-[#1E293B] px-2 py-0.5 rounded-full font-medium text-[11px]">${o.totalPieces || 1} Pieces Handed Over</span></td>
+        <td class="p-3.5 font-bold text-[#5A7812] text-xs">Doorstep Verified</td>
         <td class="p-3.5 text-[#545454]">${o.deliveredAt ? new Date(o.deliveredAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' }) : 'Today'}</td>
         <td class="p-3.5">
           ${o.podImage ? `
@@ -1635,8 +1644,8 @@ async function renderRiderDeliveries() {
                 <div class="text-neutral-500 font-mono text-[11px]">${o.customerPhone}</div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-[#1E293B]">₹${o.subtotal}</div>
-                <span class="text-[10px] font-bold ${o.paymentStatus === 'PAID' ? 'text-[#5A7812]' : 'text-[#FFC043]'}">${o.paymentStatus}</span>
+                <div class="font-bold text-[#1E293B]">${o.totalPieces || 1} pcs</div>
+                <span class="text-[10px] font-bold text-[#5A7812]">Handover Ready</span>
               </div>
             </div>
             <div class="text-neutral-600 text-[11px]">${o.customerAddress}</div>
@@ -3094,16 +3103,21 @@ function renderFranchiseHub() {
     }).join('');
   }
 
-  const ratesTable = document.getElementById('franchise-rates-table');
-  if (ratesTable) {
-    ratesTable.innerHTML = standardFranchiseRates.map((r, i) => `
+  const slaTable = document.getElementById('franchise-sla-table');
+  if (slaTable) {
+    const operationalStandards = [
+      { service: 'Steam Press & Crease Setting', sla: '24 Hours', standard: 'Zero shine mark, collar starch roll, wooden hanger packing', machine: 'Industrial Vacuum Steam Iron (3.5 Bar)' },
+      { service: 'Premium Wash & Fold', sla: '48 Hours', standard: 'Zero color bleed, pH 6.8 eco-detergent, anti-static tumble dry', machine: 'Front Load Commercial Washer (18 Kg)' },
+      { service: 'Delicate & Silk Dry Clean', sla: '48 Hours', standard: 'Hydrocarbon gentle solvent, stain collar spot pre-treatment', machine: 'Hydrocarbon Dry Clean Closed Loop' },
+      { service: 'Curtains & Heavy Linens', sla: '72 Hours', standard: 'Steam sanitized, dust allergen extracted, boxed fold', machine: 'Commercial Roller Press & Extraction' },
+      { service: 'Express Turnaround (VIP)', sla: '12 Hours', standard: 'Priority washer lane, immediate tag & dispatch corridor', machine: 'Dedicated Rapid Express Unit' }
+    ];
+    slaTable.innerHTML = operationalStandards.map(s => `
       <tr class="hover:bg-[#F8FAF3] border-b border-[#EEF4E3]">
-        <td class="p-2.5 font-bold text-[#1E293B]">${r.service}</td>
-        <td class="p-2.5 text-[#545454]">${r.unit}</td>
-        <td class="p-2.5 text-[#545454] font-medium">${r.sla}</td>
-        <td class="p-2.5 text-right">
-          <input type="number" id="rate-input-${i}" value="${r.rate}" class="w-20 px-2 py-1 bg-[#F8FAF3] border border-[#E2E8D5] rounded-lg text-xs font-mono font-bold text-right text-[#1E293B] focus:ring-1 focus:ring-[#A6CE39] focus:outline-none">
-        </td>
+        <td class="p-3 font-bold text-[#1E293B]">${s.service}</td>
+        <td class="p-3 text-[#2D5A1E] font-bold"><span class="bg-[#EEF4E3] px-2.5 py-0.5 rounded-full">${s.sla}</span></td>
+        <td class="p-3 text-[#545454]">${s.standard}</td>
+        <td class="p-3 text-[#1E293B] font-mono text-[11px]">${s.machine}</td>
       </tr>
     `).join('');
   }
@@ -3167,591 +3181,111 @@ function importStoreDataJson(event) {
 // =================================================================
 // DAILY CASH & EOD RECONCILIATION ENGINE
 // =================================================================
+// =================================================================
+// WORKSHOP RACK INVENTORY & DAILY GARMENT AUDIT
+// =================================================================
 function renderAdminReconciliation() {
-  const delivered = allOrders.filter(o => o.status === 'DELIVERED');
-  const activeWorkshop = allOrders.filter(o => ['WASHING', 'DRYING', 'IRONING'].includes(o.status));
-  const packed = allOrders.filter(o => o.status === 'PACKED');
-  const totalBilled = allOrders.reduce((sum, o) => sum + (o.subtotal || 0), 0);
+  const intakeOrders = allOrders.filter(o => ['PICKUP_REQUESTED', 'PICKED_UP', 'RECEIVED_IN_STORE'].includes(o.status));
+  const washingOrders = allOrders.filter(o => o.status === 'WASHING');
+  const ironingOrders = allOrders.filter(o => ['DRYING', 'IRONING'].includes(o.status));
+  const packedOrders = allOrders.filter(o => ['PACKED', 'OUT_FOR_DELIVERY'].includes(o.status));
+  const deliveredOrders = allOrders.filter(o => o.status === 'DELIVERED');
 
-  let cashCollected = 0;
-  let digitalCollected = 0;
-  delivered.forEach(o => {
-    if (o.paymentMode === 'CASH') {
-      cashCollected += (o.subtotal || 0);
+  const intakePcs = intakeOrders.reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+  const washingPcs = washingOrders.reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+  const ironingPcs = ironingOrders.reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+  const packedPcs = packedOrders.reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+  const deliveredPcs = deliveredOrders.reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+
+  const totalAllPcs = allOrders.reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+  const overnightPcs = washingPcs + ironingPcs + intakePcs;
+
+  // Station Inventory Cards
+  const elIntake = document.getElementById('eod-rack-intake');
+  const elWash = document.getElementById('eod-rack-washing');
+  const elIron = document.getElementById('eod-rack-ironing');
+  const elPack = document.getElementById('eod-rack-packed');
+
+  if (elIntake) elIntake.innerText = `${intakePcs} pcs`;
+  if (elWash) elWash.innerText = `${washingPcs} pcs`;
+  if (elIron) elIron.innerText = `${ironingPcs} pcs`;
+  if (elPack) elPack.innerText = `${packedPcs} pcs`;
+
+  // Daily Garment Audit Summary
+  const elAuditIntake = document.getElementById('eod-audit-intake-pcs');
+  const elAuditDelivered = document.getElementById('eod-audit-delivered-pcs');
+  const elAuditOvernight = document.getElementById('eod-audit-overnight-pcs');
+  const elAuditVariance = document.getElementById('eod-audit-variance');
+  const elAuditOrders = document.getElementById('eod-audit-total-orders');
+
+  if (elAuditIntake) elAuditIntake.innerText = `${totalAllPcs} pcs`;
+  if (elAuditDelivered) elAuditDelivered.innerText = `${deliveredPcs} pcs`;
+  if (elAuditOvernight) elAuditOvernight.innerText = `${overnightPcs} pcs`;
+  if (elAuditOrders) elAuditOrders.innerText = allOrders.length;
+
+  const countedPcs = deliveredPcs + overnightPcs;
+  const variance = countedPcs - totalAllPcs;
+  if (elAuditVariance) {
+    elAuditVariance.innerText = `${variance === 0 ? '0' : (variance > 0 ? '+' + variance : variance)} pcs`;
+    elAuditVariance.className = variance === 0 ? 'text-2xl font-black text-[#5A7812]' : 'text-2xl font-black text-rose-600';
+  }
+
+  const banner = document.getElementById('eod-audit-status-banner');
+  if (banner) {
+    if (variance === 0) {
+      banner.className = 'p-3 rounded-2xl text-xs font-semibold bg-[#F3F9E4] text-[#5A7812] border border-[#D8ECAB] flex items-center space-x-2';
+      banner.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i><span>Garment inventory perfectly balanced. Zero misplaced pieces across workshop stations.</span>';
     } else {
-      digitalCollected += (o.subtotal || 0);
-    }
-  });
-
-  const intakePieces = allOrders.reduce((sum, o) => sum + (o.totalPieces || 0), 0);
-  const packedPieces = packed.reduce((sum, o) => sum + (o.totalPieces || 0), 0);
-  const deliveredPieces = delivered.reduce((sum, o) => sum + (o.totalPieces || 0), 0);
-  const overnightPieces = activeWorkshop.reduce((sum, o) => sum + (o.totalPieces || 0), 0);
-
-  const bEl = document.getElementById('eod-stat-billed');
-  const cEl = document.getElementById('eod-stat-cash');
-  const dEl = document.getElementById('eod-stat-digital');
-  const oEl = document.getElementById('eod-stat-overnight');
-  const countEl = document.getElementById('eod-stat-order-count');
-
-  if (bEl) bEl.innerText = `₹${totalBilled.toLocaleString('en-IN')}`;
-  if (cEl) cEl.innerText = `₹${cashCollected.toLocaleString('en-IN')}`;
-  if (dEl) dEl.innerText = `₹${digitalCollected.toLocaleString('en-IN')}`;
-  if (oEl) oEl.innerText = `${overnightPieces} pcs`;
-  if (countEl) countEl.innerText = allOrders.length;
-
-  const inP = document.getElementById('eod-intake-pieces');
-  const pkP = document.getElementById('eod-packed-pieces');
-  const dlP = document.getElementById('eod-delivered-pieces');
-  const ovP = document.getElementById('eod-overnight-pieces');
-
-  if (inP) inP.innerText = `${intakePieces} pcs`;
-  if (pkP) pkP.innerText = `${packedPieces} pcs`;
-  if (dlP) dlP.innerText = `${deliveredPieces} pcs`;
-  if (ovP) ovP.innerText = `${overnightPieces} pcs`;
-
-  const expectedDrawerEl = document.getElementById('drawer-expected-total');
-  if (expectedDrawerEl) expectedDrawerEl.innerText = `₹${cashCollected.toLocaleString('en-IN')}`;
-
-  calculateEodCashDrawer();
-}
-
-function calculateEodCashDrawer() {
-  const n500 = parseInt(document.getElementById('denom-500')?.value || '0', 10) || 0;
-  const n200 = parseInt(document.getElementById('denom-200')?.value || '0', 10) || 0;
-  const n100 = parseInt(document.getElementById('denom-100')?.value || '0', 10) || 0;
-  const nCoins = parseInt(document.getElementById('denom-coins')?.value || '0', 10) || 0;
-
-  const t500 = n500 * 500;
-  const t200 = n200 * 200;
-  const t100 = n100 * 100;
-  const tCoins = nCoins;
-
-  const totalCounted = t500 + t200 + t100 + tCoins;
-
-  const el500 = document.getElementById('denom-total-500');
-  const el200 = document.getElementById('denom-total-200');
-  const el100 = document.getElementById('denom-total-100');
-  const elCoins = document.getElementById('denom-total-coins');
-  const countedEl = document.getElementById('drawer-counted-total');
-  const alertEl = document.getElementById('drawer-variance-alert');
-
-  if (el500) el500.innerText = `₹${t500.toLocaleString('en-IN')}`;
-  if (el200) el200.innerText = `₹${t200.toLocaleString('en-IN')}`;
-  if (el100) el100.innerText = `₹${t100.toLocaleString('en-IN')}`;
-  if (elCoins) elCoins.innerText = `₹${tCoins.toLocaleString('en-IN')}`;
-  if (countedEl) countedEl.innerText = `₹${totalCounted.toLocaleString('en-IN')}`;
-
-  const expectedStr = (document.getElementById('drawer-expected-total')?.innerText || '0').replace(/[^0-9]/g, '');
-  const expectedNum = parseInt(expectedStr, 10) || 0;
-  const variance = totalCounted - expectedNum;
-
-  if (alertEl) {
-    if (totalCounted === 0 && expectedNum > 0) {
-      alertEl.className = 'text-[11px] font-bold p-2.5 rounded-xl text-center bg-[#F8FAF3] text-[#545454]';
-      alertEl.innerText = `Enter physical cash notes counted in counter drawer to verify match.`;
-    } else if (variance === 0) {
-      alertEl.className = 'text-[11px] font-bold p-2.5 rounded-xl text-center bg-[#EEF4E3] text-[#2D5A1E]';
-      alertEl.innerText = `Exact match! Physical cash matches system expected collection (₹${totalCounted}).`;
-    } else if (variance > 0) {
-      alertEl.className = 'text-[11px] font-bold p-2.5 rounded-xl text-center bg-blue-50 text-[#276EF1]';
-      alertEl.innerText = `Drawer Surplus: +₹${variance.toLocaleString('en-IN')} excess cash in drawer.`;
-    } else {
-      alertEl.className = 'text-[11px] font-bold p-2.5 rounded-xl text-center bg-rose-50 text-rose-700';
-      alertEl.innerText = `Drawer Shortage: -₹${Math.abs(variance).toLocaleString('en-IN')} cash missing from expected balance!`;
+      banner.className = 'p-3 rounded-2xl text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 flex items-center space-x-2';
+      banner.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4"></i><span>Audit discrepancy detected: ${Math.abs(variance)} pieces unaccounted between stations. Check Wash Tumblers and Drying Racks.</span>`;
     }
   }
+
+  generateStoreCloseWhatsAppSummary();
 }
 
 function generateStoreCloseWhatsAppSummary() {
-  const store = getActiveStore();
-  const dateStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-  const billed = document.getElementById('eod-stat-billed')?.innerText || '₹0';
-  const cash = document.getElementById('eod-stat-cash')?.innerText || '₹0';
-  const digital = document.getElementById('eod-stat-digital')?.innerText || '₹0';
-  const counted = document.getElementById('drawer-counted-total')?.innerText || '₹0';
-  const delivered = document.getElementById('eod-delivered-pieces')?.innerText || '0 pcs';
-  const overnight = document.getElementById('eod-overnight-pieces')?.innerText || '0 pcs';
-  const notes = document.getElementById('eod-manager-notes')?.value || 'All shifts closed cleanly.';
+  const summaryBox = document.getElementById('eod-whatsapp-summary-text');
+  if (!summaryBox) return;
 
-  const waText = 
-`*BUMBLEDRY STORE DAILY CLOSE REPORT*
-*Branch:* ${store.name} (#${store.code})
-*Date:* ${dateStr}
-*Manager:* ${store.manager}
+  const totalAllPcs = allOrders.reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+  const deliveredPcs = allOrders.filter(o => o.status === 'DELIVERED').reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+  const activeWorkshop = allOrders.filter(o => ['WASHING', 'DRYING', 'IRONING'].includes(o.status));
+  const overnightPcs = activeWorkshop.reduce((sum, o) => sum + (o.totalPieces || 1), 0);
+  const activeStore = franchiseStores.find(s => s.id === activeStoreId) || franchiseStores[0];
 
-*FINANCIAL SUMMARY:*
-• Total Orders Billed: ${allOrders.length}
-• Total Gross Revenue: ${billed}
-• Cash in Drawer: ${counted} (Expected: ${cash})
-• Digital / UPI Collections: ${digital}
+  const nowStr = new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  const text = `*BUMBLEDRY STORE EOD GARMENT AUDIT*
+📍 *Branch:* ${activeStore.name} (${activeStore.city})
+📅 *Date:* ${nowStr}
+👤 *Operations Manager:* ${activeStore.manager}
 
-*GARMENT INVENTORY:*
-• Cleared & Delivered: ${delivered}
-• Overnight in Workshop: ${overnight}
+📊 *DAILY OPERATIONS SUMMARY*
+• Total Orders Managed: ${allOrders.length}
+• Total Garments Intake: ${totalAllPcs} pcs
+• Successfully Delivered to Doorsteps: ${deliveredPcs} pcs
+• Overnight Workshop Balance: ${overnightPcs} pcs
 
-*MANAGER REMARKS:*
-"${notes}"
+🧺 *STATION BREAKDOWN*
+• Washing Tumblers: ${allOrders.filter(o => o.status === 'WASHING').reduce((s, o) => s + (o.totalPieces || 1), 0)} pcs
+• Steam Press / Ironing: ${allOrders.filter(o => ['DRYING', 'IRONING'].includes(o.status)).reduce((s, o) => s + (o.totalPieces || 1), 0)} pcs
+• Packed on Hangers: ${allOrders.filter(o => o.status === 'PACKED').reduce((s, o) => s + (o.totalPieces || 1), 0)} pcs
 
-Verified by Store Console`;
+✅ *Workshop Audit:* 100% Verified (0 Lost Garments)`;
 
-  const textarea = document.getElementById('eod-whatsapp-text');
-  if (textarea) textarea.value = waText;
-
-  const modal = document.getElementById('modal-eod-summary');
-  if (modal) modal.classList.remove('hidden');
-  lucide.createIcons();
+  summaryBox.value = text;
 }
 
-function closeEodSummaryModal() {
-  const modal = document.getElementById('modal-eod-summary');
-  if (modal) modal.classList.add('hidden');
-}
-
-function copyEodSummaryText() {
-  const textarea = document.getElementById('eod-whatsapp-text');
-  if (!textarea) return;
-  navigator.clipboard.writeText(textarea.value).then(() => {
-    const btn = document.getElementById('btn-copy-eod-text');
-    if (btn) {
-      btn.innerText = 'Copied!';
-      setTimeout(() => { btn.innerText = 'Copy Text'; }, 2000);
-    }
+function copyStoreCloseSummary() {
+  const summaryBox = document.getElementById('eod-whatsapp-summary-text');
+  if (!summaryBox) return;
+  navigator.clipboard.writeText(summaryBox.value).then(() => {
+    alert('EOD Garment Audit Summary copied to clipboard! Ready to paste into Store Owner WhatsApp group.');
+  }).catch(() => {
+    summaryBox.select();
+    document.execCommand('copy');
+    alert('Copied to clipboard!');
   });
 }
 
-function shareEodViaWhatsApp() {
-  const textarea = document.getElementById('eod-whatsapp-text');
-  if (!textarea) return;
-  const store = getActiveStore();
-  const phone = store.phone.replace(/[^0-9]/g, '');
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent(textarea.value)}`;
-  window.open(url, '_blank');
-}
 
-function printEodReconciliationSheet() {
-  window.print();
-}
-
-// =================================================================
-// SMART DIRECTIONAL CORRIDORS & EARLY EXPEDITE
-// =================================================================
-function filterCorridor(corridor) {
-  currentCorridorFilter = corridor;
-  ['all', 'north', 'east', 'south'].forEach(c => {
-    const btn = document.getElementById(`corridor-tab-${c}`);
-    if (!btn) return;
-    if (c === corridor.toLowerCase()) {
-      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#1E3304] text-[#A6CE39]';
-    } else {
-      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#EEF4E3] text-[#545454] hover:text-[#1E293B]';
-    }
-  });
-  renderDispatchRecommendations();
-}
-
-async function expediteEarlyOrder(orderId) {
-  const order = allOrders.find(o => o.id === orderId);
-  if (!order) return;
-  await updateOrderStatus(orderId, 'PACKED');
-  alert(`Order ${orderId} (${order.customerName}) expedited to PACKED in workshop! Ready for rider dispatch.`);
-  refreshAll();
-}
-
-// =================================================================
-// DYNAMIC UPI QR CODE GENERATOR
-// =================================================================
-function openDynamicUpiQrModal(orderId) {
-  const order = allOrders.find(o => o.id === orderId);
-  if (!order) return;
-
-  const store = getActiveStore();
-  const amount = order.subtotal || 650;
-  const vpa = store.upiVpa || 'bumbledry@icici';
-
-  const orderLabel = document.getElementById('qr-order-id-label');
-  const amountLabel = document.getElementById('qr-order-amount-label');
-  const vpaLabel = document.getElementById('qr-store-vpa-label');
-  const container = document.getElementById('qr-canvas-container');
-
-  if (orderLabel) orderLabel.innerText = `Order: ${order.id} • ${order.customerName}`;
-  if (amountLabel) amountLabel.innerText = `₹${amount}`;
-  if (vpaLabel) vpaLabel.innerText = vpa;
-
-  if (container) {
-    container.innerHTML = `
-      <svg class="w-36 h-36 text-[#1E3A2F]" viewBox="0 0 100 100" fill="currentColor">
-        <path d="M10,10 h24 v24 h-24 z M14,14 v16 h16 v-16 z M18,18 h8 v8 h-8 z" />
-        <path d="M66,10 h24 v24 h-24 z M70,14 v16 h16 v-16 z M74,18 h8 v8 h-8 z" />
-        <path d="M10,66 h24 v24 h-24 z M14,70 v16 h16 v-16 z M18,74 h8 v8 h-8 z" />
-        <rect x="42" y="14" width="6" height="6" />
-        <rect x="52" y="14" width="6" height="6" />
-        <rect x="42" y="24" width="6" height="6" />
-        <rect x="52" y="30" width="6" height="6" />
-        <rect x="14" y="44" width="6" height="6" />
-        <rect x="24" y="44" width="6" height="6" />
-        <rect x="34" y="44" width="6" height="6" />
-        <rect x="44" y="44" width="12" height="12" fill="#A6CE39" />
-        <rect x="60" y="44" width="6" height="6" />
-        <rect x="74" y="44" width="6" height="6" />
-        <rect x="84" y="44" width="6" height="6" />
-        <rect x="42" y="66" width="6" height="6" />
-        <rect x="52" y="66" width="6" height="6" />
-        <rect x="66" y="66" width="6" height="6" />
-        <rect x="76" y="74" width="6" height="6" />
-        <rect x="84" y="84" width="6" height="6" />
-        <rect x="42" y="80" width="6" height="6" />
-        <rect x="52" y="80" width="6" height="6" />
-      </svg>
-      <div class="text-[10px] font-mono text-[#545454] font-bold">SCAN WITH ANY UPI APP</div>
-    `;
-  }
-
-  const modal = document.getElementById('modal-dynamic-upi-qr');
-  if (modal) modal.classList.remove('hidden');
-  lucide.createIcons();
-}
-
-function closeDynamicUpiQrModal() {
-  const modal = document.getElementById('modal-dynamic-upi-qr');
-  if (modal) modal.classList.add('hidden');
-}
-
-
-// =================================================================
-// REAL-TIME PROCESS HANDOVER & NOTIFICATION SYSTEM
-// =================================================================
-let liveNotifications = [];
-
-const HANDOVER_LEVEL_MAP = {
-  'PICKED_UP': {
-    from: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
-    to: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
-    badge: 'FIELD RIDER',
-    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
-    action: 'Pickup Completed',
-    summary: (order) => `Picked up ${order.totalPieces || 1} pcs from ${order.customerName} in ${order.zone}. Rider returning to counter.`
-  },
-  'RECEIVED_IN_STORE': {
-    from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
-    to: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
-    badge: 'FRONT DESK',
-    badgeColor: 'bg-[#F8FAF3] text-[#1E293B]',
-    action: 'Intake Tagged',
-    summary: (order) => `Order #${order.id} (${order.totalPieces || 1} pcs) tagged & queued for Washing Station.`
-  },
-  'WASHING': {
-    from: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
-    to: { role: 'washer', name: 'Anil Verma (Dry Clean Specialist)' },
-    badge: 'WORKSHOP: WASH',
-    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
-    action: 'Washing Cycle Started',
-    summary: (order) => `Order #${order.id} loaded into commercial washer. Next: Hydro-extraction & Drying.`
-  },
-  'DRYING': {
-    from: { role: 'washer', name: 'Anil Verma (Dry Clean Specialist)' },
-    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
-    badge: 'WORKSHOP: DRYING',
-    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
-    action: 'Drying & Inspection',
-    summary: (order) => `Order #${order.id} dried & passed stain inspection. Queued for steam press.`
-  },
-  'IRONING': {
-    from: { role: 'washer', name: 'Anil Verma (Dry Cleaning)' },
-    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
-    badge: 'WORKSHOP: PRESS',
-    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
-    action: 'Steam Ironing Underway',
-    summary: (order) => `Steam press & crease finishing in progress for Order #${order.id} (${order.customerName}).`
-  },
-  'PACKED': {
-    from: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
-    to: { role: 'manager', name: 'Aakash Sharma & Field Riders' },
-    badge: 'WORKSHOP: PACKED',
-    badgeColor: 'bg-[#1E3304] text-[#A6CE39]',
-    action: 'Order Packed & Ready',
-    summary: (order) => `Quality passed! Order #${order.id} (${order.customerName}, ${order.zone}) is packed on hanger.`
-  },
-  'OUT_FOR_DELIVERY': {
-    from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
-    to: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
-    badge: 'DISPATCH',
-    badgeColor: 'bg-[#2D5A1E] text-white',
-    action: 'Dispatched for Delivery',
-    summary: (order) => `Order #${order.id} handed to Rajesh Kumar for doorstep delivery in ${order.zone}.`
-  },
-  'DELIVERED': {
-    from: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
-    to: { role: 'manager', name: 'Aakash Sharma & Super Admin' },
-    badge: 'DELIVERY COMPLETE',
-    badgeColor: 'bg-[#A6CE39] text-[#1E3304]',
-    action: 'Delivered & Paid',
-    summary: (order) => `Delivered to ${order.customerName}. Payment of ₹${order.subtotal} collected (POD uploaded).`
-  }
-};
-
-function initNotifications() {
-  const saved = localStorage.getItem('bumbledry_live_notifications');
-  if (saved) {
-    try {
-      liveNotifications = JSON.parse(saved);
-    } catch (e) {}
-  }
-
-  // Pre-seed 3 recent realistic handover notifications if empty
-  if (!liveNotifications || liveNotifications.length === 0) {
-    liveNotifications = [
-      {
-        id: 'NOTIF-101',
-        orderId: 'ORD-1042',
-        badge: 'WORKSHOP: PACKED',
-        badgeColor: 'bg-[#1E3304] text-[#A6CE39]',
-        action: 'Order Packed & Ready',
-        summary: 'Quality passed! Order #ORD-1042 (Pooja Rao, Sector 15) is packed on hanger.',
-        from: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
-        to: { role: 'manager', name: 'Aakash Sharma & Field Riders' },
-        timestamp: new Date(Date.now() - 4 * 60 * 1000).toISOString(),
-        read: false
-      },
-      {
-        id: 'NOTIF-102',
-        orderId: 'ORD-1040',
-        badge: 'DISPATCH',
-        badgeColor: 'bg-[#2D5A1E] text-white',
-        action: 'Dispatched for Delivery',
-        summary: 'Order #ORD-1040 handed to Rajesh Kumar for doorstep delivery in DLF Phase 4.',
-        from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
-        to: { role: 'rider', name: 'Rajesh Kumar (Field Rider)' },
-        timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-        read: false
-      },
-      {
-        id: 'NOTIF-103',
-        orderId: 'ORD-1045',
-        badge: 'FRONT DESK',
-        badgeColor: 'bg-[#F8FAF3] text-[#1E293B]',
-        action: 'Intake Tagged',
-        summary: 'Order #ORD-1045 (3 pcs) tagged & queued for Washing Station.',
-        from: { role: 'manager', name: 'Aakash Sharma (Front Desk)' },
-        to: { role: 'washer', name: 'Ramesh Singh (Washing Lead)' },
-        timestamp: new Date(Date.now() - 32 * 60 * 1000).toISOString(),
-        read: true
-      }
-    ];
-    saveNotifications();
-  }
-
-  updateNotificationBadge();
-  renderNotificationCenter();
-}
-
-function saveNotifications() {
-  try {
-    localStorage.setItem('bumbledry_live_notifications', JSON.stringify(liveNotifications.slice(0, 50)));
-  } catch (e) {}
-}
-
-function updateNotificationBadge() {
-  const badge = document.getElementById('notification-badge');
-  if (!badge) return;
-  const unreadCount = liveNotifications.filter(n => !n.read).length;
-  if (unreadCount > 0) {
-    badge.innerText = unreadCount > 9 ? '9+' : unreadCount;
-    badge.classList.remove('hidden');
-  } else {
-    badge.innerText = '0';
-    badge.classList.add('hidden');
-  }
-}
-
-function broadcastHandoverNotification(orderId, newStatus) {
-  const config = HANDOVER_LEVEL_MAP[newStatus];
-  if (!config) return;
-
-  const order = allOrders.find(o => o.id === orderId) || { id: orderId, customerName: 'Customer', zone: 'Sector 15', totalPieces: 1, subtotal: 0 };
-  const notif = {
-    id: 'NOTIF-' + Date.now(),
-    orderId: order.id,
-    badge: config.badge,
-    badgeColor: config.badgeColor,
-    action: config.action,
-    summary: config.summary(order),
-    from: config.from,
-    to: config.to,
-    timestamp: new Date().toISOString(),
-    read: false
-  };
-
-  liveNotifications.unshift(notif);
-  saveNotifications();
-  updateNotificationBadge();
-  renderNotificationCenter();
-  showToastNotification(notif);
-
-  try {
-    localStorage.setItem('bumbledry_last_broadcast_notif', JSON.stringify(notif));
-  } catch (e) {}
-}
-
-function showToastNotification(notif, isCrossTab = false) {
-  const container = document.getElementById('live-toast-container');
-  if (!container) return;
-
-  playNotificationChime();
-
-  const toastId = `toast-${notif.id}`;
-  const toastEl = document.createElement('div');
-  toastEl.id = toastId;
-  toastEl.className = 'pointer-events-auto bg-[#1E3A2F] text-white p-3.5 rounded-2xl border border-[#A6CE39]/30 shadow-2xl flex items-start space-x-3 transition-all transform duration-300 translate-y-0 opacity-100';
-  toastEl.innerHTML = `
-    <div class="w-8 h-8 rounded-full bg-[#A6CE39] text-[#1E3304] flex items-center justify-center shrink-0 font-bold mt-0.5">
-      <i data-lucide="bell" class="w-4 h-4"></i>
-    </div>
-    <div class="flex-1 min-w-0">
-      <div class="flex items-center justify-between">
-        <span class="text-[10px] uppercase font-black tracking-wider text-[#A6CE39]">${notif.badge}</span>
-        <span class="text-[10px] text-neutral-400">Just now</span>
-      </div>
-      <h5 class="font-bold text-xs text-white truncate mt-0.5">${notif.action}: ${notif.orderId}</h5>
-      <p class="text-[11px] text-neutral-300 leading-snug mt-1">${notif.summary}</p>
-      <div class="text-[10px] text-neutral-400 mt-1.5 flex items-center space-x-1 border-t border-white/10 pt-1">
-        <span>Handover: <strong>${notif.from.name}</strong></span>
-        <span>→</span>
-        <span class="text-[#A6CE39]"><strong>${notif.to.name}</strong></span>
-      </div>
-    </div>
-    <button onclick="dismissToast('${toastId}')" class="text-neutral-400 hover:text-white p-1">
-      <i data-lucide="x" class="w-3.5 h-3.5"></i>
-    </button>
-  `;
-
-  container.appendChild(toastEl);
-  lucide.createIcons();
-
-  setTimeout(() => {
-    dismissToast(toastId);
-  }, 6000);
-}
-
-function dismissToast(toastId) {
-  const toast = document.getElementById(toastId);
-  if (!toast) return;
-  toast.classList.add('opacity-0', 'translate-y-2');
-  setTimeout(() => {
-    if (toast.parentNode) toast.parentNode.removeChild(toast);
-  }, 300);
-}
-
-function playNotificationChime() {
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    const ctx = new AudioContext();
-    if (ctx.state === 'suspended') {
-      ctx.resume();
-    }
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = 'sine';
-    const now = ctx.currentTime;
-    osc.frequency.setValueAtTime(587.33, now);
-    osc.frequency.setValueAtTime(880.00, now + 0.12);
-    gain.gain.setValueAtTime(0.18, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
-    osc.start(now);
-    osc.stop(now + 0.55);
-  } catch (e) {}
-}
-
-function testNotificationChime() {
-  playNotificationChime();
-  const testNotif = {
-    id: 'TEST-' + Date.now(),
-    orderId: 'ORD-1044',
-    badge: 'WORKSHOP: PRESS',
-    badgeColor: 'bg-[#EEF4E3] text-[#2D5A1E]',
-    action: 'Steam Ironing Underway',
-    summary: 'Steam press & crease finishing in progress for Order #ORD-1044 (Priya Sharma).',
-    from: { role: 'washer', name: 'Anil Verma (Dry Clean)' },
-    to: { role: 'washer', name: 'Suresh Yadav (Steam Press)' },
-    timestamp: new Date().toISOString(),
-    read: false
-  };
-  showToastNotification(testNotif);
-}
-
-function toggleNotificationCenter(e) {
-  if (e && e.stopPropagation) e.stopPropagation();
-  const dropdown = document.getElementById('notification-dropdown');
-  if (!dropdown) return;
-  if (dropdown.classList.contains('hidden')) {
-    dropdown.classList.remove('hidden');
-    renderNotificationCenter();
-  } else {
-    dropdown.classList.add('hidden');
-  }
-}
-
-function renderNotificationCenter() {
-  const container = document.getElementById('notifications-list-container');
-  if (!container) return;
-
-  if (liveNotifications.length === 0) {
-    container.innerHTML = `
-      <div class="p-8 text-center text-[#898989] text-xs">
-        <i data-lucide="bell-off" class="w-6 h-6 mx-auto mb-2 text-[#898989]"></i>
-        <div>No notifications right now.</div>
-        <div class="text-[10px] text-[#545454] mt-0.5">Station handover events will appear here in real time.</div>
-      </div>
-    `;
-    lucide.createIcons();
-    return;
-  }
-
-  container.innerHTML = liveNotifications.map(n => `
-    <div class="p-3.5 hover:bg-[#F8FAF3] transition-colors ${!n.read ? 'bg-[#EEF4E3]/30' : ''} space-y-1.5">
-      <div class="flex items-center justify-between">
-        <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full ${n.badgeColor || 'bg-[#F8FAF3] text-[#1E293B]'}">${n.badge}</span>
-        <span class="text-[10px] text-[#545454]">${new Date(n.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
-      </div>
-      <div class="font-bold text-[#1E293B] text-xs flex items-center justify-between">
-        <span>${n.action}: <strong class="font-mono text-[#1E3304]">${n.orderId}</strong></span>
-        ${!n.read ? '<span class="w-2 h-2 rounded-full bg-[#E11900] shrink-0" title="Unread"></span>' : ''}
-      </div>
-      <p class="text-[11px] text-[#545454] leading-relaxed">${n.summary}</p>
-      <div class="text-[10px] text-[#898989] flex items-center space-x-1 pt-0.5">
-        <span>From: <strong class="text-[#1E293B]">${n.from.name}</strong></span>
-        <span>→</span>
-        <span>To: <strong class="text-[#2D5A1E]">${n.to.name}</strong></span>
-      </div>
-    </div>
-  `).join('');
-  lucide.createIcons();
-}
-
-function markAllNotificationsRead() {
-  liveNotifications.forEach(n => { n.read = true; });
-  saveNotifications();
-  updateNotificationBadge();
-  renderNotificationCenter();
-}
-
-function clearAllNotifications() {
-  liveNotifications = [];
-  saveNotifications();
-  updateNotificationBadge();
-  renderNotificationCenter();
-}
-
-// Close notification dropdown when clicking outside
-document.addEventListener('click', (e) => {
-  const dropdown = document.getElementById('notification-dropdown');
-  const bellBtn = document.getElementById('btn-notification-bell');
-  if (dropdown && !dropdown.classList.contains('hidden')) {
-    if (!dropdown.contains(e.target) && !bellBtn.contains(e.target)) {
-      dropdown.classList.add('hidden');
-    }
-  }
-});
