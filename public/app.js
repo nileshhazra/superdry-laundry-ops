@@ -484,9 +484,9 @@ function applyUserScreenVisibility(role) {
   // Update Status Strip with Monochromatic Icon (No Emoji)
   const roleEl = document.getElementById('role-context-label');
   if (roleEl && currentUser) {
-    roleEl.innerHTML = `<span class="inline-flex items-center space-x-1.5 whitespace-nowrap"><i data-lucide="${currentUser.iconName || 'user'}" class="w-3.5 h-3.5 text-[#003D29] shrink-0"></i><span class="font-bold text-[#003D29]">${currentUser.title}</span><span class="text-[#72767E] font-normal hidden sm:inline ml-1">(${currentUser.name})</span></span>`;
+    roleEl.innerHTML = `<span class="inline-flex items-center space-x-1.5 whitespace-nowrap"><i data-lucide="${currentUser.iconName || 'user'}" class="w-3.5 h-3.5 text-[#0D4735] shrink-0"></i><span class="font-bold text-[#0D4735]">${currentUser.title}</span><span class="text-[#586B63] font-normal hidden sm:inline ml-1">(${currentUser.name})</span></span>`;
     if (isStaticMode) {
-      roleEl.innerHTML += ` <span class="bg-[#FAF1E5] text-[#003D29] text-[10px] px-2 py-0.5 rounded-full font-bold ml-1 border border-[#EFE9E1]">Standalone Mode</span>`;
+      roleEl.innerHTML += ` <span class="bg-[#EAF8F1] text-[#0D4735] text-[10px] px-2 py-0.5 rounded-full font-bold ml-1 border border-[#E7EFEA]">Standalone Mode</span>`;
     }
   }
 }
@@ -516,9 +516,9 @@ function updateAdminMonitorTabs(activeRole) {
     if (!btn) return;
     btn.innerHTML = `<i data-lucide="${iconMap[r]}" class="w-3.5 h-3.5"></i><span>${labelMap[r]}</span>`;
     if (r === activeRole) {
-      btn.className = 'px-3 py-1.5 rounded-full text-xs font-bold bg-[#108910] text-white shadow-xs flex items-center space-x-1 whitespace-nowrap';
+      btn.className = 'px-3 py-1.5 rounded-full text-xs font-bold bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)] flex items-center space-x-1 whitespace-nowrap';
     } else {
-      btn.className = 'px-3 py-1.5 rounded-full text-xs font-medium text-[#72767E] hover:text-[#1D252C] hover:bg-[#FAF1E5] flex items-center space-x-1 whitespace-nowrap';
+      btn.className = 'px-3 py-1.5 rounded-full text-xs font-medium text-[#586B63] hover:text-[#11221B] hover:bg-[#EAF8F1] flex items-center space-x-1 whitespace-nowrap';
     }
   });
   lucide.createIcons();
@@ -539,10 +539,10 @@ function setManagerTab(tab) {
     const view = document.getElementById(`manager-view-${t}`);
     if (!btn || !view) return;
     if (t === tab) {
-      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#003D29] text-[#108910] shadow-sm flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
+      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)] flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
       view.classList.remove('hidden');
     } else {
-      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-medium text-[#72767E] hover:text-[#1D252C] flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
+      btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-medium text-[#586B63] hover:text-[#11221B] flex items-center space-x-1.5 shrink-0 whitespace-nowrap transition-all';
       view.classList.add('hidden');
     }
   });
@@ -566,12 +566,12 @@ function setRiderMode(mode) {
   const dView = document.getElementById('rider-view-delivery');
 
   if (mode === 'pickup') {
-    pBtn.className = 'py-2 rounded-full bg-[#108910] text-white shadow transition-all flex items-center justify-center space-x-1.5 font-bold';
+    pBtn.className = 'py-2 rounded-full bg-[#00B261] text-white shadow transition-all flex items-center justify-center space-x-1.5 font-bold';
     dBtn.className = 'py-2 rounded-full text-neutral-400 hover:text-white transition-all flex items-center justify-center space-x-1.5 font-medium';
     pView.classList.remove('hidden');
     dView.classList.add('hidden');
   } else {
-    dBtn.className = 'py-2 rounded-full bg-[#108910] text-white shadow transition-all flex items-center justify-center space-x-1.5 font-bold';
+    dBtn.className = 'py-2 rounded-full bg-[#00B261] text-white shadow transition-all flex items-center justify-center space-x-1.5 font-bold';
     pBtn.className = 'py-2 rounded-full text-neutral-400 hover:text-white transition-all flex items-center justify-center space-x-1.5 font-medium';
     dView.classList.remove('hidden');
     pView.classList.add('hidden');
@@ -714,6 +714,8 @@ function renderStats() {
   const revEl = document.getElementById('stat-revenue');
   const pendEl = document.getElementById('stat-pending-revenue');
   if (revEl) revEl.innerText = `${totalPiecesInPipeline} pcs`;
+  const heroEl = document.getElementById('hero-stat-garments');
+  if (heroEl) heroEl.innerText = `${totalPiecesInPipeline} pcs`;
   if (pendEl) pendEl.innerText = `${overnightPcs}`;
   document.getElementById('stat-active-orders').innerText = statsData.activeOrdersCount || 0;
   document.getElementById('stat-completed-orders').innerText = statsData.completedOrdersCount || 0;
@@ -733,9 +735,9 @@ function renderStats() {
 
   const pipelineContainer = document.getElementById('admin-pipeline-breakdown');
   pipelineContainer.innerHTML = stages.map(s => `
-    <div class="bg-[#F7F5F0] rounded-xl p-2.5 sm:p-3 flex flex-col justify-between border border-[#E8E8E3] min-w-0">
-      <span class="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider block text-[#72767E] truncate">${s.label}</span>
-      <span class="text-xl sm:text-2xl font-black text-[#1D252C] mt-1">${statsData.stageCounts[s.key] || 0}</span>
+    <div class="bg-[#F7FAF8] rounded-xl p-2.5 sm:p-3 flex flex-col justify-between border border-[#E7EFEA] min-w-0">
+      <span class="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider block text-[#586B63] truncate">${s.label}</span>
+      <span class="text-xl sm:text-2xl font-black text-[#11221B] mt-1">${statsData.stageCounts[s.key] || 0}</span>
     </div>
   `).join('');
 }
@@ -750,44 +752,44 @@ function renderAdminOrders() {
   }
 
   if (list.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-[#72767E]">No orders match the selected filter.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-[#586B63]">No orders match the selected filter.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = list.map(o => {
-    const isExpress = o.isExpress ? `<span class="bg-[#003D29] text-[#108910] text-[9px] font-bold px-2 py-0.5 rounded-full ml-1 border border-[#108910]">EXPRESS</span>` : '';
+    const isExpress = o.isExpress ? `<span class="bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)] text-[9px] font-bold px-2 py-0.5 rounded-full ml-1 border border-[#00B261]">EXPRESS</span>` : '';
     const statusBadges = {
-      PICKUP_REQUESTED: 'bg-[#F7F5F0] text-[#003D29] border border-[#E8E8E3]',
-      PICKED_UP: 'bg-[#F7F5F0] text-[#003D29] border border-[#E8E8E3]',
-      RECEIVED_IN_STORE: 'bg-[#F7F5F0] text-[#003D29] border border-[#E8E8E3]',
+      PICKUP_REQUESTED: 'bg-[#F7FAF8] text-[#0D4735] border border-[#E7EFEA]',
+      PICKED_UP: 'bg-[#F7FAF8] text-[#0D4735] border border-[#E7EFEA]',
+      RECEIVED_IN_STORE: 'bg-[#F7FAF8] text-[#0D4735] border border-[#E7EFEA]',
       WASHING: 'bg-amber-50 text-amber-900 border border-amber-200',
-      DRYING: 'bg-[#F7F5F0] text-[#003D29] border border-[#E8E8E3]',
-      IRONING: 'bg-[#F7F5F0] text-[#003D29] border border-[#E8E8E3]',
-      PACKED: 'bg-[#FAF1E5] text-[#0A610A] border border-[#EFE9E1]',
+      DRYING: 'bg-[#F7FAF8] text-[#0D4735] border border-[#E7EFEA]',
+      IRONING: 'bg-[#F7FAF8] text-[#0D4735] border border-[#E7EFEA]',
+      PACKED: 'bg-[#EAF8F1] text-[#0D4735] border border-[#E7EFEA]',
       OUT_FOR_DELIVERY: 'bg-blue-50 text-blue-900 border border-blue-200',
-      DELIVERED: 'bg-[#003D29] text-[#108910] font-bold border border-[#108910]'
+      DELIVERED: 'bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)] font-bold border border-[#00B261]'
     };
 
     return `
-      <tr class="hover:bg-[#F7F5F0] transition-colors">
-        <td class="p-3.5 font-mono font-bold text-[#1D252C]">${o.id} ${isExpress}</td>
+      <tr class="hover:bg-[#F7FAF8] transition-colors">
+        <td class="p-3.5 font-mono font-bold text-[#11221B]">${o.id} ${isExpress}</td>
         <td class="p-3.5">
-          <div class="font-bold text-[#1D252C]">${o.customerName}</div>
-          <div class="text-[#72767E] font-mono text-[11px]">${o.customerPhone}</div>
+          <div class="font-bold text-[#11221B]">${o.customerName}</div>
+          <div class="text-[#586B63] font-mono text-[11px]">${o.customerPhone}</div>
         </td>
-        <td class="p-3.5"><span class="bg-[#FAF1E5] text-[#1D252C] px-2 py-0.5 rounded-full font-medium text-[11px]">${o.zone}</span></td>
+        <td class="p-3.5"><span class="bg-[#EAF8F1] text-[#11221B] px-2 py-0.5 rounded-full font-medium text-[11px]">${o.zone}</span></td>
         <td class="p-3.5">
-          <span class="font-bold text-[#1D252C]">${o.totalPieces} Pieces</span>
-          <div class="text-[#72767E] text-[10px] truncate max-w-[150px]">${(o.items || []).map(i => i.garmentName).slice(0, 2).join(', ')}...</div>
+          <span class="font-bold text-[#11221B]">${o.totalPieces} Pieces</span>
+          <div class="text-[#586B63] text-[10px] truncate max-w-[150px]">${(o.items || []).map(i => i.garmentName).slice(0, 2).join(', ')}...</div>
         </td>
-        <td class="p-3.5 font-bold text-[#1D252C]">
+        <td class="p-3.5 font-bold text-[#11221B]">
           ${o.totalPieces || 1} pcs
-          <div class="text-[10px] text-[#72767E] font-medium">${o.serviceType || 'Standard Care'}</div>
+          <div class="text-[10px] text-[#586B63] font-medium">${o.serviceType || 'Standard Care'}</div>
         </td>
-        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusBadges[o.status] || 'bg-[#F7F5F0] text-[#1D252C]'}">${o.status.replace(/_/g, ' ')}</span></td>
-        <td class="p-3.5 text-[#72767E]">${new Date(o.promisedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</td>
+        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusBadges[o.status] || 'bg-[#F7FAF8] text-[#11221B]'}">${o.status.replace(/_/g, ' ')}</span></td>
+        <td class="p-3.5 text-[#586B63]">${new Date(o.promisedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</td>
         <td class="p-3.5 text-right space-x-1">
-          <button onclick="previewThermalTags('${o.id}')" title="Print Garment Tags" class="p-1.5 bg-[#FAF1E5] hover:bg-[#E8E8E3] text-[#1D252C] rounded-full">
+          <button onclick="previewThermalTags('${o.id}')" title="Print Garment Tags" class="p-1.5 bg-[#EAF8F1] hover:bg-[#E7EFEA] text-[#11221B] rounded-full">
             <i data-lucide="printer" class="w-3.5 h-3.5 inline"></i>
           </button>
         </td>
@@ -806,9 +808,9 @@ function setAdminTableTab(tab) {
     const view = document.getElementById(`admin-${t}-view`);
     if (btn) {
       if (t === tab) {
-        btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#003D29] text-[#108910] shadow-sm transition-all whitespace-nowrap flex items-center space-x-1';
+        btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)] transition-all whitespace-nowrap flex items-center space-x-1';
       } else {
-        btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#72767E] hover:text-[#1D252C] transition-all whitespace-nowrap flex items-center space-x-1';
+        btn.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#586B63] hover:text-[#11221B] transition-all whitespace-nowrap flex items-center space-x-1';
       }
     }
     if (view) {
@@ -849,38 +851,38 @@ function renderAdminPodTable() {
 
   const delivered = allOrders.filter(o => o.status === 'DELIVERED' || o.podImage);
   if (delivered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-[#72767E]">No delivered orders logged yet. Once a rider completes delivery, photos appear here for audit.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-[#586B63]">No delivered orders logged yet. Once a rider completes delivery, photos appear here for audit.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = delivered.map(o => {
     const isVerified = Boolean(o.podVerified);
     return `
-      <tr class="hover:bg-[#F7F5F0] transition-colors border-b border-[#FAF1E5]">
-        <td class="p-3.5 font-mono font-bold text-[#1D252C]">${o.id}</td>
+      <tr class="hover:bg-[#F7FAF8] transition-colors border-b border-[#EAF8F1]">
+        <td class="p-3.5 font-mono font-bold text-[#11221B]">${o.id}</td>
         <td class="p-3.5">
-          <div class="font-bold text-[#1D252C]">${o.customerName}</div>
-          <div class="text-[#72767E] font-mono text-[11px]">${o.customerPhone}</div>
+          <div class="font-bold text-[#11221B]">${o.customerName}</div>
+          <div class="text-[#586B63] font-mono text-[11px]">${o.customerPhone}</div>
         </td>
-        <td class="p-3.5 font-medium text-[#1D252C]">${o.assignedRider || 'Matteo Bianchi'}</td>
-        <td class="p-3.5"><span class="bg-[#FAF1E5] text-[#1D252C] px-2 py-0.5 rounded-full font-medium text-[11px]">${o.totalPieces || 1} Pieces Handed Over</span></td>
-        <td class="p-3.5 font-bold text-[#0A610A] text-xs">Doorstep Verified</td>
-        <td class="p-3.5 text-[#72767E]">${o.deliveredAt ? new Date(o.deliveredAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' }) : 'Today'}</td>
+        <td class="p-3.5 font-medium text-[#11221B]">${o.assignedRider || 'Matteo Bianchi'}</td>
+        <td class="p-3.5"><span class="bg-[#EAF8F1] text-[#11221B] px-2 py-0.5 rounded-full font-medium text-[11px]">${o.totalPieces || 1} Pieces Handed Over</span></td>
+        <td class="p-3.5 font-bold text-[#0D4735] text-xs">Doorstep Verified</td>
+        <td class="p-3.5 text-[#586B63]">${o.deliveredAt ? new Date(o.deliveredAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' }) : 'Today'}</td>
         <td class="p-3.5">
           ${o.podImage ? `
-            <button onclick="openAdminPodModal('${o.id}')" class="flex items-center space-x-1.5 px-3 py-1 bg-[#003D29] text-white hover:bg-neutral-800 rounded-full font-bold text-[11px] transition">
+            <button onclick="openAdminPodModal('${o.id}')" class="flex items-center space-x-1.5 px-3 py-1 bg-[#0D4735] text-white hover:bg-neutral-800 rounded-full font-bold text-[11px] transition">
               <i data-lucide="image" class="w-3.5 h-3.5"></i>
               <span>View Photo</span>
             </button>
-          ` : `<span class="text-[#72767E] text-[11px]">No Photo Attached</span>`}
+          ` : `<span class="text-[#586B63] text-[11px]">No Photo Attached</span>`}
         </td>
         <td class="p-3.5 text-right">
           ${isVerified ? `
-            <span class="bg-[#FAF1E5] text-[#0A610A] font-bold text-[10px] px-2.5 py-1 rounded-full border border-[#EFE9E1]">
+            <span class="bg-[#EAF8F1] text-[#0D4735] font-bold text-[10px] px-2.5 py-1 rounded-full border border-[#E7EFEA]">
               Verified Authentic
             </span>
           ` : `
-            <button onclick="openAdminPodModal('${o.id}')" class="bg-red-50 text-[#E11900] hover:bg-red-100 font-bold text-[10px] px-2.5 py-1 rounded-full border border-red-200 transition">
+            <button onclick="openAdminPodModal('${o.id}')" class="bg-red-50 text-[#E54B4B] hover:bg-red-100 font-bold text-[10px] px-2.5 py-1 rounded-full border border-red-200 transition">
               Audit Pending
             </button>
           `}
@@ -918,11 +920,11 @@ function openAdminPodModal(orderId) {
   const verifyBtn = document.getElementById('btn-admin-verify-pod');
 
   if (order.podVerified) {
-    statusBanner.className = 'p-3 rounded-2xl text-xs font-semibold bg-[#FAF1E5] text-[#0A610A] border border-[#EFE9E1]';
+    statusBanner.className = 'p-3 rounded-2xl text-xs font-semibold bg-[#EAF8F1] text-[#0D4735] border border-[#E7EFEA]';
     statusBanner.innerHTML = 'Payment verified and approved by Admin. No fraud detected.';
     verifyBtn.innerHTML = '<i data-lucide="shield-alert" class="w-4 h-4"></i><span>Flag Discrepancy</span>';
   } else {
-    statusBanner.className = 'p-3 rounded-2xl text-xs font-semibold bg-red-50 text-[#E11900] border border-red-200';
+    statusBanner.className = 'p-3 rounded-2xl text-xs font-semibold bg-red-50 text-[#E54B4B] border border-red-200';
     statusBanner.innerHTML = 'Awaiting Admin audit. Check UPI reference ID and timestamp on screenshot.';
     verifyBtn.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i><span>Verify Payment Authentic</span>';
   }
@@ -975,9 +977,9 @@ function setLeadsFilter(filter) {
     const btn = document.getElementById(`lfilter-${f}`);
     if (!btn) return;
     if (f === filter) {
-      btn.className = 'px-3 py-1 rounded-full font-bold text-[#1D252C] bg-white shadow-sm transition-all shrink-0 whitespace-nowrap';
+      btn.className = 'px-3 py-1 rounded-full font-bold text-[#11221B] bg-white shadow-sm transition-all shrink-0 whitespace-nowrap';
     } else {
-      btn.className = 'px-3 py-1 rounded-full font-medium text-[#72767E] hover:text-[#1D252C] transition-all shrink-0 whitespace-nowrap';
+      btn.className = 'px-3 py-1 rounded-full font-medium text-[#586B63] hover:text-[#11221B] transition-all shrink-0 whitespace-nowrap';
     }
   });
   renderManagerLeads();
@@ -1020,7 +1022,7 @@ function renderManagerLeads() {
       resolved: 'No resolved leads in this view.',
       archived: 'Archive is empty.'
     };
-    container.innerHTML = `<div class="col-span-3 p-8 text-center bg-white rounded-2xl border border-[#E8E8E3] text-[#72767E] text-xs">${emptyMessages[currentLeadsFilter]}</div>`;
+    container.innerHTML = `<div class="col-span-3 p-8 text-center bg-white rounded-2xl border border-[#E7EFEA] text-[#586B63] text-xs">${emptyMessages[currentLeadsFilter]}</div>`;
     return;
   }
 
@@ -1031,52 +1033,52 @@ function renderManagerLeads() {
     const attempts = lead.attempts || 1;
 
     return `
-      <div class="bg-white p-5 rounded-2xl border ${isUrgent && !isResolved && !isArchived ? 'border-[#E11900] ring-1 ring-[#E11900]' : 'border-[#E8E8E3]'} space-y-3 relative">
+      <div class="bg-white p-5 rounded-2xl border ${isUrgent && !isResolved && !isArchived ? 'border-[#E54B4B] ring-1 ring-[#E54B4B]' : 'border-[#E7EFEA]'} space-y-3 relative">
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-1.5 flex-wrap">
-              <span class="font-bold text-[#1D252C] text-sm">${lead.customerName}</span>
-              ${attempts > 1 ? `<span class="bg-[#FFC043]/20 text-[#1D252C] text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#FFC043]">Called ${attempts}x</span>` : ''}
-              ${isUrgent && !isResolved && !isArchived ? '<span class="bg-red-50 text-[#E11900] text-[9px] font-bold px-1.5 py-0.5 rounded-full">SLA URGENT</span>' : ''}
+              <span class="font-bold text-[#11221B] text-sm">${lead.customerName}</span>
+              ${attempts > 1 ? `<span class="bg-[#E5A93C]/20 text-[#11221B] text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#E5A93C]">Called ${attempts}x</span>` : ''}
+              ${isUrgent && !isResolved && !isArchived ? '<span class="bg-red-50 text-[#E54B4B] text-[9px] font-bold px-1.5 py-0.5 rounded-full">SLA URGENT</span>' : ''}
             </div>
-            <span class="text-xs font-mono text-[#72767E]">${lead.phone}</span>
+            <span class="text-xs font-mono text-[#586B63]">${lead.phone}</span>
           </div>
 
           <div class="flex items-center space-x-1.5">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isResolved ? 'bg-[#FAF1E5] text-[#0A610A]' : isArchived ? 'bg-[#FAF1E5] text-[#72767E]' : 'bg-amber-50 text-amber-900'}">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isResolved ? 'bg-[#EAF8F1] text-[#0D4735]' : isArchived ? 'bg-[#EAF8F1] text-[#586B63]' : 'bg-amber-50 text-amber-900'}">
               ${lead.status.replace(/_/g, ' ')}
             </span>
-            <button onclick="deleteLead('${lead.id}')" title="Delete lead card permanently" class="p-1 hover:bg-red-50 text-[#72767E] hover:text-[#E11900] rounded-full transition-colors">
+            <button onclick="deleteLead('${lead.id}')" title="Delete lead card permanently" class="p-1 hover:bg-red-50 text-[#586B63] hover:text-[#E54B4B] rounded-full transition-colors">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
             </button>
           </div>
         </div>
 
-        <div class="p-3 bg-[#F7F5F0] rounded-xl text-xs text-[#1D252C] border border-[#E8E8E3]">
-          <div class="flex items-center space-x-1.5 font-bold text-[#72767E] text-[10px] uppercase mb-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#108910]"></span>
+        <div class="p-3 bg-[#F7FAF8] rounded-xl text-xs text-[#11221B] border border-[#E7EFEA]">
+          <div class="flex items-center space-x-1.5 font-bold text-[#586B63] text-[10px] uppercase mb-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#00B261]"></span>
             <span>${lead.channel}</span>
           </div>
           <p class="leading-relaxed">${lead.message}</p>
-          ${lead.address ? `<div class="mt-2 text-[11px] text-[#1D252C] font-medium">${lead.address} (${lead.zone})</div>` : ''}
+          ${lead.address ? `<div class="mt-2 text-[11px] text-[#11221B] font-medium">${lead.address} (${lead.zone})</div>` : ''}
         </div>
 
-        <div class="flex items-center justify-between text-xs text-[#72767E] pt-2 border-t border-[#E8E8E3]">
+        <div class="flex items-center justify-between text-xs text-[#586B63] pt-2 border-t border-[#E7EFEA]">
           <span>
-            ${!isResolved && !isArchived ? `Callback SLA: <strong class="${lead.slaMinutesRemaining < 10 ? 'text-[#E11900]' : 'text-[#1D252C]'}">${lead.slaMinutesRemaining}m left</strong>` : `<span class="text-[#72767E]">Closed</span>`}
+            ${!isResolved && !isArchived ? `Callback SLA: <strong class="${lead.slaMinutesRemaining < 10 ? 'text-[#E54B4B]' : 'text-[#11221B]'}">${lead.slaMinutesRemaining}m left</strong>` : `<span class="text-[#586B63]">Closed</span>`}
           </span>
 
           <div class="flex items-center space-x-1.5">
             ${!isResolved && !isArchived ? `
-              <button onclick="markLeadResolved('${lead.id}')" class="px-3 py-1.5 bg-[#FAF1E5] hover:bg-[#E8E8E3] text-[#1D252C] rounded-full font-semibold text-xs transition-all">
+              <button onclick="markLeadResolved('${lead.id}')" class="px-3 py-1.5 bg-[#EAF8F1] hover:bg-[#E7EFEA] text-[#11221B] rounded-full font-semibold text-xs transition-all">
                 Mark Called
               </button>
-              <button onclick="convertLeadToOrder('${lead.id}')" class="px-3.5 py-1.5 bg-[#003D29] hover:bg-[#002B1D] text-white rounded-full font-bold text-xs flex items-center space-x-1 shadow-sm transition-all">
+              <button onclick="convertLeadToOrder('${lead.id}')" class="px-3.5 py-1.5 bg-[#0D4735] hover:bg-[#083426] text-white rounded-full font-bold text-xs flex items-center space-x-1 shadow-sm transition-all">
                 <i data-lucide="plus" class="w-3 h-3"></i>
                 <span>Book Order</span>
               </button>
             ` : `
-              <button onclick="archiveLead('${lead.id}')" class="px-3 py-1.5 bg-[#FAF1E5] hover:bg-[#E8E8E3] text-[#1D252C] rounded-full font-semibold text-xs flex items-center space-x-1 transition-all">
+              <button onclick="archiveLead('${lead.id}')" class="px-3 py-1.5 bg-[#EAF8F1] hover:bg-[#E7EFEA] text-[#11221B] rounded-full font-semibold text-xs flex items-center space-x-1 transition-all">
                 <i data-lucide="archive" class="w-3 h-3"></i>
                 <span>${isArchived ? 'Archived' : 'Archive'}</span>
               </button>
@@ -1185,7 +1187,7 @@ function renderManagerTagging() {
   const ordersToTag = allOrders.filter(o => ['PICKED_UP', 'RECEIVED_IN_STORE'].includes(o.status));
 
   if (ordersToTag.length === 0) {
-    container.innerHTML = `<div class="p-8 text-center text-[#72767E] text-xs">No orders awaiting garment tagging. All incoming clothes are tagged.</div>`;
+    container.innerHTML = `<div class="p-8 text-center text-[#586B63] text-xs">No orders awaiting garment tagging. All incoming clothes are tagged.</div>`;
     return;
   }
 
@@ -1193,28 +1195,28 @@ function renderManagerTagging() {
     <div class="py-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div>
         <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-          <span class="font-mono font-bold text-[#1D252C] shrink-0 whitespace-nowrap">${o.id}</span>
-          <span class="text-xs font-bold text-[#1D252C]">${o.customerName}</span>
-          <span class="bg-[#FAF1E5] text-[#1D252C] text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">${o.status.replace(/_/g, ' ')}</span>
-          ${o.isExpress ? '<span class="bg-[#003D29] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#E11900] shrink-0 whitespace-nowrap">EXPRESS</span>' : ''}
+          <span class="font-mono font-bold text-[#11221B] shrink-0 whitespace-nowrap">${o.id}</span>
+          <span class="text-xs font-bold text-[#11221B]">${o.customerName}</span>
+          <span class="bg-[#EAF8F1] text-[#11221B] text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">${o.status.replace(/_/g, ' ')}</span>
+          ${o.isExpress ? '<span class="bg-[#0D4735] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-[#E54B4B] shrink-0 whitespace-nowrap">EXPRESS</span>' : ''}
         </div>
-        <p class="text-xs text-[#72767E] mt-1">${o.totalPieces} Pieces Counted • Zone: ${o.zone} • ${o.customerPhone}</p>
+        <p class="text-xs text-[#586B63] mt-1">${o.totalPieces} Pieces Counted • Zone: ${o.zone} • ${o.customerPhone}</p>
         <div class="flex flex-wrap gap-1.5 mt-2">
           ${(o.items || []).map(item => `
-            <span class="bg-[#F7F5F0] border border-[#E8E8E3] text-[#1D252C] text-[10px] px-2.5 py-0.5 rounded-full font-medium">
+            <span class="bg-[#F7FAF8] border border-[#E7EFEA] text-[#11221B] text-[10px] px-2.5 py-0.5 rounded-full font-medium">
               #${item.pieceNumber} ${item.garmentName} (${item.service})
-              ${item.hasStain ? '<strong class="text-[#E11900]">Stain Care</strong>' : ''}
+              ${item.hasStain ? '<strong class="text-[#E54B4B]">Stain Care</strong>' : ''}
             </span>
           `).join('')}
         </div>
       </div>
       <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 shrink-0 mt-2 md:mt-0">
-        <button onclick="previewThermalTags('${o.id}')" class="px-4 py-2 bg-[#003D29] hover:bg-[#002B1D] text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5 transition-all">
+        <button onclick="previewThermalTags('${o.id}')" class="px-4 py-2 bg-[#0D4735] hover:bg-[#083426] text-white rounded-full text-xs font-bold shadow-sm flex items-center space-x-1.5 transition-all">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i>
           <span>Print Tags</span>
         </button>
         ${o.status === 'RECEIVED_IN_STORE' ? `
-          <button onclick="updateOrderStatus('${o.id}', 'WASHING')" class="px-4 py-2 bg-[#108910] hover:bg-[#0D720D] text-[#003D29] rounded-full text-xs font-bold flex items-center space-x-1 shadow-sm transition-all">
+          <button onclick="updateOrderStatus('${o.id}', 'WASHING')" class="px-4 py-2 bg-[#00B261] hover:bg-[#009E54] text-[#0D4735] rounded-full text-xs font-bold flex items-center space-x-1 shadow-sm transition-all">
             <span>Send to Washers →</span>
           </button>
         ` : ''}
@@ -1244,7 +1246,7 @@ function renderDispatchRecommendations() {
         zone,
         title: `Combine Pickup & Delivery in ${zone}`,
         badge: `${pInZone.length} Pickups • ${dInZone.length} Deliveries`,
-        badgeColor: 'bg-[#FAF1E5] text-[#0A610A] border-[#EFE9E1]',
+        badgeColor: 'bg-[#EAF8F1] text-[#0D4735] border-[#E7EFEA]',
         description: `Rider going to ${zone} for pickup (${pInZone[0].customerName}). ${dInZone.length} order(s) are ready for delivery in the same area. Dispatched together to avoid duplicate round-trips.`,
         actionLabel: `Assign Combined Run`,
         actionFn: `combineZoneTrip('${zone}', 'Matteo Bianchi')`
@@ -1262,7 +1264,7 @@ function renderDispatchRecommendations() {
       zone: o.zone,
       title: `Early Delivery Candidate (${o.customerName})`,
       badge: `Due Tomorrow • Packed Today`,
-      badgeColor: 'bg-blue-50 text-[#276EF1] border-blue-200',
+      badgeColor: 'bg-blue-50 text-[#2E7CF6] border-blue-200',
       description: `Order #${o.id} in ${o.zone} is finished ahead of SLA. Call customer now to deliver early alongside today's trips and save tomorrow's vehicle fuel.`,
       actionLabel: `Call Customer`,
       actionFn: `window.open('tel:${o.customerPhone}')`
@@ -1277,7 +1279,7 @@ function renderDispatchRecommendations() {
       zone: pendingPickups[0].zone,
       title: `Rider Available at Store: ${availableRiders[0].name}`,
       badge: `Standby at Counter`,
-      badgeColor: 'bg-[#FAF1E5] text-[#1D252C] border-[#E8E8E3]',
+      badgeColor: 'bg-[#EAF8F1] text-[#11221B] border-[#E7EFEA]',
       description: `${availableRiders[0].name} is idle at store counter. Nearest pending pickup is ${pendingPickups[0].customerName} in ${pendingPickups[0].zone}.`,
       actionLabel: `Dispatch ${availableRiders[0].name}`,
       actionFn: `assignOrderRider('${pendingPickups[0].id}', '${availableRiders[0].name}')`
@@ -1286,7 +1288,7 @@ function renderDispatchRecommendations() {
 
   if (recs.length === 0) {
     container.innerHTML = `
-      <div class="col-span-full p-4 rounded-xl bg-[#F7F5F0] text-neutral-500 text-center">
+      <div class="col-span-full p-4 rounded-xl bg-[#F7FAF8] text-neutral-500 text-center">
         All logistics routes currently balanced. No duplicate turns detected.
       </div>
     `;
@@ -1294,16 +1296,16 @@ function renderDispatchRecommendations() {
   }
 
   container.innerHTML = recs.map(r => `
-    <div class="p-3.5 rounded-xl border border-[#E8E8E3] bg-[#F7F5F0] space-y-2">
+    <div class="p-3.5 rounded-xl border border-[#E7EFEA] bg-[#F7FAF8] space-y-2">
       <div class="flex items-start justify-between">
         <div>
-          <span class="font-bold text-[#1D252C] text-xs">${r.title}</span>
-          <div class="text-[11px] text-[#72767E] mt-0.5 leading-relaxed">${r.description}</div>
+          <span class="font-bold text-[#11221B] text-xs">${r.title}</span>
+          <div class="text-[11px] text-[#586B63] mt-0.5 leading-relaxed">${r.description}</div>
         </div>
         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${r.badgeColor} shrink-0 ml-2">${r.badge}</span>
       </div>
       <div class="pt-1 flex justify-end">
-        <button onclick="${r.actionFn}" class="px-3.5 py-1 bg-[#003D29] hover:bg-[#002B1D] text-white rounded-full font-bold text-[11px] transition">
+        <button onclick="${r.actionFn}" class="px-3.5 py-1 bg-[#0D4735] hover:bg-[#083426] text-white rounded-full font-bold text-[11px] transition">
           ${r.actionLabel}
         </button>
       </div>
@@ -1436,8 +1438,8 @@ function searchCustomers(query, context = 'all') {
       adminCountPill.innerText = `${list.length} of ${totalCustCount.toLocaleString('en-IN')} Customers`;
     }
 
-    const emptyRowHtml = `<tr><td colspan="7" class="p-8 text-center text-[#72767E] text-xs">No verified customers found matching "${query || 'selected filter'}".</td></tr>`;
-    const emptyCardsHtml = `<div class="p-6 text-center text-[#72767E] text-xs">No verified customers found matching "${query || 'selected filter'}".</div>`;
+    const emptyRowHtml = `<tr><td colspan="7" class="p-8 text-center text-[#586B63] text-xs">No verified customers found matching "${query || 'selected filter'}".</td></tr>`;
+    const emptyCardsHtml = `<div class="p-6 text-center text-[#586B63] text-xs">No verified customers found matching "${query || 'selected filter'}".</div>`;
 
     if (list.length === 0) {
       if (adminTbody) adminTbody.innerHTML = emptyRowHtml;
@@ -1450,23 +1452,23 @@ function searchCustomers(query, context = 'all') {
     // Render Admin Table Rows
     if (adminTbody) {
       adminTbody.innerHTML = list.map(c => `
-        <tr class="hover:bg-[#F7F5F0] transition-colors border-b border-[#FAF1E5]">
-          <td class="p-3.5 font-mono font-bold text-[#1D252C]">${c.id}</td>
+        <tr class="hover:bg-[#F7FAF8] transition-colors border-b border-[#EAF8F1]">
+          <td class="p-3.5 font-mono font-bold text-[#11221B]">${c.id}</td>
           <td class="p-3.5">
-            <div class="font-bold text-[#1D252C]">${c.name}</div>
-            <div class="text-[10px] text-[#72767E]">Active Member</div>
+            <div class="font-bold text-[#11221B]">${c.name}</div>
+            <div class="text-[10px] text-[#586B63]">Active Member</div>
           </td>
-          <td class="p-3.5 font-mono text-[#72767E]">${c.phone}</td>
-          <td class="p-3.5 text-[#72767E]">
+          <td class="p-3.5 font-mono text-[#586B63]">${c.phone}</td>
+          <td class="p-3.5 text-[#586B63]">
             <div class="truncate max-w-[220px]">${c.address}</div>
-            <span class="text-[10px] bg-[#FAF1E5] text-[#003D29] font-semibold px-2 py-0.5 rounded-full inline-block mt-0.5">${c.zone}</span>
+            <span class="text-[10px] bg-[#EAF8F1] text-[#0D4735] font-semibold px-2 py-0.5 rounded-full inline-block mt-0.5">${c.zone}</span>
           </td>
-          <td class="p-3.5 font-bold text-[#1D252C]">${c.totalOrders || 0} Orders</td>
+          <td class="p-3.5 font-bold text-[#11221B]">${c.totalOrders || 0} Orders</td>
           <td class="p-3.5">
-            <span class="text-[10px] bg-[#F7F5F0] border border-[#E8E8E3] text-[#1D252C] font-medium px-2 py-0.5 rounded-full">${c.preferredService || 'Wash & Iron'}</span>
+            <span class="text-[10px] bg-[#F7FAF8] border border-[#E7EFEA] text-[#11221B] font-medium px-2 py-0.5 rounded-full">${c.preferredService || 'Wash & Iron'}</span>
           </td>
           <td class="p-3.5 text-right">
-            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3 py-1.5 bg-[#003D29] hover:bg-[#002B1D] text-white rounded-full font-bold text-xs shadow-xs transition-all inline-flex items-center space-x-1">
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3 py-1.5 bg-[#0D4735] hover:bg-[#083426] text-white rounded-full font-bold text-xs shadow-xs transition-all inline-flex items-center space-x-1">
               <i data-lucide="plus" class="w-3 h-3"></i>
               <span>New Intake</span>
             </button>
@@ -1478,21 +1480,21 @@ function searchCustomers(query, context = 'all') {
     // Render Admin Mobile Cards
     if (adminMobileCards) {
       adminMobileCards.innerHTML = list.map(c => `
-        <div class="p-3.5 bg-white border border-[#E8E8E3] rounded-2xl space-y-2 shadow-xs">
+        <div class="p-3.5 bg-white border border-[#E7EFEA] rounded-2xl space-y-2 shadow-xs">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-1.5">
-              <span class="font-mono text-[10px] font-bold text-[#1D252C] bg-[#FAF1E5] px-2 py-0.5 rounded-full">${c.id}</span>
-              <span class="font-bold text-[#1D252C] text-xs">${c.name}</span>
+              <span class="font-mono text-[10px] font-bold text-[#11221B] bg-[#EAF8F1] px-2 py-0.5 rounded-full">${c.id}</span>
+              <span class="font-bold text-[#11221B] text-xs">${c.name}</span>
             </div>
-            <span class="text-[10px] bg-[#FAF1E5] text-[#003D29] px-2 py-0.5 rounded-full font-semibold shrink-0">${c.zone}</span>
+            <span class="text-[10px] bg-[#EAF8F1] text-[#0D4735] px-2 py-0.5 rounded-full font-semibold shrink-0">${c.zone}</span>
           </div>
-          <div class="text-xs text-[#72767E] space-y-0.5">
-            <div class="font-mono text-[11px] text-[#1D252C]">${c.phone}</div>
-            <div class="text-[11px] text-[#72767E] truncate">${c.address}</div>
+          <div class="text-xs text-[#586B63] space-y-0.5">
+            <div class="font-mono text-[11px] text-[#11221B]">${c.phone}</div>
+            <div class="text-[11px] text-[#586B63] truncate">${c.address}</div>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-[#FAF1E5] text-xs">
-            <span class="font-semibold text-[#1D252C]">${c.totalOrders || 0} Orders</span>
-            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#003D29] hover:bg-[#002B1D] text-white rounded-full font-bold text-xs shadow-xs transition-all">
+          <div class="flex items-center justify-between pt-2 border-t border-[#EAF8F1] text-xs">
+            <span class="font-semibold text-[#11221B]">${c.totalOrders || 0} Orders</span>
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#0D4735] hover:bg-[#083426] text-white rounded-full font-bold text-xs shadow-xs transition-all">
               + New Intake
             </button>
           </div>
@@ -1503,17 +1505,17 @@ function searchCustomers(query, context = 'all') {
     // Render Manager Table Rows
     if (mgrTbody) {
       mgrTbody.innerHTML = list.map(c => `
-        <tr class="hover:bg-[#F7F5F0] transition-colors border-b border-[#FAF1E5]">
-          <td class="p-3 font-mono font-bold text-[#1D252C]">${c.id}</td>
-          <td class="p-3 font-bold text-[#1D252C]">${c.name}</td>
-          <td class="p-3 font-mono text-[#72767E]">${c.phone}</td>
-          <td class="p-3 text-[#72767E]">
+        <tr class="hover:bg-[#F7FAF8] transition-colors border-b border-[#EAF8F1]">
+          <td class="p-3 font-mono font-bold text-[#11221B]">${c.id}</td>
+          <td class="p-3 font-bold text-[#11221B]">${c.name}</td>
+          <td class="p-3 font-mono text-[#586B63]">${c.phone}</td>
+          <td class="p-3 text-[#586B63]">
             <div class="truncate max-w-[200px]">${c.address}</div>
-            <span class="text-[10px] bg-[#FAF1E5] text-[#1D252C] px-2 py-0.5 rounded-full font-medium inline-block mt-0.5">${c.zone}</span>
+            <span class="text-[10px] bg-[#EAF8F1] text-[#11221B] px-2 py-0.5 rounded-full font-medium inline-block mt-0.5">${c.zone}</span>
           </td>
-          <td class="p-3 font-bold text-[#1D252C]">${c.totalOrders || 0} Orders</td>
+          <td class="p-3 font-bold text-[#11221B]">${c.totalOrders || 0} Orders</td>
           <td class="p-3 text-right">
-            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#003D29] hover:bg-[#002B1D] text-white rounded-full font-bold text-xs shadow-sm transition-all">
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#0D4735] hover:bg-[#083426] text-white rounded-full font-bold text-xs shadow-sm transition-all">
               + New Intake
             </button>
           </td>
@@ -1524,21 +1526,21 @@ function searchCustomers(query, context = 'all') {
     // Render Manager Mobile Cards
     if (mgrMobileCards) {
       mgrMobileCards.innerHTML = list.map(c => `
-        <div class="p-3.5 bg-white border border-[#E8E8E3] rounded-2xl space-y-2">
+        <div class="p-3.5 bg-white border border-[#E7EFEA] rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-1.5">
-              <span class="font-mono text-[10px] font-bold text-[#1D252C] bg-[#FAF1E5] px-2 py-0.5 rounded-full">${c.id}</span>
-              <span class="font-bold text-[#1D252C] text-xs">${c.name}</span>
+              <span class="font-mono text-[10px] font-bold text-[#11221B] bg-[#EAF8F1] px-2 py-0.5 rounded-full">${c.id}</span>
+              <span class="font-bold text-[#11221B] text-xs">${c.name}</span>
             </div>
-            <span class="text-[10px] bg-[#FAF1E5] text-[#1D252C] px-2 py-0.5 rounded-full font-semibold shrink-0">${c.zone}</span>
+            <span class="text-[10px] bg-[#EAF8F1] text-[#11221B] px-2 py-0.5 rounded-full font-semibold shrink-0">${c.zone}</span>
           </div>
-          <div class="text-xs text-[#72767E]">
-            <div class="font-mono text-[11px] text-[#1D252C]">${c.phone}</div>
-            <div class="text-[11px] text-[#72767E] truncate">${c.address}</div>
+          <div class="text-xs text-[#586B63]">
+            <div class="font-mono text-[11px] text-[#11221B]">${c.phone}</div>
+            <div class="text-[11px] text-[#586B63] truncate">${c.address}</div>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-[#E8E8E3] text-xs">
-            <span class="font-medium text-[#72767E]">${c.totalOrders || 0} Orders</span>
-            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#003D29] hover:bg-[#002B1D] text-white rounded-full font-bold text-xs shadow-sm transition-all">
+          <div class="flex items-center justify-between pt-2 border-t border-[#E7EFEA] text-xs">
+            <span class="font-medium text-[#586B63]">${c.totalOrders || 0} Orders</span>
+            <button onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="px-3.5 py-1.5 bg-[#0D4735] hover:bg-[#083426] text-white rounded-full font-bold text-xs shadow-sm transition-all">
               + New Intake
             </button>
           </div>
@@ -1561,9 +1563,9 @@ function filterWasherMobileCol(stage) {
     const pill = document.getElementById(`wstage-${s}`);
     if (pill) {
       if (s === stage) {
-        pill.className = 'washer-stage-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white shadow-sm shrink-0';
+        pill.className = 'washer-stage-pill px-3 py-1.5 rounded-full text-xs font-bold bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)] shrink-0';
       } else {
-        pill.className = 'washer-stage-pill px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 shrink-0';
+        pill.className = 'washer-stage-pill px-3 py-1.5 rounded-full text-xs font-semibold bg-[#EAF8F1] border border-[#E7EFEA] text-[#586B63] hover:text-[#11221B] shrink-0';
       }
     }
   });
@@ -1616,7 +1618,7 @@ function renderWasherKanban() {
 
 function renderKanbanColumn(ordersList, nextStatus, nextBtnLabel, isFinal = false) {
   if (ordersList.length === 0) {
-    return `<div class="h-28 flex items-center justify-center text-neutral-400 text-xs border border-dashed border-[#E8E8E3] rounded-2xl">Queue empty</div>`;
+    return `<div class="h-28 flex items-center justify-center text-neutral-400 text-xs border border-dashed border-[#E7EFEA] rounded-2xl">Queue empty</div>`;
   }
 
   const sorted = [...ordersList].sort((a, b) => (b.isExpress ? 1 : 0) - (a.isExpress ? 1 : 0));
@@ -1624,44 +1626,44 @@ function renderKanbanColumn(ordersList, nextStatus, nextBtnLabel, isFinal = fals
   return sorted.map(o => {
     const isExpress = o.isExpress;
     return `
-      <div class="bg-white p-4 rounded-2xl border ${isExpress ? 'border-[#108910] ring-1 ring-[#108910]' : 'border-[#E8E8E3]'} shadow-sm space-y-3">
+      <div class="bg-white p-4 rounded-2xl border ${isExpress ? 'border-[#00B261] ring-1 ring-[#00B261]' : 'border-[#E7EFEA]'} shadow-sm space-y-3">
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-1.5">
-              <span class="font-mono font-bold text-[#1D252C] text-sm">${o.id}</span>
-              ${isExpress ? '<span class="bg-[#003D29] text-[#108910] text-[9px] font-bold px-2 py-0.5 rounded-full border border-[#108910]">EXPRESS 24H</span>' : ''}
+              <span class="font-mono font-bold text-[#11221B] text-sm">${o.id}</span>
+              ${isExpress ? '<span class="bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)] text-[9px] font-bold px-2 py-0.5 rounded-full border border-[#00B261]">EXPRESS 24H</span>' : ''}
             </div>
             <span class="text-xs font-semibold text-neutral-700">${o.customerName}</span>
           </div>
-          <span class="text-xs font-semibold bg-[#F7F5F0] text-[#1D252C] px-2.5 py-0.5 rounded-full">${o.totalPieces} Pcs</span>
+          <span class="text-xs font-semibold bg-[#F7FAF8] text-[#11221B] px-2.5 py-0.5 rounded-full">${o.totalPieces} Pcs</span>
         </div>
 
-        <div class="space-y-1 bg-[#F7F5F0] p-3 rounded-xl border border-[#FAF1E5] text-xs">
+        <div class="space-y-1 bg-[#F7FAF8] p-3 rounded-xl border border-[#EAF8F1] text-xs">
           ${(o.items || []).map(item => `
             <div class="flex items-center justify-between text-[11px] text-neutral-700">
               <span>#${item.pieceNumber} ${item.garmentName}</span>
               <span class="text-neutral-500 font-medium">${item.service}</span>
             </div>
-            ${item.hasStain ? `<div class="text-[10px] text-[#E11900] font-semibold pl-2">Special: ${item.specialNote || 'Stain Treatment'}</div>` : ''}
+            ${item.hasStain ? `<div class="text-[10px] text-[#E54B4B] font-semibold pl-2">Special: ${item.specialNote || 'Stain Treatment'}</div>` : ''}
           `).join('')}
         </div>
 
-        <div class="flex items-center justify-between pt-2 border-t border-[#FAF1E5] text-xs">
+        <div class="flex items-center justify-between pt-2 border-t border-[#EAF8F1] text-xs">
           <div>
             <span class="text-neutral-500 text-[10px] block">Due ${new Date(o.promisedDelivery).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
             <span class="text-[10px] text-neutral-400 font-medium">${o.assignedWasher || 'Staff: Erik & Antoine'}</span>
           </div>
           ${!isFinal ? `
-            <button onclick="updateOrderStatus('${o.id}', '${nextStatus}')" class="px-3.5 py-1.5 bg-[#003D29] hover:bg-[#002B1D] text-[#108910] text-xs font-bold rounded-full transition-transform active:scale-95">
+            <button onclick="updateOrderStatus('${o.id}', '${nextStatus}')" class="px-3.5 py-1.5 bg-[#0D4735] hover:bg-[#083426] text-[#00B261] text-xs font-bold rounded-full transition-transform active:scale-95">
               ${nextBtnLabel}
             </button>
           ` : `
             <div class="flex items-center space-x-1.5">
-              <button onclick="openWhatsAppReadyModal('${o.id}')" class="px-2.5 py-1 bg-[#108910] hover:bg-[#0D720D] text-[#003D29] rounded-full text-[10px] font-bold flex items-center space-x-1 shadow-sm transition">
+              <button onclick="openWhatsAppReadyModal('${o.id}')" class="px-2.5 py-1 bg-[#00B261] hover:bg-[#009E54] text-[#0D4735] rounded-full text-[10px] font-bold flex items-center space-x-1 shadow-sm transition">
                 <i data-lucide="send" class="w-2.5 h-2.5"></i>
                 <span>Notify</span>
               </button>
-              <span class="text-[#108910] font-semibold text-xs flex items-center space-x-1">
+              <span class="text-[#00B261] font-semibold text-xs flex items-center space-x-1">
                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
                 <span>Packed</span>
               </span>
@@ -1703,32 +1705,32 @@ function renderRiderPickups(pickups) {
   }
 
   container.innerHTML = pickups.map(p => `
-    <div class="bg-white p-4 rounded-2xl border border-[#E8E8E3] shadow-sm space-y-3">
+    <div class="bg-white p-4 rounded-2xl border border-[#E7EFEA] shadow-sm space-y-3">
       <div class="flex items-start justify-between">
         <div>
           <span class="font-mono text-neutral-500 font-semibold text-xs">${p.id}</span>
-          <h4 class="font-bold text-[#1D252C] text-sm">${p.customerName}</h4>
+          <h4 class="font-bold text-[#11221B] text-sm">${p.customerName}</h4>
           <span class="text-xs text-neutral-500 font-mono">${p.customerPhone}</span>
         </div>
-        <span class="text-[10px] bg-[#FAF1E5] text-[#1D252C] font-semibold px-2.5 py-0.5 rounded-full">${p.zone}</span>
+        <span class="text-[10px] bg-[#EAF8F1] text-[#11221B] font-semibold px-2.5 py-0.5 rounded-full">${p.zone}</span>
       </div>
 
-      <div class="text-xs text-neutral-700 bg-[#F7F5F0] p-3 rounded-xl border border-[#FAF1E5]">
+      <div class="text-xs text-neutral-700 bg-[#F7FAF8] p-3 rounded-xl border border-[#EAF8F1]">
         ${p.customerAddress}
       </div>
 
       <div class="grid grid-cols-2 gap-2 text-xs">
-        <a href="tel:${p.customerPhone}" class="py-2.5 bg-[#FAF1E5] hover:bg-[#E8E8E3] rounded-full font-semibold text-[#1D252C] flex items-center justify-center space-x-1.5 transition">
+        <a href="tel:${p.customerPhone}" class="py-2.5 bg-[#EAF8F1] hover:bg-[#E7EFEA] rounded-full font-semibold text-[#11221B] flex items-center justify-center space-x-1.5 transition">
           <i data-lucide="phone" class="w-3.5 h-3.5"></i>
           <span>Call</span>
         </a>
-        <a href="https://maps.google.com/?q=${encodeURIComponent(p.customerAddress)}" target="_blank" class="py-2.5 bg-[#FAF1E5] hover:bg-[#E8E8E3] rounded-full font-semibold text-[#1D252C] flex items-center justify-center space-x-1.5 transition">
+        <a href="https://maps.google.com/?q=${encodeURIComponent(p.customerAddress)}" target="_blank" class="py-2.5 bg-[#EAF8F1] hover:bg-[#E7EFEA] rounded-full font-semibold text-[#11221B] flex items-center justify-center space-x-1.5 transition">
           <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
           <span>Directions</span>
         </a>
       </div>
 
-      <button onclick="promptRiderPickupIntake('${p.id}')" class="w-full py-3 bg-[#003D29] hover:bg-[#002B1D] text-[#108910] rounded-full font-bold text-xs transition flex items-center justify-center space-x-1.5 active:scale-98">
+      <button onclick="promptRiderPickupIntake('${p.id}')" class="w-full py-3 bg-[#0D4735] hover:bg-[#083426] text-[#00B261] rounded-full font-bold text-xs transition flex items-center justify-center space-x-1.5 active:scale-98">
         <i data-lucide="check" class="w-4 h-4"></i>
         <span>Confirm Pickup</span>
       </button>
@@ -1769,49 +1771,49 @@ async function renderRiderDeliveries() {
   }
 
   container.innerHTML = clusters.map(cluster => `
-    <div class="bg-white rounded-2xl border border-[#E8E8E3] shadow-sm overflow-hidden">
-      <div class="bg-[#F7F5F0] p-4 flex items-center justify-between border-b border-[#E8E8E3]">
+    <div class="bg-white rounded-2xl border border-[#E7EFEA] shadow-sm overflow-hidden">
+      <div class="bg-[#F7FAF8] p-4 flex items-center justify-between border-b border-[#E7EFEA]">
         <div>
           <span class="text-[10px] uppercase font-bold text-neutral-500 tracking-wider">Cluster</span>
-          <h4 class="font-bold text-[#1D252C] text-sm">${cluster.zoneName}</h4>
+          <h4 class="font-bold text-[#11221B] text-sm">${cluster.zoneName}</h4>
         </div>
         <div class="text-right">
-          <span class="bg-[#003D29] text-white text-xs font-bold px-2.5 py-0.5 rounded-full">${cluster.orders.length} Orders</span>
+          <span class="bg-[#0D4735] text-white text-xs font-bold px-2.5 py-0.5 rounded-full">${cluster.orders.length} Orders</span>
           <div class="text-[10px] text-neutral-600 font-semibold mt-0.5">Collect €${cluster.totalAmountToCollect}</div>
         </div>
       </div>
 
-      <div class="p-4 divide-y divide-[#FAF1E5] space-y-3">
+      <div class="p-4 divide-y divide-[#EAF8F1] space-y-3">
         ${cluster.orders.map(o => `
           <div class="pt-3 first:pt-0 space-y-2 text-xs">
             <div class="flex items-start justify-between">
               <div>
-                <div class="font-bold text-[#1D252C]">${o.customerName}</div>
+                <div class="font-bold text-[#11221B]">${o.customerName}</div>
                 <div class="text-neutral-500 font-mono text-[11px]">${o.customerPhone}</div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-[#1D252C]">${o.totalPieces || 1} pcs</div>
-                <span class="text-[10px] font-bold text-[#0A610A]">Handover Ready</span>
+                <div class="font-bold text-[#11221B]">${o.totalPieces || 1} pcs</div>
+                <span class="text-[10px] font-bold text-[#0D4735]">Handover Ready</span>
               </div>
             </div>
             <div class="text-neutral-600 text-[11px]">${o.customerAddress}</div>
             <div class="flex items-center space-x-1.5 pt-1">
-              <a href="tel:${o.customerPhone}" class="px-2.5 py-2 bg-[#FAF1E5] hover:bg-[#E8E8E3] text-[#1D252C] rounded-full text-xs font-semibold flex items-center justify-center space-x-1 shrink-0" title="Call Customer">
+              <a href="tel:${o.customerPhone}" class="px-2.5 py-2 bg-[#EAF8F1] hover:bg-[#E7EFEA] text-[#11221B] rounded-full text-xs font-semibold flex items-center justify-center space-x-1 shrink-0" title="Call Customer">
                 <i data-lucide="phone" class="w-3.5 h-3.5"></i>
               </a>
-              <a href="https://maps.google.com/?q=${encodeURIComponent(o.customerAddress || o.zone)}" target="_blank" class="px-2.5 py-2 bg-[#FAF1E5] hover:bg-[#E8E8E3] text-[#1D252C] rounded-full text-xs font-semibold flex items-center justify-center space-x-1 shrink-0" title="Navigate with Google Maps">
+              <a href="https://maps.google.com/?q=${encodeURIComponent(o.customerAddress || o.zone)}" target="_blank" class="px-2.5 py-2 bg-[#EAF8F1] hover:bg-[#E7EFEA] text-[#11221B] rounded-full text-xs font-semibold flex items-center justify-center space-x-1 shrink-0" title="Navigate with Google Maps">
                 <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
               </a>
-              <button onclick="openWhatsAppReadyModal('${o.id}')" class="px-2.5 py-2 bg-[#F7F5F0] hover:bg-[#FAF1E5] border border-[#E8E8E3] text-[#003D29] rounded-full text-xs font-bold flex items-center justify-center space-x-1 shrink-0" title="Check Doorstep Availability via WhatsApp">
+              <button onclick="openWhatsAppReadyModal('${o.id}')" class="px-2.5 py-2 bg-[#F7FAF8] hover:bg-[#EAF8F1] border border-[#E7EFEA] text-[#0D4735] rounded-full text-xs font-bold flex items-center justify-center space-x-1 shrink-0" title="Check Doorstep Availability via WhatsApp">
                 <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
                 <span class="hidden sm:inline">WhatsApp</span>
               </button>
               ${o.status === 'PACKED' ? `
-                <button onclick="updateOrderStatus('${o.id}', 'OUT_FOR_DELIVERY')" class="flex-1 py-2 bg-[#003D29] hover:bg-[#002B1D] text-[#108910] rounded-full font-bold text-xs transition">
+                <button onclick="updateOrderStatus('${o.id}', 'OUT_FOR_DELIVERY')" class="flex-1 py-2 bg-[#0D4735] hover:bg-[#083426] text-[#00B261] rounded-full font-bold text-xs transition">
                   Start Trip
                 </button>
               ` : `
-                <button onclick="completeRiderDelivery('${o.id}')" class="flex-1 py-2 bg-[#108910] hover:bg-[#0D720D] text-[#003D29] rounded-full font-bold text-xs flex items-center justify-center space-x-1 transition">
+                <button onclick="completeRiderDelivery('${o.id}')" class="flex-1 py-2 bg-[#00B261] hover:bg-[#009E54] text-[#0D4735] rounded-full font-bold text-xs flex items-center justify-center space-x-1 transition">
                   <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
                   <span>Delivered & Handover</span>
                 </button>
@@ -2087,8 +2089,8 @@ async function previewThermalTags(orderId) {
 
     const container = document.getElementById('print-thermal-container');
     container.innerHTML = tags.map(tag => `
-      <div class="bg-white p-4 border-2 border-dashed border-slate-400 w-[72mm] shadow-md text-[#1D252C] font-mono text-[11px] leading-tight space-y-2">
-        <div class="text-center border-b border-[#108910] pb-1.5">
+      <div class="bg-white p-4 border-2 border-dashed border-[#E7EFEA] w-[72mm] shadow-md text-[#11221B] font-mono text-[11px] leading-tight space-y-2">
+        <div class="text-center border-b border-[#00B261] pb-1.5">
           <div class="font-extrabold text-sm uppercase">${storeSettings.storeName}</div>
           <div class="text-[9px]">${storeSettings.phone} • ${storeSettings.address}</div>
         </div>
@@ -2104,11 +2106,11 @@ async function previewThermalTags(orderId) {
           <div><strong>Promised:</strong> ${new Date(tag.promisedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
         </div>
 
-        <div class="border-t border-b border-[#108910] py-1">
+        <div class="border-t border-b border-[#00B261] py-1">
           <div class="font-black text-xs">${tag.garmentName}</div>
           <div class="font-bold">${tag.service}</div>
-          ${tag.hasStain ? `<div class="bg-[#003D29] text-white px-1 text-[10px] font-bold mt-1">CARE: ${tag.specialNote || 'STAIN REMOVAL'}</div>` : ''}
-          ${tag.isExpress ? `<div class="bg-[#003D29] text-white px-1 text-[10px] font-black mt-1">24H EXPRESS PRIORITY</div>` : ''}
+          ${tag.hasStain ? `<div class="bg-[#0D4735] text-white px-1 text-[10px] font-bold mt-1">CARE: ${tag.specialNote || 'STAIN REMOVAL'}</div>` : ''}
+          ${tag.isExpress ? `<div class="bg-[#0D4735] text-white px-1 text-[10px] font-black mt-1">24H EXPRESS PRIORITY</div>` : ''}
         </div>
 
         <div class="text-center pt-1">
@@ -2344,12 +2346,12 @@ function searchOrderCustomer(query) {
     }
 
     if (results.length === 0) {
-      dropdown.innerHTML = `<div class="p-3 text-slate-400 text-xs">No customer found. <a href="javascript:void(0)" onclick="closeNewOrderModal(); openNewCustomerModal();" class="text-teal-600 font-bold underline">Create New</a></div>`;
+      dropdown.innerHTML = `<div class="p-3 text-[#586B63] text-xs">No customer found. <a href="javascript:void(0)" onclick="closeNewOrderModal(); openNewCustomerModal();" class="text-[#00B261] font-bold underline">Create New</a></div>`;
     } else {
       dropdown.innerHTML = results.map(c => `
-        <div onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="p-2.5 hover:bg-slate-50 cursor-pointer text-xs">
-          <div class="font-bold text-slate-900">${c.name} <span class="font-normal font-mono text-slate-500">(${c.phone})</span></div>
-          <div class="text-slate-500 text-[11px]">${c.address}</div>
+        <div onclick="selectCustomerForOrder('${c.id}', '${encodeURIComponent(c.name)}', '${c.phone}', '${encodeURIComponent(c.address)}', '${c.zone}')" class="p-2.5 hover:bg-[#F0FAF5] cursor-pointer text-xs">
+          <div class="font-bold text-[#11221B]">${c.name} <span class="font-normal font-mono text-[#586B63]">(${c.phone})</span></div>
+          <div class="text-[#586B63] text-[11px]">${c.address}</div>
         </div>
       `).join('');
     }
@@ -2413,7 +2415,7 @@ function renderOrderItemsTable() {
   countSpan.innerText = currentNewOrderItems.length;
 
   if (currentNewOrderItems.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">No garments added yet. Use the selector above.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-[#586B63]">No garments added yet. Use the selector above.</td></tr>`;
     recalculateOrderTotal();
     return;
   }
@@ -2421,12 +2423,12 @@ function renderOrderItemsTable() {
   tbody.innerHTML = currentNewOrderItems.map((item, idx) => `
     <tr>
       <td class="p-2.5 font-bold font-mono">${idx + 1}</td>
-      <td class="p-2.5 font-semibold text-[#1D252C]">${item.garmentName}</td>
+      <td class="p-2.5 font-semibold text-[#11221B]">${item.garmentName}</td>
       <td class="p-2.5">${item.service}</td>
-      <td class="p-2.5">${item.hasStain ? `<span class="text-[#E11900] font-semibold">${item.specialNote}</span>` : '—'}</td>
+      <td class="p-2.5">${item.hasStain ? `<span class="text-[#E54B4B] font-semibold">${item.specialNote}</span>` : '—'}</td>
       <td class="p-2.5 text-right font-bold font-mono">€${item.rate}</td>
       <td class="p-2.5 text-right">
-        <button onclick="removeGarmentItem(${idx})" class="text-neutral-500 hover:text-[#1D252C] font-semibold text-xs">Remove</button>
+        <button onclick="removeGarmentItem(${idx})" class="text-neutral-500 hover:text-[#11221B] font-semibold text-xs">Remove</button>
       </td>
     </tr>
   `).join('');
@@ -2661,7 +2663,7 @@ function setupExcelDropZone() {
     dropZone.addEventListener(eventName, (e) => {
       e.preventDefault();
       e.stopPropagation();
-      dropZone.classList.add('border-[#108910]', 'bg-[#FAF1E5]');
+      dropZone.classList.add('border-[#00B261]', 'bg-[#EAF8F1]');
     }, false);
   });
 
@@ -2669,7 +2671,7 @@ function setupExcelDropZone() {
     dropZone.addEventListener(eventName, (e) => {
       e.preventDefault();
       e.stopPropagation();
-      dropZone.classList.remove('border-[#108910]', 'bg-[#FAF1E5]');
+      dropZone.classList.remove('border-[#00B261]', 'bg-[#EAF8F1]');
     }, false);
   });
 
@@ -2831,25 +2833,25 @@ function renderFleetCards(riders) {
 
     let statusBadge = '';
     if (isOverdue) {
-      statusBadge = `<span class="bg-red-50 text-[#E11900] border border-red-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Delayed (+${r.currentRun ? r.currentRun.unaccountedGapMinutes : 12}m)</span>`;
+      statusBadge = `<span class="bg-red-50 text-[#E54B4B] border border-red-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Delayed (+${r.currentRun ? r.currentRun.unaccountedGapMinutes : 12}m)</span>`;
     } else if (isReturning) {
-      statusBadge = `<span class="bg-[#FAF1E5] text-[#1D252C] text-[10px] font-semibold px-2.5 py-0.5 rounded-full">En Route</span>`;
+      statusBadge = `<span class="bg-[#EAF8F1] text-[#11221B] text-[10px] font-semibold px-2.5 py-0.5 rounded-full">En Route</span>`;
     } else if (isIdle) {
-      statusBadge = `<span class="bg-[#FAF1E5] text-[#0A610A] text-[10px] font-semibold px-2.5 py-0.5 rounded-full">Available</span>`;
+      statusBadge = `<span class="bg-[#EAF8F1] text-[#0D4735] text-[10px] font-semibold px-2.5 py-0.5 rounded-full">Available</span>`;
     } else {
-      statusBadge = `<span class="bg-[#FAF1E5] text-neutral-800 text-[10px] font-semibold px-2.5 py-0.5 rounded-full">In Transit</span>`;
+      statusBadge = `<span class="bg-[#EAF8F1] text-neutral-800 text-[10px] font-semibold px-2.5 py-0.5 rounded-full">In Transit</span>`;
     }
 
     return `
-      <div class="bg-white p-4 rounded-2xl border ${isOverdue ? 'border-red-300 ring-1 ring-red-200' : 'border-[#E8E8E3]'} shadow-sm space-y-3">
+      <div class="bg-white p-4 rounded-2xl border ${isOverdue ? 'border-red-300 ring-1 ring-red-200' : 'border-[#E7EFEA]'} shadow-sm space-y-3">
         <div class="flex items-start justify-between">
           <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-full ${isOverdue ? 'bg-[#FF7009] text-white' : isIdle ? 'bg-[#108910] text-white' : 'bg-[#003D29] text-[#108910]'} flex items-center justify-center font-bold text-xs">
+            <div class="w-9 h-9 rounded-full ${isOverdue ? 'bg-[#E5A93C] text-white' : isIdle ? 'bg-[#00B261] text-white' : 'bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)]'} flex items-center justify-center font-bold text-xs">
               ${r.name.split(' ').map(n => n[0]).join('')}
             </div>
             <div>
               <div class="flex items-center space-x-1.5">
-                <h4 class="font-bold text-[#1D252C] text-sm">${r.name}</h4>
+                <h4 class="font-bold text-[#11221B] text-sm">${r.name}</h4>
                 <span class="text-[10px] text-neutral-500 font-mono">(${r.vehicle})</span>
               </div>
               <div class="text-[11px] text-neutral-500">${r.phone}</div>
@@ -2858,38 +2860,38 @@ function renderFleetCards(riders) {
           <div>${statusBadge}</div>
         </div>
 
-        <div class="p-3 bg-[#F7F5F0] rounded-xl border border-[#FAF1E5] text-xs space-y-1.5">
+        <div class="p-3 bg-[#F7FAF8] rounded-xl border border-[#EAF8F1] text-xs space-y-1.5">
           <div class="flex items-center justify-between text-[11px]">
             <span class="text-neutral-700 truncate"><strong>Location:</strong> ${r.location.address}</span>
             <span class="text-neutral-500 font-mono shrink-0 font-semibold">${r.location.batteryLevel}</span>
           </div>
 
           ${r.currentRun ? `
-            <div class="pt-1.5 border-t border-[#E8E8E3] flex items-center justify-between text-[11px] text-neutral-600">
+            <div class="pt-1.5 border-t border-[#E7EFEA] flex items-center justify-between text-[11px] text-neutral-600">
               <span>Run: <strong>${r.currentRun.zone}</strong> (${r.currentRun.totalOrders} orders)</span>
-              <span>Due: <strong class="${isOverdue ? 'text-[#E11900] font-bold' : 'text-[#1D252C]'}">${new Date(r.currentRun.expectedReturnAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</strong></span>
+              <span>Due: <strong class="${isOverdue ? 'text-[#E54B4B] font-bold' : 'text-[#11221B]'}">${new Date(r.currentRun.expectedReturnAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</strong></span>
             </div>
             ${isOverdue ? `
-              <div class="p-2 bg-red-50 text-[#E11900] text-[11px] rounded-lg font-semibold border border-red-100">
+              <div class="p-2 bg-red-50 text-[#E54B4B] text-[11px] rounded-lg font-semibold border border-red-100">
                 Transit Gap: Completed delivery 25m ago. Delayed by +${r.currentRun.unaccountedGapMinutes}m.
               </div>
             ` : ''}
           ` : `
-            <div class="pt-1 text-[11px] text-[#0A610A] font-bold">Available at store. Standby.</div>
+            <div class="pt-1 text-[11px] text-[#0D4735] font-bold">Available at store. Standby.</div>
           `}
         </div>
 
         <div class="flex items-center justify-between pt-1">
-          <span class="text-[10px] text-neutral-500">Punctuality: <strong class="text-[#1D252C] font-semibold">${r.todayStats.integrityScore}%</strong></span>
+          <span class="text-[10px] text-neutral-500">Punctuality: <strong class="text-[#11221B] font-semibold">${r.todayStats.integrityScore}%</strong></span>
           <div class="flex space-x-2">
             ${isOverdue ? `
-              <button onclick="sendRiderWarning('${r.id}')" class="px-3.5 py-1.5 bg-[#FF7009] hover:bg-red-700 text-white rounded-full text-xs font-semibold flex items-center space-x-1 transition">
+              <button onclick="sendRiderWarning('${r.id}')" class="px-3.5 py-1.5 bg-[#E5A93C] hover:bg-red-700 text-white rounded-full text-xs font-semibold flex items-center space-x-1 transition">
                 <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i>
                 <span>Send Alert</span>
               </button>
             ` : ''}
             ${!isIdle ? `
-              <button onclick="checkInAtStoreCounter('${r.id}')" class="px-3.5 py-1.5 bg-[#003D29] hover:bg-[#002B1D] text-[#108910] rounded-full text-xs font-bold flex items-center space-x-1 transition">
+              <button onclick="checkInAtStoreCounter('${r.id}')" class="px-3.5 py-1.5 bg-[#0D4735] hover:bg-[#083426] text-[#00B261] rounded-full text-xs font-bold flex items-center space-x-1 transition">
                 <i data-lucide="check" class="w-3.5 h-3.5"></i>
                 <span>Check In</span>
               </button>
@@ -2909,20 +2911,20 @@ function renderFleetAuditTable(riders) {
   tbody.innerHTML = riders.map(r => {
     const isGood = r.todayStats.integrityScore >= 90;
     return `
-      <tr class="hover:bg-[#F7F5F0] transition-colors border-b border-[#FAF1E5]">
-        <td class="p-3 font-semibold text-[#1D252C]">${r.name}</td>
+      <tr class="hover:bg-[#F7FAF8] transition-colors border-b border-[#EAF8F1]">
+        <td class="p-3 font-semibold text-[#11221B]">${r.name}</td>
         <td class="p-3 text-neutral-500 font-mono text-[11px]">${r.vehicle}</td>
-        <td class="p-3 font-semibold text-[#1D252C]">${r.todayStats.completedRuns} Trips</td>
+        <td class="p-3 font-semibold text-[#11221B]">${r.todayStats.completedRuns} Trips</td>
         <td class="p-3">
-          <span class="font-semibold ${r.todayStats.delayedReturns > 0 ? 'text-[#FFC043]' : 'text-[#108910]'}">
+          <span class="font-semibold ${r.todayStats.delayedReturns > 0 ? 'text-[#E5A93C]' : 'text-[#00B261]'}">
             ${Math.round((r.todayStats.onTimeRuns / Math.max(1, r.todayStats.completedRuns)) * 100)}%
           </span>
           <span class="text-[10px] text-neutral-400 block">${r.todayStats.delayedReturns} delayed</span>
         </td>
-        <td class="p-3 font-mono ${r.todayStats.totalUnaccountedGapMins > 0 ? 'text-[#E11900] font-semibold' : 'text-neutral-500'}">
+        <td class="p-3 font-mono ${r.todayStats.totalUnaccountedGapMins > 0 ? 'text-[#E54B4B] font-semibold' : 'text-neutral-500'}">
           ${r.todayStats.totalUnaccountedGapMins > 0 ? `+${r.todayStats.totalUnaccountedGapMins}m` : '0m'}
         </td>
-        <td class="p-3 text-right font-bold ${isGood ? 'text-[#108910]' : 'text-[#FFC043]'}">
+        <td class="p-3 text-right font-bold ${isGood ? 'text-[#00B261]' : 'text-[#E5A93C]'}">
           ${r.todayStats.integrityScore} / 100
         </td>
       </tr>
@@ -3099,12 +3101,12 @@ function openStoreProfileModal() {
     branchGrid.innerHTML = franchiseStores.map(s => {
       const isSelected = s.id === activeStoreId;
       return `
-        <button type="button" onclick="switchActiveBranch('${s.id}')" class="p-2.5 rounded-xl text-left border transition-all ${isSelected ? 'bg-[#FAF1E5] border-[#108910] ring-1 ring-[#108910]' : 'bg-[#F7F5F0] border-[#E8E8E3] hover:border-[#108910]'}">
+        <button type="button" onclick="switchActiveBranch('${s.id}')" class="p-2.5 rounded-xl text-left border transition-all ${isSelected ? 'bg-[#EAF8F1] border-[#00B261] ring-1 ring-[#00B261]' : 'bg-[#F7FAF8] border-[#E7EFEA] hover:border-[#00B261]'}">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-[#1D252C] text-xs">${s.name}</span>
-            <span class="text-[9px] font-mono px-1 rounded ${isSelected ? 'bg-[#003D29] text-[#108910]' : 'bg-[#E8E8E3] text-[#72767E]'}">#${s.code}</span>
+            <span class="font-bold text-[#11221B] text-xs">${s.name}</span>
+            <span class="text-[9px] font-mono px-1 rounded ${isSelected ? 'bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)]' : 'bg-[#E7EFEA] text-[#586B63]'}">#${s.code}</span>
           </div>
-          <div class="text-[10px] text-[#72767E] truncate mt-0.5">${s.city} • ${s.manager}</div>
+          <div class="text-[10px] text-[#586B63] truncate mt-0.5">${s.city} • ${s.manager}</div>
         </button>
       `;
     }).join('');
@@ -3214,32 +3216,32 @@ function renderFranchiseHub() {
     grid.innerHTML = franchiseStores.map(s => {
       const isSelected = s.id === activeStoreId;
       return `
-        <div class="bg-white p-4 rounded-2xl border transition-all ${isSelected ? 'border-[#108910] ring-2 ring-[#108910]/30 bg-[#F7F5F0]' : 'border-[#E8E8E3] hover:border-[#108910]'} space-y-3">
+        <div class="bg-white p-4 rounded-2xl border transition-all ${isSelected ? 'border-[#00B261] ring-2 ring-[#00B261]/30 bg-[#F7FAF8]' : 'border-[#E7EFEA] hover:border-[#00B261]'} space-y-3">
           <div class="flex items-start justify-between">
             <div>
               <div class="flex items-center space-x-1.5">
-                <span class="font-black text-[#1D252C] text-sm">${s.name}</span>
-                <span class="text-[9px] font-mono px-1.5 py-0.2 rounded-full font-bold ${isSelected ? 'bg-[#003D29] text-[#108910]' : 'bg-[#FAF1E5] text-[#003D29]'}">#${s.code}</span>
+                <span class="font-black text-[#11221B] text-sm">${s.name}</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.2 rounded-full font-bold ${isSelected ? 'bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)]' : 'bg-[#EAF8F1] text-[#0D4735]'}">#${s.code}</span>
               </div>
-              <p class="text-[11px] text-[#72767E] mt-0.5">${s.city}</p>
+              <p class="text-[11px] text-[#586B63] mt-0.5">${s.city}</p>
             </div>
-            ${isSelected ? '<span class="text-[10px] bg-[#108910] text-white font-black px-2 py-0.5 rounded-full">ACTIVE</span>' : ''}
+            ${isSelected ? '<span class="text-[10px] bg-[#00B261] text-white font-black px-2 py-0.5 rounded-full">ACTIVE</span>' : ''}
           </div>
 
-          <div class="text-[11px] text-[#72767E] space-y-1 bg-white p-2.5 rounded-xl border border-[#FAF1E5]">
+          <div class="text-[11px] text-[#586B63] space-y-1 bg-white p-2.5 rounded-xl border border-[#EAF8F1]">
             <div><strong>Manager:</strong> ${s.manager} (${s.phone})</div>
-            <div><strong>UPI VPA:</strong> <code class="font-mono text-[#003D29]">${s.upiVpa || 'bumbledry@bank'}</code></div>
+            <div><strong>UPI VPA:</strong> <code class="font-mono text-[#0D4735]">${s.upiVpa || 'bumbledry@bank'}</code></div>
             <div><strong>Coverage:</strong> ${s.geofenceKm} KM Radius</div>
           </div>
 
           <div class="pt-1 flex items-center justify-between">
-            <span class="text-[11px] text-[#72767E]">Fleet: <strong>${s.activeRiders} Riders</strong> • <strong>${s.workshopStaff} Staff</strong></span>
+            <span class="text-[11px] text-[#586B63]">Fleet: <strong>${s.activeRiders} Riders</strong> • <strong>${s.workshopStaff} Staff</strong></span>
             ${!isSelected ? `
-              <button onclick="switchActiveBranch('${s.id}')" class="px-3 py-1 bg-[#FAF1E5] hover:bg-[#108910] text-white rounded-full text-xs font-bold transition-all">
+              <button onclick="switchActiveBranch('${s.id}')" class="px-3 py-1 bg-[#EAF8F1] hover:bg-[#00B261] text-white rounded-full text-xs font-bold transition-all">
                 Switch Branch
               </button>
             ` : `
-              <button onclick="openStoreProfileModal()" class="px-3 py-1 bg-white border border-[#E8E8E3] hover:border-[#108910] text-[#1D252C] rounded-full text-xs font-semibold transition-all">
+              <button onclick="openStoreProfileModal()" class="px-3 py-1 bg-white border border-[#E7EFEA] hover:border-[#00B261] text-[#11221B] rounded-full text-xs font-semibold transition-all">
                 Edit Profile
               </button>
             `}
@@ -3259,11 +3261,11 @@ function renderFranchiseHub() {
       { service: 'Express Turnaround (VIP)', sla: '12 Hours', standard: 'Priority washer lane, immediate tag & dispatch corridor', machine: 'Dedicated Rapid Express Unit' }
     ];
     slaTable.innerHTML = operationalStandards.map(s => `
-      <tr class="hover:bg-[#F7F5F0] border-b border-[#FAF1E5]">
-        <td class="p-3 font-bold text-[#1D252C]">${s.service}</td>
-        <td class="p-3 text-[#003D29] font-bold"><span class="bg-[#FAF1E5] px-2.5 py-0.5 rounded-full">${s.sla}</span></td>
-        <td class="p-3 text-[#72767E]">${s.standard}</td>
-        <td class="p-3 text-[#1D252C] font-mono text-[11px]">${s.machine}</td>
+      <tr class="hover:bg-[#F7FAF8] border-b border-[#EAF8F1]">
+        <td class="p-3 font-bold text-[#11221B]">${s.service}</td>
+        <td class="p-3 text-[#0D4735] font-bold"><span class="bg-[#EAF8F1] px-2.5 py-0.5 rounded-full">${s.sla}</span></td>
+        <td class="p-3 text-[#586B63]">${s.standard}</td>
+        <td class="p-3 text-[#11221B] font-mono text-[11px]">${s.machine}</td>
       </tr>
     `).join('');
   }
@@ -3373,13 +3375,13 @@ function renderAdminReconciliation() {
   const variance = countedPcs - totalAllPcs;
   if (elAuditVariance) {
     elAuditVariance.innerText = `${variance === 0 ? '0' : (variance > 0 ? '+' + variance : variance)} pcs`;
-    elAuditVariance.className = variance === 0 ? 'text-2xl font-black text-[#0A610A]' : 'text-2xl font-black text-rose-600';
+    elAuditVariance.className = variance === 0 ? 'text-2xl font-black text-[#0D4735]' : 'text-2xl font-black text-rose-600';
   }
 
   const banner = document.getElementById('eod-audit-status-banner');
   if (banner) {
     if (variance === 0) {
-      banner.className = 'p-3 rounded-2xl text-xs font-semibold bg-[#FAF1E5] text-[#0A610A] border border-[#EFE9E1] flex items-center space-x-2';
+      banner.className = 'p-3 rounded-2xl text-xs font-semibold bg-[#EAF8F1] text-[#0D4735] border border-[#E7EFEA] flex items-center space-x-2';
       banner.innerHTML = '<i data-lucide="shield-check" class="w-4 h-4"></i><span>Garment inventory perfectly balanced. Zero misplaced pieces across workshop stations.</span>';
     } else {
       banner.className = 'p-3 rounded-2xl text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 flex items-center space-x-2';
@@ -3441,9 +3443,9 @@ function filterCorridor(corridor) {
     const btn = document.getElementById(`corridor-tab-${c}`);
     if (!btn) return;
     if (c === corridor.toLowerCase()) {
-      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#003D29] text-[#108910]';
+      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)]';
     } else {
-      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#FAF1E5] text-[#72767E] hover:text-[#1D252C]';
+      btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#EAF8F1] text-[#586B63] hover:text-[#11221B]';
     }
   });
   renderDispatchRecommendations();
@@ -3465,7 +3467,7 @@ const HANDOVER_LEVEL_MAP = {
     from: { role: 'rider', name: 'Matteo Bianchi (Field Rider)' },
     to: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
     badge: 'FIELD RIDER',
-    badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
+    badgeColor: 'bg-[#EAF8F1] text-[#0D4735]',
     action: 'Pickup Completed',
     summary: (order) => `Picked up ${order.totalPieces || 1} pcs from ${order.customerName} in ${order.zone}. Rider returning to counter.`
   },
@@ -3473,7 +3475,7 @@ const HANDOVER_LEVEL_MAP = {
     from: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
     to: { role: 'washer', name: 'Erik Lindqvist (Washing Lead)' },
     badge: 'FRONT DESK',
-    badgeColor: 'bg-[#F7F5F0] text-[#1D252C]',
+    badgeColor: 'bg-[#F7FAF8] text-[#11221B]',
     action: 'Intake Tagged',
     summary: (order) => `Order #${order.id} (${order.totalPieces || 1} pcs) tagged & queued for Washing Station.`
   },
@@ -3481,7 +3483,7 @@ const HANDOVER_LEVEL_MAP = {
     from: { role: 'washer', name: 'Erik Lindqvist (Washing Lead)' },
     to: { role: 'washer', name: 'Stefan Müller (Dry Clean Specialist)' },
     badge: 'WORKSHOP: WASH',
-    badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
+    badgeColor: 'bg-[#EAF8F1] text-[#0D4735]',
     action: 'Washing Cycle Started',
     summary: (order) => `Order #${order.id} loaded into commercial washer. Next: Hydro-extraction & Drying.`
   },
@@ -3489,7 +3491,7 @@ const HANDOVER_LEVEL_MAP = {
     from: { role: 'washer', name: 'Stefan Müller (Dry Clean Specialist)' },
     to: { role: 'washer', name: 'Antoine Dubois (Steam Press)' },
     badge: 'WORKSHOP: DRYING',
-    badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
+    badgeColor: 'bg-[#EAF8F1] text-[#0D4735]',
     action: 'Drying & Inspection',
     summary: (order) => `Order #${order.id} dried & passed stain inspection. Queued for steam press.`
   },
@@ -3497,7 +3499,7 @@ const HANDOVER_LEVEL_MAP = {
     from: { role: 'washer', name: 'Stefan Müller (Dry Cleaning)' },
     to: { role: 'washer', name: 'Antoine Dubois (Steam Press)' },
     badge: 'WORKSHOP: PRESS',
-    badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
+    badgeColor: 'bg-[#EAF8F1] text-[#0D4735]',
     action: 'Steam Ironing Underway',
     summary: (order) => `Steam press & crease finishing in progress for Order #${order.id} (${order.customerName}).`
   },
@@ -3505,7 +3507,7 @@ const HANDOVER_LEVEL_MAP = {
     from: { role: 'washer', name: 'Antoine Dubois (Steam Press)' },
     to: { role: 'manager', name: 'Lars Jansen & Field Riders' },
     badge: 'WORKSHOP: PACKED',
-    badgeColor: 'bg-[#003D29] text-[#108910]',
+    badgeColor: 'bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)]',
     action: 'Order Packed & Ready',
     summary: (order) => `Quality passed! Order #${order.id} (${order.customerName}, ${order.zone}) is packed on hanger.`
   },
@@ -3513,7 +3515,7 @@ const HANDOVER_LEVEL_MAP = {
     from: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
     to: { role: 'rider', name: 'Matteo Bianchi (Field Rider)' },
     badge: 'DISPATCH',
-    badgeColor: 'bg-[#003D29] text-white',
+    badgeColor: 'bg-[#0D4735] text-white',
     action: 'Dispatched for Delivery',
     summary: (order) => `Order #${order.id} handed to Matteo Bianchi for doorstep delivery in ${order.zone}.`
   },
@@ -3521,7 +3523,7 @@ const HANDOVER_LEVEL_MAP = {
     from: { role: 'rider', name: 'Matteo Bianchi (Field Rider)' },
     to: { role: 'manager', name: 'Lars Jansen & Super Admin' },
     badge: 'DELIVERY COMPLETE',
-    badgeColor: 'bg-[#108910] text-white',
+    badgeColor: 'bg-[#00B261] text-white',
     action: 'Delivered & Paid',
     summary: (order) => `Delivered to ${order.customerName}. Payment of €${order.subtotal} collected (POD uploaded).`
   }
@@ -3542,7 +3544,7 @@ function initNotifications() {
         id: 'NOTIF-101',
         orderId: 'ORD-1042',
         badge: 'WORKSHOP: PACKED',
-        badgeColor: 'bg-[#003D29] text-[#108910]',
+        badgeColor: 'bg-[#0D4735] text-white shadow-[0_4px_12px_rgba(13,71,53,0.2)]',
         action: 'Order Packed & Ready',
         summary: 'Quality passed! Order #ORD-1042 (Pooja Rao, De Pijp) is packed on hanger.',
         from: { role: 'washer', name: 'Antoine Dubois (Steam Press)' },
@@ -3554,7 +3556,7 @@ function initNotifications() {
         id: 'NOTIF-102',
         orderId: 'ORD-1040',
         badge: 'DISPATCH',
-        badgeColor: 'bg-[#003D29] text-white',
+        badgeColor: 'bg-[#0D4735] text-white',
         action: 'Dispatched for Delivery',
         summary: 'Order #ORD-1040 handed to Matteo Bianchi for doorstep delivery in Jordaan.',
         from: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
@@ -3566,7 +3568,7 @@ function initNotifications() {
         id: 'NOTIF-103',
         orderId: 'ORD-1045',
         badge: 'FRONT DESK',
-        badgeColor: 'bg-[#F7F5F0] text-[#1D252C]',
+        badgeColor: 'bg-[#F7FAF8] text-[#11221B]',
         action: 'Intake Tagged',
         summary: 'Order #ORD-1045 (3 pcs) tagged & queued for Washing Station.',
         from: { role: 'manager', name: 'Lars Jansen (Front Desk)' },
@@ -3639,14 +3641,14 @@ function showToastNotification(notif, isCrossTab = false) {
   const toastId = `toast-${notif.id}`;
   const toastEl = document.createElement('div');
   toastEl.id = toastId;
-  toastEl.className = 'pointer-events-auto bg-[#003D29] text-white p-3.5 rounded-2xl border border-[#108910]/30 shadow-2xl flex items-start space-x-3 transition-all transform duration-300 translate-y-0 opacity-100';
+  toastEl.className = 'pointer-events-auto bg-[#0D4735] text-white p-3.5 rounded-2xl border border-[#00B261]/30 shadow-2xl flex items-start space-x-3 transition-all transform duration-300 translate-y-0 opacity-100';
   toastEl.innerHTML = `
-    <div class="w-8 h-8 rounded-full bg-[#108910] text-white flex items-center justify-center shrink-0 font-bold mt-0.5">
+    <div class="w-8 h-8 rounded-full bg-[#00B261] text-white flex items-center justify-center shrink-0 font-bold mt-0.5">
       <i data-lucide="bell" class="w-4 h-4"></i>
     </div>
     <div class="flex-1 min-w-0">
       <div class="flex items-center justify-between">
-        <span class="text-[10px] uppercase font-black tracking-wider text-[#108910]">${notif.badge}</span>
+        <span class="text-[10px] uppercase font-black tracking-wider text-[#00B261]">${notif.badge}</span>
         <span class="text-[10px] text-neutral-400">Just now</span>
       </div>
       <h5 class="font-bold text-xs text-white truncate mt-0.5">${notif.action}: ${notif.orderId}</h5>
@@ -3654,7 +3656,7 @@ function showToastNotification(notif, isCrossTab = false) {
       <div class="text-[10px] text-neutral-400 mt-1.5 flex items-center space-x-1 border-t border-white/10 pt-1">
         <span>Handover: <strong>${notif.from.name}</strong></span>
         <span>→</span>
-        <span class="text-[#108910]"><strong>${notif.to.name}</strong></span>
+        <span class="text-[#00B261]"><strong>${notif.to.name}</strong></span>
       </div>
     </div>
     <button onclick="dismissToast('${toastId}')" class="text-neutral-400 hover:text-white p-1">
@@ -3708,7 +3710,7 @@ function testNotificationChime() {
     id: 'TEST-' + Date.now(),
     orderId: 'ORD-1044',
     badge: 'WORKSHOP: PRESS',
-    badgeColor: 'bg-[#FAF1E5] text-[#003D29]',
+    badgeColor: 'bg-[#EAF8F1] text-[#0D4735]',
     action: 'Steam Ironing Underway',
     summary: 'Steam press & crease finishing in progress for Order #ORD-1044 (Priya Sharma).',
     from: { role: 'washer', name: 'Stefan Müller (Dry Clean)' },
@@ -3737,10 +3739,10 @@ function renderNotificationCenter() {
 
   if (liveNotifications.length === 0) {
     container.innerHTML = `
-      <div class="p-8 text-center text-[#72767E] text-xs">
-        <i data-lucide="bell-off" class="w-6 h-6 mx-auto mb-2 text-[#72767E]"></i>
+      <div class="p-8 text-center text-[#586B63] text-xs">
+        <i data-lucide="bell-off" class="w-6 h-6 mx-auto mb-2 text-[#586B63]"></i>
         <div>No notifications right now.</div>
-        <div class="text-[10px] text-[#72767E] mt-0.5">Station handover events will appear here in real time.</div>
+        <div class="text-[10px] text-[#586B63] mt-0.5">Station handover events will appear here in real time.</div>
       </div>
     `;
     lucide.createIcons();
@@ -3748,20 +3750,20 @@ function renderNotificationCenter() {
   }
 
   container.innerHTML = liveNotifications.map(n => `
-    <div class="p-3.5 hover:bg-[#F7F5F0] transition-colors ${!n.read ? 'bg-[#FAF1E5]/30' : ''} space-y-1.5">
+    <div class="p-3.5 hover:bg-[#F7FAF8] transition-colors ${!n.read ? 'bg-[#EAF8F1]/30' : ''} space-y-1.5">
       <div class="flex items-center justify-between">
-        <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full ${n.badgeColor || 'bg-[#F7F5F0] text-[#1D252C]'}">${n.badge}</span>
-        <span class="text-[10px] text-[#72767E]">${new Date(n.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+        <span class="text-[9px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full ${n.badgeColor || 'bg-[#F7FAF8] text-[#11221B]'}">${n.badge}</span>
+        <span class="text-[10px] text-[#586B63]">${new Date(n.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
       </div>
-      <div class="font-bold text-[#1D252C] text-xs flex items-center justify-between">
-        <span>${n.action}: <strong class="font-mono text-[#003D29]">${n.orderId}</strong></span>
-        ${!n.read ? '<span class="w-2 h-2 rounded-full bg-[#FF7009] shrink-0" title="Unread"></span>' : ''}
+      <div class="font-bold text-[#11221B] text-xs flex items-center justify-between">
+        <span>${n.action}: <strong class="font-mono text-[#0D4735]">${n.orderId}</strong></span>
+        ${!n.read ? '<span class="w-2 h-2 rounded-full bg-[#E5A93C] shrink-0" title="Unread"></span>' : ''}
       </div>
-      <p class="text-[11px] text-[#72767E] leading-relaxed">${n.summary}</p>
-      <div class="text-[10px] text-[#72767E] flex items-center space-x-1 pt-0.5">
-        <span>From: <strong class="text-[#1D252C]">${n.from.name}</strong></span>
+      <p class="text-[11px] text-[#586B63] leading-relaxed">${n.summary}</p>
+      <div class="text-[10px] text-[#586B63] flex items-center space-x-1 pt-0.5">
+        <span>From: <strong class="text-[#11221B]">${n.from.name}</strong></span>
         <span>→</span>
-        <span>To: <strong class="text-[#003D29]">${n.to.name}</strong></span>
+        <span>To: <strong class="text-[#0D4735]">${n.to.name}</strong></span>
       </div>
     </div>
   `).join('');

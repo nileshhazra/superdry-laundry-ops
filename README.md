@@ -3,9 +3,9 @@
 > **Modern European Urban Laundry & Dry Cleaning Management System**  
 > Tailored for high-density eco-laundry hubs, cargo bike fleets, and multi-station store operations. Headquartered at the **De Pijp Flagship (#101), Amsterdam, Netherlands**.
 
-[![GitHub Pages Deployment](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-108910?style=for-the-badge&logo=github)](https://nileshhazra.github.io/superdry-laundry-ops/)
-[![Platform](https://img.shields.io/badge/Region-Western%20Europe%20(Amsterdam)-003D29?style=for-the-badge)](https://github.com/nileshhazra/superdry-laundry-ops)
-[![Architecture](https://img.shields.io/badge/Mode-Node.js%20%2B%20Standalone%20PWA-FAF1E5?style=for-the-badge&color=003D29)](https://github.com/nileshhazra/superdry-laundry-ops)
+[![GitHub Pages Deployment](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-00B261?style=for-the-badge&logo=github)](https://nileshhazra.github.io/superdry-laundry-ops/)
+[![Design System](https://img.shields.io/badge/Design%20System-Finora%20Emerald%20%26%20Mint-0D4735?style=for-the-badge)](https://github.com/nileshhazra/superdry-laundry-ops)
+[![Architecture](https://img.shields.io/badge/Mode-Node.js%20%2B%20Standalone%20PWA-EAF8F1?style=for-the-badge&color=0D4735)](https://github.com/nileshhazra/superdry-laundry-ops)
 
 ---
 
@@ -92,7 +92,7 @@ Mobile-first logistics console for urban delivery partners utilizing electric ca
 
 ## 🛠️ Architecture & Tech Stack
 
-- **Frontend**: Responsive Single-Page Application (HTML5, Tailwind CSS, Lucide Monochromatic Icons, Plus Jakarta Sans).
+- **Frontend**: Responsive Single-Page Application powered by the **Finora Design System 2.0** (Deep Forest Emerald `#0D4735`, Mint `#00B261`/`#00D474`, off-white `#F7FAF8`, 20px/28px rounded cards with 1px border `#E7EFEA`, Lucide monochromatic icons, and Plus Jakarta Sans typography).
 - **Backend**: Node.js & Express (`server.js`) with Web Audio chime notification engine.
 - **Dual-Mode Engine**: Runs identically as a persistent Node.js full-stack server or as a standalone client-side PWA on **GitHub Pages**.
 - **Data Persistence**: JSON-backed local storage engine (`data/customers.json`, `data/initial_state.json`) with auto-sync across browser tabs.
